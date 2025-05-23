@@ -23,7 +23,10 @@ app.set('layout', 'layouts/base-layout');
 
 // Routes
 const indexRoutes = require('./routes/index');
+const mapRoutes = require('./routes/map');
+
 app.use('/', indexRoutes);
+app.use('/map', mapRoutes);
 
 // Start server
 app.listen(PORT, () => {
