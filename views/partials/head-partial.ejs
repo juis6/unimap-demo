@@ -1,0 +1,21 @@
+<!-- Meta tags -->
+<meta
+  name="description"
+  content="Цифрова навігаційна карта університету - знайдіть потрібні аудиторії та побудуйте оптимальний маршрут"
+/>
+<meta
+  name="keywords"
+  content="університет, карта, навігація, аудиторії, пошук, маршрут"
+/>
+<meta name="author" content="University Navigation System" />
+
+<!-- Favicon -->
+<link rel="icon" type="image/x-icon" href="/img/favicon.ico" />
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/base.css" />
+
+<!-- Additional page-specific styles -->
+<% if (typeof page !== 'undefined') { %> <% if (page === 'map') { %>
+<link rel="stylesheet" href="/css/map.css" />
+<% } %> <% } %>
