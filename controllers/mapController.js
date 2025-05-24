@@ -206,6 +206,7 @@ class MapController {
         } catch (error) {
             // Директорія не існує, створюємо її
             await fs.mkdir(this.mapsDirectory, { recursive: true });
+            console.log(`Created maps directory: ${this.mapsDirectory}`);
         }
     }
 
@@ -232,15 +233,24 @@ class MapController {
         try {
             const filename = `${mapId}.svg`;
             const filePath = path.join(this.mapsDirectory, filename);
+
+            // Перевіряємо чи існує файл
+            await fs.access(filePath);
+
             const svgContent = await fs.readFile(filePath, 'utf8');
             const mapData = parseSVGMap(svgContent);
 
             // Зберігаємо в кеш
             mapCache.set(mapId, mapData);
+            console.log(`Parsed and cached map: ${mapId}`);
 
             return mapData;
         } catch (error) {
-            console.error(`Error parsing map ${mapId}:`, error);
+            if (error.code === 'ENOENT') {
+                console.error(`Map file not found: ${mapId}.svg`);
+            } else {
+                console.error(`Error parsing map ${mapId}:`, error);
+            }
             return null;
         }
     }
@@ -252,31 +262,37 @@ class MapController {
         const toRoom = mapData.rooms.find(room => room.id === toRoomId);
 
         if (!fromRoom || !toRoom) {
+            console.log(`Room not found: from=${fromRoomId}, to=${toRoomId}`);
             return null;
         }
 
         // Знаходимо відповідні вузли
-        const fromNode = mapData.nodes.find(node => node.id === fromRoom.nodeId);
-        const toNode = mapData.nodes.find(node => node.id === toRoom.nodeId);
+        let fromNodeId = fromRoom.nodeId;
+        let toNodeId = toRoom.nodeId;
 
-        if (!fromNode || !toNode) {
-            // Якщо прямі вузли не знайдено, шукаємо найближчі навігаційні вузли
-            const fromNodeId = this.findNearestNode(fromRoom, mapData.nodes);
-            const toNodeId = this.findNearestNode(toRoom, mapData.nodes);
-
-            if (!fromNodeId || !toNodeId) {
-                return null;
-            }
-
-            return this.findShortestPath(mapData, fromNodeId, toNodeId);
+        // Якщо прямі вузли не знайдено, шукаємо найближчі навігаційні вузли
+        if (!fromNodeId || !mapData.nodes.find(n => n.id === fromNodeId)) {
+            fromNodeId = this.findNearestNode(fromRoom, mapData.nodes);
         }
 
-        return this.findShortestPath(mapData, fromNode.id, toNode.id);
+        if (!toNodeId || !mapData.nodes.find(n => n.id === toNodeId)) {
+            toNodeId = this.findNearestNode(toRoom, mapData.nodes);
+        }
+
+        if (!fromNodeId || !toNodeId) {
+            console.log(`Navigation nodes not found: from=${fromNodeId}, to=${toNodeId}`);
+            return null;
+        }
+
+        return this.findShortestPath(mapData, fromNodeId, toNodeId);
     }
 
     // Пошук найближчого вузла до кімнати
     findNearestNode(room, nodes) {
-        if (!room.geometry || !room.geometry.children) return null;
+        if (!room.geometry || !room.geometry.children) {
+            console.log(`No geometry for room: ${room.id}`);
+            return null;
+        }
 
         const roomCenter = this.calculateRoomCenter(room.geometry);
         let nearestNode = null;
@@ -307,6 +323,13 @@ class MapController {
 
         const shape = geometry.children[0];
 
+        if (shape.type === 'rect' && shape.coordinates) {
+            return {
+                x: shape.coordinates.x + shape.coordinates.width / 2,
+                y: shape.coordinates.y + shape.coordinates.height / 2
+            };
+        }
+
         if (shape.type === 'polygon' || shape.type === 'polyline') {
             const points = shape.coordinates;
             if (points.length > 0) {
@@ -323,6 +346,12 @@ class MapController {
     findShortestPath(mapData, fromNodeId, toNodeId) {
         // Будуємо граф
         const graph = this.buildGraph(mapData);
+
+        // Перевіряємо чи існують вузли в графі
+        if (!graph[fromNodeId] || !graph[toNodeId]) {
+            console.log(`Nodes not in graph: from=${fromNodeId}, to=${toNodeId}`);
+            return null;
+        }
 
         // Виконуємо алгоритм Дейкстри
         const distances = {};
@@ -350,7 +379,10 @@ class MapController {
                 }
             }
 
-            if (currentNode === null) break;
+            if (currentNode === null || distances[currentNode] === Infinity) {
+                console.log('No path found - disconnected graph');
+                break;
+            }
 
             unvisited.delete(currentNode);
 
@@ -382,6 +414,7 @@ class MapController {
         }
 
         if (path[0] !== fromNodeId) {
+            console.log('No valid path found');
             return null; // Шлях не знайдено
         }
 
@@ -448,4 +481,6 @@ class MapController {
     }
 }
 
-module.exports = new MapController();
+// Створюємо та експортуємо екземпляр контролера
+const mapController = new MapController();
+module.exports = mapController;
