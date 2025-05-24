@@ -1,3 +1,7 @@
+// Імпорт JSDOM для серверного середовища
+const jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+
 // SVG Map Parser - конвертує SVG карти у JSON формат
 class SVGMapParser {
     constructor() {
@@ -17,15 +21,9 @@ class SVGMapParser {
      * @returns {Object} - об'єкт з даними карти
      */
     parse(svgContent) {
-        // Створюємо DOM parser для роботи з SVG
-        const parser = new DOMParser();
-        const svgDoc = parser.parseFromString(svgContent, 'image/svg+xml');
-
-        // Перевіряємо на помилки парсингу
-        const parseError = svgDoc.querySelector('parsererror');
-        if (parseError) {
-            throw new Error('Invalid SVG format: ' + parseError.textContent);
-        }
+        // Створюємо JSDOM для серверного середовища
+        const dom = new JSDOM(svgContent, { contentType: "image/svg+xml" });
+        const svgDoc = dom.window.document;
 
         // Отримуємо root SVG елемент
         const svgElement = svgDoc.querySelector('svg');
@@ -86,6 +84,15 @@ class SVGMapParser {
             };
             this.mapData.floors.push(floor);
         });
+
+        // Якщо поверхи не знайдено, додаємо базовий поверх
+        if (this.mapData.floors.length === 0) {
+            this.mapData.floors.push({
+                id: '20-01-01',
+                number: '1',
+                buildingId: '10-01'
+            });
+        }
     }
 
     /**
@@ -213,7 +220,6 @@ class SVGMapParser {
     parsePoints(pointsString) {
         if (!pointsString) return [];
 
-        // Обробляємо різні формати points: "x1,y1 x2,y2" або "x1 y1 x2 y2"
         const points = [];
         const coords = pointsString.trim().replace(/,/g, ' ').split(/\s+/).map(Number);
 
@@ -230,31 +236,40 @@ class SVGMapParser {
     }
 
     /**
-     * Парсить позицію вузла з урахуванням transform
+     * Парсить позицію вузла
      */
     parseNodePosition(nodeElement) {
-        const rect = nodeElement.querySelector('rect, polygon');
-        if (!rect) return { x: 0, y: 0 };
+        const shapes = nodeElement.querySelectorAll('rect, polygon, circle');
+        if (shapes.length === 0) return { x: 0, y: 0 };
 
+        const shape = shapes[0];
         let position = { x: 0, y: 0 };
 
-        if (rect.tagName.toLowerCase() === 'rect') {
-            position = {
-                x: parseFloat(rect.getAttribute('x')) || 0,
-                y: parseFloat(rect.getAttribute('y')) || 0
-            };
-        } else if (rect.tagName.toLowerCase() === 'polygon') {
-            const points = this.parsePoints(rect.getAttribute('points') || '');
-            if (points.length > 0) {
-                // Обчислюємо центр полігону
-                const centerX = points.reduce((sum, p) => sum + p.x, 0) / points.length;
-                const centerY = points.reduce((sum, p) => sum + p.y, 0) / points.length;
-                position = { x: centerX, y: centerY };
-            }
+        switch (shape.tagName.toLowerCase()) {
+            case 'rect':
+                position = {
+                    x: parseFloat(shape.getAttribute('x')) || 0,
+                    y: parseFloat(shape.getAttribute('y')) || 0
+                };
+                break;
+            case 'circle':
+                position = {
+                    x: parseFloat(shape.getAttribute('cx')) || 0,
+                    y: parseFloat(shape.getAttribute('cy')) || 0
+                };
+                break;
+            case 'polygon':
+                const points = this.parsePoints(shape.getAttribute('points') || '');
+                if (points.length > 0) {
+                    const centerX = points.reduce((sum, p) => sum + p.x, 0) / points.length;
+                    const centerY = points.reduce((sum, p) => sum + p.y, 0) / points.length;
+                    position = { x: centerX, y: centerY };
+                }
+                break;
         }
 
         // Застосовуємо transform якщо є
-        const transform = rect.getAttribute('transform');
+        const transform = shape.getAttribute('transform');
         if (transform) {
             position = this.applyTransform(position, transform);
         }
@@ -263,16 +278,17 @@ class SVGMapParser {
     }
 
     /**
-     * Застосовує transform до координат (спрощена версія)
+     * Застосовує transform до координат
      */
     applyTransform(point, transformString) {
-        // Простий парсинг translate() transform
         const translateMatch = transformString.match(/translate\(([^)]+)\)/);
         if (translateMatch) {
-            const [tx, ty] = translateMatch[1].split(/[,\s]+/).map(Number);
+            const coords = translateMatch[1].split(/[,\s]+/).map(Number);
+            const tx = coords[0] || 0;
+            const ty = coords[1] || 0;
             return {
-                x: point.x + (tx || 0),
-                y: point.y + (ty || 0)
+                x: point.x + tx,
+                y: point.y + ty
             };
         }
         return point;
@@ -283,105 +299,11 @@ class SVGMapParser {
      */
     parseStyle(element) {
         const classList = Array.from(element.classList || []);
-        const style = {
+        return {
             classes: classList,
             fill: element.getAttribute('fill') || '',
             stroke: element.getAttribute('stroke') || '',
             strokeWidth: element.getAttribute('stroke-width') || ''
-        };
-
-        return style;
-    }
-
-    /**
-     * Знаходить кімнату за її вузлом
-     */
-    findRoomByNodeId(nodeId) {
-        return this.mapData.rooms.find(room => room.nodeId === nodeId);
-    }
-
-    /**
-     * Знаходить всі з'єднання для вузла
-     */
-    findEdgesForNode(nodeId) {
-        return this.mapData.edges.filter(edge =>
-            edge.fromNodeId === nodeId || edge.toNodeId === nodeId
-        );
-    }
-
-    /**
-     * Створює граф для навігації
-     */
-    buildNavigationGraph() {
-        const graph = new Map();
-
-        // Ініціалізуємо всі вузли
-        this.mapData.nodes.forEach(node => {
-            graph.set(node.id, {
-                ...node,
-                connections: []
-            });
-        });
-
-        // Додаємо з'єднання
-        this.mapData.edges.forEach(edge => {
-            const fromNode = graph.get(edge.fromNodeId);
-            const toNode = graph.get(edge.toNodeId);
-
-            if (fromNode && toNode) {
-                fromNode.connections.push({
-                    nodeId: edge.toNodeId,
-                    weight: edge.weight,
-                    edgeId: edge.id
-                });
-
-                toNode.connections.push({
-                    nodeId: edge.fromNodeId,
-                    weight: edge.weight,
-                    edgeId: edge.id
-                });
-            }
-        });
-
-        return graph;
-    }
-
-    /**
-     * Експортує дані у JSON
-     */
-    toJSON() {
-        return JSON.stringify(this.mapData, null, 2);
-    }
-
-    /**
-     * Створює спрощену версію даних для навігації
-     */
-    toNavigationData() {
-        return {
-            metadata: this.mapData.metadata,
-            building: this.mapData.building,
-            rooms: this.mapData.rooms.map(room => ({
-                id: room.id,
-                nodeId: room.nodeId,
-                label: room.label,
-                category: room.category,
-                keywords: room.keywords,
-                access: room.access,
-                center: this.calculateRoomCenter(room.geometry)
-            })),
-            nodes: this.mapData.nodes.map(node => ({
-                id: node.id,
-                type: node.type,
-                roomId: node.roomId,
-                position: node.position
-            })),
-            edges: this.mapData.edges.map(edge => ({
-                id: edge.id,
-                from: edge.fromNodeId,
-                to: edge.toNodeId,
-                weight: edge.weight
-            })),
-            graph: this.buildSimpleGraph()
         };
     }
 
@@ -413,39 +335,6 @@ class SVGMapParser {
 
         return { x: 0, y: 0 };
     }
-
-    /**
-     * Створює простий граф для алгоритмів пошуку шляху
-     */
-    buildSimpleGraph() {
-        const graph = {};
-
-        // Ініціалізуємо вузли
-        this.mapData.nodes.forEach(node => {
-            graph[node.id] = {
-                position: node.position,
-                roomId: node.roomId,
-                connections: []
-            };
-        });
-
-        // Додаємо з'єднання
-        this.mapData.edges.forEach(edge => {
-            if (graph[edge.fromNodeId] && graph[edge.toNodeId]) {
-                graph[edge.fromNodeId].connections.push({
-                    nodeId: edge.toNodeId,
-                    weight: edge.weight
-                });
-
-                graph[edge.toNodeId].connections.push({
-                    nodeId: edge.fromNodeId,
-                    weight: edge.weight
-                });
-            }
-        });
-
-        return graph;
-    }
 }
 
 // Функція для використання парсера
@@ -454,33 +343,4 @@ function parseSVGMap(svgContent) {
     return parser.parse(svgContent);
 }
 
-// Експорт для використання в Node.js або браузері
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { SVGMapParser, parseSVGMap };
-} else if (typeof window !== 'undefined') {
-    window.SVGMapParser = SVGMapParser;
-    window.parseSVGMap = parseSVGMap;
-}
-
-// Приклад використання:
-/*
-// Читання SVG файлу та парсинг
-fetch('map_10_01.svg')
-    .then(response => response.text())
-    .then(svgContent => {
-        const mapData = parseSVGMap(svgContent);
-        console.log('Parsed map data:', mapData);
-        
-        // Збереження в JSON
-        const jsonData = JSON.stringify(mapData, null, 2);
-        console.log('JSON output:', jsonData);
-    })
-    .catch(error => {
-        console.error('Error parsing SVG:', error);
-    });
-
-// Або з використанням класу
-const parser = new SVGMapParser();
-const mapData = parser.parse(svgContent);
-const navigationGraph = parser.buildNavigationGraph();
-*/
+module.exports = { SVGMapParser, parseSVGMap };

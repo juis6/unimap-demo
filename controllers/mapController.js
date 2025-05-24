@@ -8,6 +8,10 @@ const Fuse = require('fuse.js');
 const mapCache = new NodeCache({ stdTTL: 3600 }); // кеш на 1 годину
 
 class MapController {
+    constructor() {
+        this.mapsDirectory = path.join(__dirname, '../data/maps');
+    }
+
     // Отримання головної сторінки карти
     async getMapPage(req, res) {
         try {
@@ -22,7 +26,7 @@ class MapController {
             });
         } catch (error) {
             console.error('Error loading map page:', error);
-            res.status(500).render('error/500', {
+            res.status(500).render('pages/error', {
                 title: 'Помилка сервера',
                 error: 'Не вдалося завантажити карту'
             });
@@ -176,7 +180,10 @@ class MapController {
     // Отримання доступних карт
     async getAvailableMaps() {
         try {
-            const files = await fs.readdir('.');
+            // Створюємо директорію якщо її немає
+            await this.ensureMapsDirectory();
+
+            const files = await fs.readdir(this.mapsDirectory);
             const svgFiles = files.filter(file =>
                 file.endsWith('.svg') && file.startsWith('map-')
             );
@@ -189,6 +196,16 @@ class MapController {
         } catch (error) {
             console.error('Error getting available maps:', error);
             return [];
+        }
+    }
+
+    // Створення директорії для карт
+    async ensureMapsDirectory() {
+        try {
+            await fs.access(this.mapsDirectory);
+        } catch (error) {
+            // Директорія не існує, створюємо її
+            await fs.mkdir(this.mapsDirectory, { recursive: true });
         }
     }
 
@@ -214,7 +231,8 @@ class MapController {
 
         try {
             const filename = `${mapId}.svg`;
-            const svgContent = await fs.readFile(filename, 'utf8');
+            const filePath = path.join(this.mapsDirectory, filename);
+            const svgContent = await fs.readFile(filePath, 'utf8');
             const mapData = parseSVGMap(svgContent);
 
             // Зберігаємо в кеш
@@ -229,7 +247,7 @@ class MapController {
 
     // Алгоритм Дейкстри для пошуку найкоротшого шляху
     dijkstraRoute(mapData, fromRoomId, toRoomId) {
-        // Знаходимо вузли для кімнат
+        // Знаходимо кімнати
         const fromRoom = mapData.rooms.find(room => room.id === fromRoomId);
         const toRoom = mapData.rooms.find(room => room.id === toRoomId);
 
@@ -237,13 +255,72 @@ class MapController {
             return null;
         }
 
-        const fromNodeId = fromRoom.nodeId;
-        const toNodeId = toRoom.nodeId;
+        // Знаходимо відповідні вузли
+        const fromNode = mapData.nodes.find(node => node.id === fromRoom.nodeId);
+        const toNode = mapData.nodes.find(node => node.id === toRoom.nodeId);
 
-        if (!fromNodeId || !toNodeId) {
-            return null;
+        if (!fromNode || !toNode) {
+            // Якщо прямі вузли не знайдено, шукаємо найближчі навігаційні вузли
+            const fromNodeId = this.findNearestNode(fromRoom, mapData.nodes);
+            const toNodeId = this.findNearestNode(toRoom, mapData.nodes);
+
+            if (!fromNodeId || !toNodeId) {
+                return null;
+            }
+
+            return this.findShortestPath(mapData, fromNodeId, toNodeId);
         }
 
+        return this.findShortestPath(mapData, fromNode.id, toNode.id);
+    }
+
+    // Пошук найближчого вузла до кімнати
+    findNearestNode(room, nodes) {
+        if (!room.geometry || !room.geometry.children) return null;
+
+        const roomCenter = this.calculateRoomCenter(room.geometry);
+        let nearestNode = null;
+        let minDistance = Infinity;
+
+        nodes.forEach(node => {
+            if (node.type === 'nav') { // тільки навігаційні вузли
+                const distance = Math.sqrt(
+                    Math.pow(node.position.x - roomCenter.x, 2) +
+                    Math.pow(node.position.y - roomCenter.y, 2)
+                );
+
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestNode = node.id;
+                }
+            }
+        });
+
+        return nearestNode;
+    }
+
+    // Обчислення центру кімнати
+    calculateRoomCenter(geometry) {
+        if (!geometry || !geometry.children || geometry.children.length === 0) {
+            return { x: 0, y: 0 };
+        }
+
+        const shape = geometry.children[0];
+
+        if (shape.type === 'polygon' || shape.type === 'polyline') {
+            const points = shape.coordinates;
+            if (points.length > 0) {
+                const centerX = points.reduce((sum, p) => sum + p.x, 0) / points.length;
+                const centerY = points.reduce((sum, p) => sum + p.y, 0) / points.length;
+                return { x: centerX, y: centerY };
+            }
+        }
+
+        return { x: 0, y: 0 };
+    }
+
+    // Пошук найкоротшого шляху
+    findShortestPath(mapData, fromNodeId, toNodeId) {
         // Будуємо граф
         const graph = this.buildGraph(mapData);
 

@@ -1,0 +1,727 @@
+/* Стилі для інтерактивної карти */
+
+#map-container {
+  display: flex;
+  height: 100vh;
+  background: #f8f9fa;
+}
+
+/* Ліва частина - карта */
+#map-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 0;
+}
+
+#map-header {
+  background: white;
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#map-header h1 {
+  font-size: 1.5rem;
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+}
+
+#map-info {
+  display: flex;
+  gap: 2rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+#building-name {
+  font-weight: 600;
+  color: #495057;
+}
+
+/* Контроли карти */
+#map-controls {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+#map-controls button {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  color: #495057;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+#map-controls button:hover {
+  background: #f8f9fa;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* SVG контейнер */
+#svg-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  cursor: grab;
+}
+
+#svg-container:active {
+  cursor: grabbing;
+}
+
+#map-svg {
+  width: 100%;
+  height: 100%;
+}
+
+#map-svg svg {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease;
+}
+
+/* Індикатор завантаження */
+#loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+}
+
+#loading-indicator div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #6c757d;
+}
+
+#loading-indicator div::before {
+  content: "";
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e9ecef;
+  border-top: 2px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Інформація про маршрут */
+#route-info {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 300px;
+  z-index: 1000;
+}
+
+#route-info h3 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+  font-size: 1.1rem;
+}
+
+#route-distance {
+  font-weight: 600;
+  color: #007bff;
+  margin-bottom: 1rem;
+}
+
+#route-steps {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.route-step {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.route-step:last-child {
+  border-bottom: none;
+}
+
+#clear-route {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.5rem;
+  background: #dc3545;
+  font-size: 0.9rem;
+}
+
+/* Права частина - інструменти */
+#tools-panel {
+  width: 350px;
+  background: white;
+  border-left: 1px solid #dee2e6;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#tools-panel > div {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+#tools-panel h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #007bff;
+}
+
+#tools-panel h3 {
+  font-size: 1rem;
+  margin: 1rem 0 0.5rem 0;
+  color: #495057;
+}
+
+/* Вибір карти */
+#map-selector select {
+  margin-bottom: 1rem;
+}
+
+#load-map {
+  width: 100%;
+}
+
+/* Вибір поверху */
+#floor-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.floor-button {
+  flex: 1;
+  min-width: 80px;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  font-size: 0.9rem;
+}
+
+.floor-button.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+/* Пошук кімнат */
+#search-input-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+#search-input {
+  flex: 1;
+}
+
+#search-button {
+  flex-shrink: 0;
+  padding: 0.75rem 1rem;
+}
+
+#category-filter {
+  margin-bottom: 1rem;
+}
+
+#category-filter label {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+#search-results {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.search-result {
+  padding: 0.75rem;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-result:hover {
+  background: #f8f9fa;
+  border-color: #007bff;
+}
+
+.search-result h4 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.9rem;
+  color: #2c3e50;
+}
+
+.search-result p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+/* Навігація */
+#route-builder {
+  margin-bottom: 1rem;
+}
+
+#from-room,
+#to-room {
+  margin-bottom: 1rem;
+}
+
+#from-room label,
+#to-room label {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+#route-builder > div:last-child {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#build-route {
+  flex: 1;
+}
+
+#swap-route {
+  width: 40px;
+  padding: 0.75rem 0.5rem;
+  font-size: 1.2rem;
+}
+
+/* Швидкі дії */
+#quick-actions button {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem;
+  font-size: 0.9rem;
+}
+
+/* Деталі кімнати */
+#room-details {
+  background: #f8f9fa;
+}
+
+#selected-room-info div {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+#room-name {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+#room-actions {
+  margin-top: 1rem;
+}
+
+#room-actions button {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem;
+  font-size: 0.9rem;
+}
+
+/* Легенда */
+#legend-items > div {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Системна інформація */
+#system-status div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+#connection-status {
+  color: #28a745;
+  font-weight: 600;
+}
+
+/* Модальне вікно */
+#error-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+#error-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+}
+
+#error-content h3 {
+  color: #dc3545;
+  margin-bottom: 1rem;
+}
+
+#close-error {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* Контекстне меню */
+#context-menu {
+  position: fixed;
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1500;
+  padding: 0.5rem 0;
+  min-width: 200px;
+}
+
+#context-room-name {
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 1px solid #e9ecef;
+  margin-bottom: 0.5rem;
+}
+
+#context-menu button {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  color: #495057;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+#context-menu button:hover {
+  background: #f8f9fa;
+}
+
+/* SVG стилі для елементів карти */
+.room {
+  fill: #e3f2fd;
+  stroke: #1976d2;
+  stroke-width: 1;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.room:hover,
+.room.highlighted {
+  fill: #bbdefb;
+  stroke: #0d47a1;
+  stroke-width: 2;
+}
+
+.room.selected {
+  fill: #2196f3;
+  stroke: #0d47a1;
+  stroke-width: 3;
+}
+
+.room.route-highlight {
+  fill: #f44336 !important;
+  stroke: #d32f2f !important;
+  stroke-width: 3 !important;
+}
+
+/* Категорії кімнат */
+.category-laboratory {
+  fill: #e8f5e8;
+  stroke: #4caf50;
+}
+.category-restroom {
+  fill: #fff3e0;
+  stroke: #ff9800;
+}
+.category-food-service {
+  fill: #fce4ec;
+  stroke: #e91e63;
+}
+.category-utility {
+  fill: #f3e5f5;
+  stroke: #9c27b0;
+}
+.category-recreation {
+  fill: #e0f2f1;
+  stroke: #009688;
+}
+.category-workspace {
+  fill: #e3f2fd;
+  stroke: #2196f3;
+}
+
+/* Вузли навігації */
+.node {
+  fill: #1976d2;
+  stroke: #fff;
+  stroke-width: 1;
+  cursor: pointer;
+}
+
+.node-nav {
+  fill: #1976d2;
+}
+.node-sup {
+  fill: #ff9800;
+}
+
+.node.route-highlight {
+  fill: #f44336 !important;
+  stroke: #fff !important;
+  stroke-width: 2 !important;
+}
+
+/* Ребра (коридори) */
+.edge {
+  fill: #ffeb3b;
+  stroke: #fbc02d;
+  stroke-width: 1;
+  opacity: 0.7;
+}
+
+.edge.route-highlight {
+  fill: #f44336 !important;
+  stroke: #d32f2f !important;
+  stroke-width: 2 !important;
+  opacity: 1 !important;
+}
+
+/* Адаптивність для планшетів */
+@media (max-width: 1024px) {
+  #map-container {
+    flex-direction: column;
+  }
+
+  #tools-panel {
+    width: 100%;
+    max-height: 40vh;
+    border-left: none;
+    border-top: 1px solid #dee2e6;
+  }
+
+  #map-area {
+    height: 60vh;
+  }
+}
+
+/* Адаптивність для мобільних */
+@media (max-width: 768px) {
+  #map-container {
+    height: 100vh;
+  }
+
+  #map-area {
+    height: 50vh;
+  }
+
+  #tools-panel {
+    max-height: 50vh;
+  }
+
+  #map-controls {
+    top: 10px;
+    right: 10px;
+  }
+
+  #map-controls button {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+
+  #route-info {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    max-width: none;
+  }
+
+  #tools-panel > div {
+    padding: 0.75rem;
+  }
+
+  #search-input-container {
+    flex-direction: column;
+  }
+
+  #search-button {
+    width: 100%;
+  }
+}
+
+/* Попередній перегляд маршруту */
+.route-preview {
+  fill: #ffc107 !important;
+  stroke: #f57c00 !important;
+  stroke-width: 2 !important;
+  opacity: 0.7 !important;
+}
+
+/* Збережені маршрути */
+#saved-routes {
+  border-top: 1px solid #e9ecef;
+  padding-top: 1rem;
+  margin-top: 1rem;
+}
+
+#saved-routes h3 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: #495057;
+}
+
+#saved-routes-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+/* Дії з маршрутом */
+#route-actions {
+  border-top: 1px solid #e9ecef;
+  padding-top: 1rem;
+}
+
+#route-actions button {
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#route-actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#save-route:hover {
+  background: #218838 !important;
+}
+#share-route:hover {
+  background: #138496 !important;
+}
+#export-route:hover {
+  background: #5a32a3 !important;
+}
+
+/* Модальні вікна */
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h3 {
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.modal-content input {
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+/* Анімації */
+@keyframes routeAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.route-highlight {
+  animation: routeAnimation 0.3s ease-out;
+}
+
+/* Адаптивність для дій з маршрутом */
+@media (max-width: 768px) {
+  #route-actions {
+    flex-direction: column;
+  }
+
+  #route-actions button {
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Скролбари */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
