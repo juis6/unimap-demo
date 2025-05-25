@@ -13,7 +13,11 @@ app.use(morgan('combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
+
+// Статичні файли
 app.use(express.static('public'));
+// ДОДАНО: Статичний доступ до папки data для SVG файлів
+app.use('/data', express.static(path.join(__dirname, 'data')));
 
 // View engine setup
 app.set('view engine', 'ejs');
@@ -27,6 +31,23 @@ const mapRoutes = require('./routes/map');
 
 app.use('/', indexRoutes);
 app.use('/map', mapRoutes);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('Server error:', err);
+    res.status(500).render('pages/error', {
+        title: 'Помилка сервера',
+        error: 'Внутрішня помилка сервера'
+    });
+});
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).render('pages/error', {
+        title: 'Сторінка не знайдена',
+        error: 'Запитувана сторінка не знайдена'
+    });
+});
 
 // Start server
 app.listen(PORT, () => {

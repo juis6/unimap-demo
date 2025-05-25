@@ -11,6 +11,11 @@ router.get('/data/:mapId', (req, res) => {
     mapController.getMapData(req, res);
 });
 
+// НОВИЙ МАРШРУТ: Доступ до оригінального SVG файлу
+router.get('/svg/:mapId', (req, res) => {
+    mapController.getSVGFile(req, res);
+});
+
 router.get('/floors/:mapId', (req, res) => {
     mapController.getFloors(req, res);
 });

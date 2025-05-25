@@ -1,4 +1,4 @@
-// Основний клас для роботи з картою
+// Основний клас для роботи з картою - ВИПРАВЛЕНА ВЕРСІЯ
 class MapCore {
     constructor() {
         this.currentMapData = null;
@@ -94,7 +94,8 @@ class MapCore {
             const mapData = await response.json();
             this.currentMapData = mapData;
 
-            await this.renderMap();
+            // ВИПРАВЛЕННЯ: Завантажуємо оригінальний SVG напряму
+            await this.loadOriginalSVG(mapId);
             await this.loadFloors();
             await this.loadRooms();
 
@@ -108,6 +109,163 @@ class MapCore {
         }
     }
 
+    // НОВА ФУНКЦІЯ: Завантаження оригінального SVG
+    async loadOriginalSVG(mapId) {
+        try {
+            // Завантажуємо оригінальний SVG файл
+            const svgResponse = await fetch(`/map/svg/${mapId}`);
+            if (!svgResponse.ok) {
+                throw new Error('SVG file not found');
+            }
+
+            const svgContent = await svgResponse.text();
+
+            // Очищуємо контейнер та вставляємо оригінальний SVG
+            const svgContainer = document.getElementById('map-svg');
+            svgContainer.innerHTML = svgContent;
+
+            // Знаходимо SVG елемент та налаштовуємо його
+            const svgElement = svgContainer.querySelector('svg');
+            if (svgElement) {
+                svgElement.setAttribute('id', 'main-svg');
+                svgElement.style.width = '100%';
+                svgElement.style.height = '100%';
+
+                // Додаємо обробники подій для кімнат
+                this.setupRoomInteractions(svgElement);
+
+                // Оновлюємо інформацію про будівлю
+                this.updateBuildingInfo();
+            }
+        } catch (error) {
+            console.warn('Could not load original SVG, falling back to parsed version:', error);
+            // Якщо не вдалося завантажити оригінальний SVG, використовуємо парсовану версію
+            await this.renderMap();
+        }
+    }
+
+    // НОВА ФУНКЦІЯ: Налаштування взаємодії з кімнатами
+    setupRoomInteractions(svgElement) {
+        if (!this.currentMapData || !this.currentMapData.rooms) return;
+
+        // Знаходимо всі кімнати в SVG
+        const roomElements = svgElement.querySelectorAll('[data-name="room"]');
+
+        roomElements.forEach(roomElement => {
+            const roomId = roomElement.id;
+            const roomData = this.currentMapData.rooms.find(r => r.id === roomId);
+
+            if (roomData) {
+                // Додаємо CSS класи для стилізації
+                roomElement.classList.add('room');
+                roomElement.classList.add(`category-${roomData.category}`);
+
+                // Додаємо обробники подій
+                roomElement.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectRoom(roomData);
+                });
+
+                roomElement.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.showContextMenu(e, roomData);
+                });
+
+                roomElement.addEventListener('mouseenter', () => {
+                    this.highlightRoom(roomId, true);
+                });
+
+                roomElement.addEventListener('mouseleave', () => {
+                    this.highlightRoom(roomId, false);
+                });
+
+                // Додаємо атрибути для пошуку та ідентифікації
+                roomElement.setAttribute('data-room-id', roomId);
+                roomElement.setAttribute('data-room-label', roomData.label || '');
+                roomElement.setAttribute('data-room-category', roomData.category || '');
+            }
+        });
+
+        // Додаємо стилі безпосередньо в SVG
+        this.injectSVGStyles(svgElement);
+    }
+
+    // НОВА ФУНКЦІЯ: Додавання стилів в SVG
+    injectSVGStyles(svgElement) {
+        // Перевіряємо чи вже є стилі
+        let styleElement = svgElement.querySelector('#dynamic-styles');
+        if (!styleElement) {
+            styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+            styleElement.id = 'dynamic-styles';
+
+            // Вставляємо в defs або на початок SVG
+            let defsElement = svgElement.querySelector('defs');
+            if (!defsElement) {
+                defsElement = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                svgElement.insertBefore(defsElement, svgElement.firstChild);
+            }
+            defsElement.appendChild(styleElement);
+        }
+
+        styleElement.textContent = `
+            /* Інтерактивні стилі для кімнат */
+            .room {
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .room:hover, .room.highlighted {
+                opacity: 0.8;
+                filter: brightness(1.1);
+            }
+            
+            .room.selected {
+                filter: brightness(1.2) drop-shadow(0 0 5px #2196f3);
+                stroke: #2196f3 !important;
+                stroke-width: 2 !important;
+            }
+            
+            /* Категорії кімнат - додаткові ефекти */
+            .category-laboratory:hover { 
+                filter: brightness(1.1) drop-shadow(0 0 3px #4caf50); 
+            }
+            .category-restroom:hover { 
+                filter: brightness(1.1) drop-shadow(0 0 3px #ff9800); 
+            }
+            .category-food-service:hover { 
+                filter: brightness(1.1) drop-shadow(0 0 3px #e91e63); 
+            }
+            .category-utility:hover { 
+                filter: brightness(1.1) drop-shadow(0 0 3px #9c27b0); 
+            }
+            .category-recreation:hover { 
+                filter: brightness(1.1) drop-shadow(0 0 3px #009688); 
+            }
+            .category-workspace:hover { 
+                filter: brightness(1.1) drop-shadow(0 0 3px #2196f3); 
+            }
+            
+            /* Стилі для маршруту */
+            .route-highlight {
+                filter: brightness(1.3) drop-shadow(0 0 5px #f44336) !important;
+                stroke: #f44336 !important;
+                stroke-width: 3 !important;
+                animation: routePulse 2s infinite;
+            }
+            
+            @keyframes routePulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.7; }
+            }
+            
+            /* Приховування підписів */
+            .hide-labels text {
+                display: none;
+            }
+        `;
+    }
+
+    // Залишаємо метод renderMap як fallback
     async renderMap() {
         if (!this.currentMapData) return;
 
@@ -283,31 +441,20 @@ class MapCore {
     renderNodes(svg) {
         if (!this.currentMapData.nodes) return;
 
-        // Просто копіюємо оригінальні nodes елементи без змін
-        const originalSvg = document.querySelector('#main-svg');
-        if (originalSvg) {
-            // Знаходимо оригінальні nodes в SVG
-            const originalNodes = svg.ownerDocument.querySelectorAll('[data-name="node"]');
+        const nodesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        nodesGroup.setAttribute('id', 'nodes-group');
 
-            // Створюємо групу для nodes
-            const nodesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-            nodesGroup.setAttribute('id', 'nodes-group');
+        this.currentMapData.nodes.forEach(nodeData => {
+            const nodeElement = this.createOriginalNodeCopy(nodeData);
+            if (nodeElement) {
+                nodesGroup.appendChild(nodeElement);
+            }
+        });
 
-            // Копіюємо кожен node як є
-            this.currentMapData.nodes.forEach(nodeData => {
-                // Створюємо копію оригінального node елемента
-                const nodeElement = this.createOriginalNodeCopy(nodeData);
-                if (nodeElement) {
-                    nodesGroup.appendChild(nodeElement);
-                }
-            });
-
-            svg.appendChild(nodesGroup);
-        }
+        svg.appendChild(nodesGroup);
     }
 
     createOriginalNodeCopy(nodeData) {
-        // Створюємо точну копію оригінального node з геометрією
         if (!nodeData.geometry) return null;
 
         const nodeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -316,7 +463,6 @@ class MapCore {
         nodeGroup.setAttribute('data-type', nodeData.type);
         nodeGroup.setAttribute('data-room-id', nodeData.roomId);
 
-        // Копіюємо всю оригінальну геометрію
         if (nodeData.geometry.children) {
             nodeData.geometry.children.forEach(child => {
                 const element = this.createGeometryElement(child);
@@ -332,11 +478,9 @@ class MapCore {
     renderEdges(svg) {
         if (!this.currentMapData.edges) return;
 
-        // Створюємо групу для edges
         const edgesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         edgesGroup.setAttribute('id', 'edges-group');
 
-        // Копіюємо кожен edge як є
         this.currentMapData.edges.forEach(edgeData => {
             const edgeElement = this.createOriginalEdgeCopy(edgeData);
             if (edgeElement) {
@@ -348,7 +492,6 @@ class MapCore {
     }
 
     createOriginalEdgeCopy(edgeData) {
-        // Створюємо точну копію оригінального edge з геометрією
         if (!edgeData.geometry) return null;
 
         const edgeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -357,7 +500,6 @@ class MapCore {
         edgeGroup.setAttribute('data-weight', edgeData.weight);
         edgeGroup.setAttribute('data-nodes-id', `${edgeData.fromNodeId},${edgeData.toNodeId}`);
 
-        // Копіюємо всю оригінальну геометрію
         if (edgeData.geometry.children) {
             edgeData.geometry.children.forEach(child => {
                 const element = this.createGeometryElement(child);
@@ -395,7 +537,6 @@ class MapCore {
                 floorButtons.appendChild(button);
             });
         } else {
-            // Якщо поверхи не визначені, показуємо поточну карту як єдиний поверх
             const button = document.createElement('button');
             button.textContent = 'Поверх 1';
             button.classList.add('floor-button', 'active');
@@ -407,7 +548,6 @@ class MapCore {
     async loadRooms() {
         if (!this.currentMapData || !this.currentMapData.rooms) return;
 
-        // Оновлюємо випадаючі списки для навігації
         const fromSelect = document.getElementById('from-select');
         const toSelect = document.getElementById('to-select');
 
@@ -415,7 +555,7 @@ class MapCore {
         toSelect.innerHTML = '<option value="">Виберіть кінцеву кімнату</option>';
 
         this.currentMapData.rooms.forEach(room => {
-            if (room.access) { // Тільки доступні кімнати
+            if (room.access) {
                 const option1 = document.createElement('option');
                 option1.value = room.id;
                 option1.textContent = room.label || room.id;
@@ -430,7 +570,6 @@ class MapCore {
     }
 
     selectFloor(floorNumber) {
-        // Оновлюємо активну кнопку поверху
         document.querySelectorAll('.floor-button').forEach(btn => {
             btn.classList.remove('active');
         });
@@ -438,22 +577,19 @@ class MapCore {
         document.querySelector(`[data-floor="${floorNumber}"]`).classList.add('active');
         document.getElementById('current-floor').textContent = floorNumber;
 
-        // Тут можна було б завантажити карту конкретного поверху
-        // Поки що просто оновлюємо відображення
         console.log(`Selected floor: ${floorNumber}`);
     }
 
     selectRoom(room) {
         this.selectedRoom = room;
 
-        // Підсвічуємо вибрану кімнату
         document.querySelectorAll('.room').forEach(r => r.classList.remove('selected'));
-        document.getElementById(room.id).classList.add('selected');
+        const roomElement = document.getElementById(room.id);
+        if (roomElement) {
+            roomElement.classList.add('selected');
+        }
 
-        // Оновлюємо панель деталей кімнати
         this.updateRoomDetails(room);
-
-        // Показуємо панель деталей
         document.getElementById('room-details').style.display = 'block';
     }
 
@@ -497,7 +633,6 @@ class MapCore {
         contextMenu.style.left = event.pageX + 'px';
         contextMenu.style.top = event.pageY + 'px';
 
-        // Додаємо обробники для контекстного меню
         document.getElementById('context-route-to').onclick = () => {
             this.setRouteDestination(room);
             this.hideContextMenu();
@@ -513,7 +648,6 @@ class MapCore {
             this.hideContextMenu();
         };
 
-        // Закриваємо меню при кліку поза ним
         document.addEventListener('click', this.hideContextMenu.bind(this), { once: true });
     }
 
@@ -668,7 +802,6 @@ class MapCore {
             .category-recreation { fill: #e0f2f1; stroke: #009688; }
             .category-workspace { fill: #e3f2fd; stroke: #2196f3; }
             
-            /* Оригінальні стилі з SVG для nodes та edges */
             .cls-3 {
                 fill: yellow;
             }

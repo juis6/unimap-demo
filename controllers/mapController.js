@@ -33,6 +33,41 @@ class MapController {
         }
     }
 
+    // НОВИЙ МЕТОД: Отримання оригінального SVG файлу
+    async getSVGFile(req, res) {
+        try {
+            const { mapId } = req.params;
+            const filename = `${mapId}.svg`;
+            const filePath = path.join(this.mapsDirectory, filename);
+
+            // Перевіряємо чи існує файл
+            await fs.access(filePath);
+
+            // Читаємо файл і відправляємо як SVG
+            const svgContent = await fs.readFile(filePath, 'utf8');
+
+            res.set({
+                'Content-Type': 'image/svg+xml',
+                'Cache-Control': 'public, max-age=3600' // кешуємо на 1 годину
+            });
+
+            res.send(svgContent);
+
+        } catch (error) {
+            if (error.code === 'ENOENT') {
+                console.error(`SVG file not found: ${req.params.mapId}.svg`);
+                res.status(404).json({
+                    error: 'SVG файл не знайдено'
+                });
+            } else {
+                console.error(`Error serving SVG file ${req.params.mapId}:`, error);
+                res.status(500).json({
+                    error: 'Помилка завантаження SVG файлу'
+                });
+            }
+        }
+    }
+
     // Отримання даних карти
     async getMapData(req, res) {
         try {
@@ -207,6 +242,15 @@ class MapController {
             // Директорія не існує, створюємо її
             await fs.mkdir(this.mapsDirectory, { recursive: true });
             console.log(`Created maps directory: ${this.mapsDirectory}`);
+
+            // Також створюємо папку для зображень
+            const imgDir = path.join(__dirname, '../public/img');
+            try {
+                await fs.mkdir(imgDir, { recursive: true });
+                console.log(`Created images directory: ${imgDir}`);
+            } catch (imgError) {
+                console.log('Images directory already exists or cannot be created');
+            }
         }
     }
 
