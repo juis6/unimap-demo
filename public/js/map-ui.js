@@ -105,12 +105,6 @@ class MapUI {
                 this.clearSelection();
             }
 
-            // Пробіл - переключення підписів
-            if (e.key === ' ' && !e.target.matches('input, textarea, select')) {
-                e.preventDefault();
-                this.mapCore.toggleLabels();
-            }
-
             // Клавіші масштабування
             if (e.key === '+' || e.key === '=') {
                 e.preventDefault();
@@ -299,7 +293,7 @@ class MapUI {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
 
-            // Еasing функція для плавної анімації
+            // Easing функція для плавної анімації
             const easeProgress = this.easeInOutQuad(progress);
 
             this.mapCore.panX = fromX + (toX - fromX) * easeProgress;
@@ -352,178 +346,6 @@ class MapUI {
             if (progressText) {
                 progressText.textContent = message;
             }
-        }
-    }
-
-    // Створення динамічної легенди категорій
-    updateCategoryLegend(rooms) {
-        const legendContainer = document.getElementById('room-legend');
-        if (!legendContainer) return;
-
-        // Збираємо унікальні категорії
-        const categories = [...new Set(rooms.map(room => room.category))];
-
-        // Кольори для категорій
-        const categoryColors = {
-            'laboratory': '#4caf50',
-            'restroom': '#ff9800',
-            'food-service': '#e91e63',
-            'utility': '#9c27b0',
-            'recreation': '#009688',
-            'workspace': '#2196f3'
-        };
-
-        // Назви категорій
-        const categoryNames = {
-            'laboratory': 'Лабораторії',
-            'restroom': 'Туалети',
-            'food-service': 'Їдальня',
-            'utility': 'Підсобні приміщення',
-            'recreation': 'Відпочинок',
-            'workspace': 'Робочі зони'
-        };
-
-        // Очищуємо контейнер
-        legendContainer.innerHTML = '';
-
-        // Додаємо елементи легенди
-        categories.forEach(category => {
-            const color = categoryColors[category] || '#666';
-            const name = categoryNames[category] || category;
-
-            const legendItem = document.createElement('div');
-            legendItem.innerHTML = `
-                <span style="background-color: ${color}; width: 15px; height: 15px; display: inline-block; border-radius: 2px;"></span>
-                ${name}
-            `;
-            legendContainer.appendChild(legendItem);
-        });
-    }
-
-    // Створення міні-карти для навігації
-    createMiniMap() {
-        const miniMapContainer = document.createElement('div');
-        miniMapContainer.id = 'mini-map';
-        miniMapContainer.style.cssText = `
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 200px;
-            height: 150px;
-            background: white;
-            border: 2px solid #dee2e6;
-            border-radius: 4px;
-            overflow: hidden;
-            z-index: 1000;
-            opacity: 0.8;
-        `;
-
-        const miniMapSvg = document.createElement('div');
-        miniMapSvg.style.cssText = `
-            width: 100%;
-            height: 100%;
-            transform: scale(0.1);
-            transform-origin: top left;
-        `;
-
-        // Клонуємо основну карту
-        const mainSvg = document.getElementById('main-svg');
-        if (mainSvg) {
-            const clonedSvg = mainSvg.cloneNode(true);
-            clonedSvg.style.width = '2000px';
-            clonedSvg.style.height = '1500px';
-
-            // Видаляємо інтерактивність з клону
-            clonedSvg.querySelectorAll('*').forEach(el => {
-                el.style.pointerEvents = 'none';
-            });
-
-            miniMapSvg.appendChild(clonedSvg);
-        }
-
-        miniMapContainer.appendChild(miniMapSvg);
-        document.getElementById('map-area').appendChild(miniMapContainer);
-
-        // Додаємо обробник кліку для навігації
-        miniMapContainer.addEventListener('click', (e) => {
-            const rect = miniMapContainer.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width;
-            const y = (e.clientY - rect.top) / rect.height;
-
-            // Переміщуємо основну карту
-            this.mapCore.panX = -x * 1000;
-            this.mapCore.panY = -y * 750;
-            this.mapCore.applyTransform();
-        });
-
-        return miniMapContainer;
-    }
-
-    // Створення панелі статистики
-    createStatsPanel() {
-        const statsPanel = document.createElement('div');
-        statsPanel.id = 'stats-panel';
-        statsPanel.innerHTML = `
-            <h3>Статистика карти</h3>
-            <div id="stats-content">
-                <div>Завантаження статистики...</div>
-            </div>
-        `;
-
-        return statsPanel;
-    }
-
-    // Оновлення статистики карти
-    updateStats(mapData) {
-        const statsContent = document.getElementById('stats-content');
-        if (!statsContent || !mapData) return;
-
-        const totalRooms = mapData.rooms.length;
-        const accessibleRooms = mapData.rooms.filter(room => room.access).length;
-        const categories = [...new Set(mapData.rooms.map(room => room.category))];
-
-        const categoryStats = {};
-        categories.forEach(category => {
-            categoryStats[category] = mapData.rooms.filter(room => room.category === category).length;
-        });
-
-        let statsHtml = `
-            <div style="margin-bottom: 0.5rem;">
-                <strong>Загальна кількість кімнат:</strong> ${totalRooms}
-            </div>
-            <div style="margin-bottom: 0.5rem;">
-                <strong>Доступних кімнат:</strong> ${accessibleRooms}
-            </div>
-            <div style="margin-bottom: 1rem;">
-                <strong>Навігаційних вузлів:</strong> ${mapData.nodes.length}
-            </div>
-            <div style="margin-bottom: 0.5rem;">
-                <strong>За категоріями:</strong>
-            </div>
-        `;
-
-        Object.entries(categoryStats).forEach(([category, count]) => {
-            const categoryName = this.mapCore.getCategoryName(category);
-            statsHtml += `
-                <div style="margin-left: 1rem; font-size: 0.9rem;">
-                    ${categoryName}: ${count}
-                </div>
-            `;
-        });
-
-        statsContent.innerHTML = statsHtml;
-    }
-
-    // Створення режиму повноекранного перегляду
-    toggleFullscreen() {
-        const mapContainer = document.getElementById('map-container');
-
-        if (!document.fullscreenElement) {
-            mapContainer.requestFullscreen().catch(err => {
-                console.error('Error attempting to enable fullscreen:', err);
-            });
-        } else {
-            document.exitFullscreen();
         }
     }
 
@@ -632,6 +454,60 @@ class MapUI {
         } catch (error) {
             console.warn('Failed to restore map state:', error);
         }
+    }
+
+    // Створення режиму повноекранного перегляду
+    toggleFullscreen() {
+        const mapContainer = document.getElementById('map-container');
+
+        if (!document.fullscreenElement) {
+            mapContainer.requestFullscreen().catch(err => {
+                console.error('Error attempting to enable fullscreen:', err);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    // Створення статистичної панели
+    updateStats(mapData) {
+        const statsContent = document.getElementById('stats-content');
+        if (!statsContent || !mapData) return;
+
+        const totalRooms = mapData.rooms.length;
+        const accessibleRooms = mapData.rooms.filter(room => room.access).length;
+        const categories = [...new Set(mapData.rooms.map(room => room.category))];
+
+        const categoryStats = {};
+        categories.forEach(category => {
+            categoryStats[category] = mapData.rooms.filter(room => room.category === category).length;
+        });
+
+        let statsHtml = `
+            <div style="margin-bottom: 0.5rem;">
+                <strong>Загальна кількість кімнат:</strong> ${totalRooms}
+            </div>
+            <div style="margin-bottom: 0.5rem;">
+                <strong>Доступних кімнат:</strong> ${accessibleRooms}
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <strong>Навігаційних вузлів:</strong> ${mapData.nodes.length}
+            </div>
+            <div style="margin-bottom: 0.5rem;">
+                <strong>За категоріями:</strong>
+            </div>
+        `;
+
+        Object.entries(categoryStats).forEach(([category, count]) => {
+            const categoryName = this.mapCore.getCategoryName(category);
+            statsHtml += `
+                <div style="margin-left: 1rem; font-size: 0.9rem;">
+                    ${categoryName}: ${count}
+                </div>
+            `;
+        });
+
+        statsContent.innerHTML = statsHtml;
     }
 }
 

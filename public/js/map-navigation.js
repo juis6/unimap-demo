@@ -1,4 +1,4 @@
-// Клас для роботи з навігацією та побудовою маршрутів
+// Клас для роботи з навігацією та побудовою маршрутів - Material Design версія
 class MapNavigation {
     constructor(mapCore) {
         this.mapCore = mapCore;
@@ -70,9 +70,15 @@ class MapNavigation {
             return;
         }
 
+        // Показуємо індикатор завантаження
+        this.showRouteBuilding();
+
         try {
             const mapSelect = document.getElementById('map-list');
             const currentMapId = mapSelect.value;
+
+            // Активуємо режим маршруту для показу nodes та edges
+            this.mapCore.toggleRouteMode(true);
 
             const response = await fetch('/map/route', {
                 method: 'POST',
@@ -97,11 +103,30 @@ class MapNavigation {
             }
 
             this.displayRoute(result.route);
+            this.mapCore.announceToScreenReader('Маршрут успішно побудовано');
 
         } catch (error) {
             console.error('Error building route:', error);
             this.mapCore.showError('Помилка побудови маршруту: ' + error.message);
+            // Вимикаємо режим маршруту при помилці
+            this.mapCore.toggleRouteMode(false);
+        } finally {
+            this.hideRouteBuilding();
         }
+    }
+
+    showRouteBuilding() {
+        const buildButton = document.getElementById('build-route');
+        buildButton.disabled = true;
+        buildButton.textContent = 'Будується маршрут...';
+        buildButton.style.opacity = '0.6';
+    }
+
+    hideRouteBuilding() {
+        const buildButton = document.getElementById('build-route');
+        buildButton.disabled = false;
+        buildButton.textContent = 'Побудувати маршрут';
+        buildButton.style.opacity = '1';
     }
 
     displayRoute(route) {
@@ -117,7 +142,12 @@ class MapNavigation {
         this.showRouteInfo(route);
 
         // Показуємо панель з інформацією про маршрут
-        document.getElementById('route-info').style.display = 'block';
+        const routeInfo = document.getElementById('route-info');
+        routeInfo.style.display = 'block';
+
+        // Додаємо ARIA-атрибути для доступності
+        routeInfo.setAttribute('aria-live', 'polite');
+        routeInfo.setAttribute('aria-expanded', 'true');
     }
 
     highlightRoute(route) {
@@ -145,17 +175,46 @@ class MapNavigation {
                 const roomElement = document.getElementById(routeNode.room.id);
                 if (roomElement) {
                     roomElement.classList.add('route-highlight');
+                    // Додаємо ARIA-атрибут для індикації що кімната частина маршруту
+                    roomElement.setAttribute('aria-describedby', 'route-description');
                 }
             }
         });
+
+        // Створюємо опис маршруту для screen readers
+        this.createRouteDescription(route);
+    }
+
+    createRouteDescription(route) {
+        let description = document.getElementById('route-description');
+        if (!description) {
+            description = document.createElement('div');
+            description.id = 'route-description';
+            description.className = 'sr-only';
+            document.body.appendChild(description);
+        }
+
+        const fromRoom = route.nodes[0]?.room?.label || 'початкова точка';
+        const toRoom = route.nodes[route.nodes.length - 1]?.room?.label || 'кінцева точка';
+        const distance = Math.round(route.distance * 10) / 10;
+
+        description.textContent = `Активний маршрут від ${fromRoom} до ${toRoom}, відстань ${distance} метрів`;
     }
 
     showRouteInfo(route) {
         const routeDistance = document.getElementById('route-distance');
         const routeSteps = document.getElementById('route-steps');
 
-        // Показуємо відстань
-        routeDistance.querySelector('span').textContent = Math.round(route.distance * 10) / 10;
+        // Показуємо відстань з часом
+        const distance = Math.round(route.distance * 10) / 10;
+        const estimatedTime = this.calculateRouteTime(route);
+
+        routeDistance.innerHTML = `
+            <div>Відстань: <strong>${distance}</strong> м</div>
+            <div style="font-size: 0.75rem; color: var(--md-text-secondary); margin-top: 4px;">
+                Приблизний час: ${estimatedTime} хв
+            </div>
+        `;
 
         // Створюємо кроки маршруту
         routeSteps.innerHTML = '';
@@ -163,33 +222,72 @@ class MapNavigation {
         route.nodes.forEach((routeNode, index) => {
             const step = document.createElement('div');
             step.classList.add('route-step');
+            step.setAttribute('role', 'listitem');
 
             if (routeNode.room) {
                 if (index === 0) {
-                    step.textContent = `${index + 1}. Початок: ${routeNode.room.label}`;
+                    step.innerHTML = `
+                        <strong>${index + 1}. Початок</strong><br>
+                        <span style="color: var(--md-text-secondary);">${routeNode.room.label}</span>
+                    `;
                 } else if (index === route.nodes.length - 1) {
-                    step.textContent = `${index + 1}. Кінець: ${routeNode.room.label}`;
+                    step.innerHTML = `
+                        <strong>${index + 1}. Кінець</strong><br>
+                        <span style="color: var(--md-text-secondary);">${routeNode.room.label}</span>
+                    `;
                 } else {
-                    step.textContent = `${index + 1}. Через: ${routeNode.room.label}`;
+                    step.innerHTML = `
+                        <strong>${index + 1}. Через</strong><br>
+                        <span style="color: var(--md-text-secondary);">${routeNode.room.label}</span>
+                    `;
                 }
             } else {
-                step.textContent = `${index + 1}. Навігаційна точка`;
+                step.innerHTML = `
+                    <strong>${index + 1}.</strong> 
+                    <span style="color: var(--md-text-secondary);">Навігаційна точка</span>
+                `;
             }
 
             routeSteps.appendChild(step);
         });
     }
 
+    calculateRouteTime(route, walkingSpeedKmh = 4.5) {
+        if (!route) return 0;
+
+        const distanceKm = route.distance / 1000;
+        const timeHours = distanceKm / walkingSpeedKmh;
+        const timeMinutes = Math.ceil(timeHours * 60);
+
+        return Math.max(timeMinutes, 1); // Мінімум 1 хвилина
+    }
+
     clearRoute() {
         this.clearRouteDisplay();
         this.currentRoute = null;
-        document.getElementById('route-info').style.display = 'none';
+
+        // Приховуємо панель маршруту
+        const routeInfo = document.getElementById('route-info');
+        routeInfo.style.display = 'none';
+        routeInfo.setAttribute('aria-expanded', 'false');
+
+        // Вимикаємо режим маршруту
+        this.mapCore.toggleRouteMode(false);
+
+        // Видаляємо опис маршруту
+        const description = document.getElementById('route-description');
+        if (description) {
+            description.remove();
+        }
+
+        this.mapCore.announceToScreenReader('Маршрут очищено');
     }
 
     clearRouteDisplay() {
         // Видаляємо підсвічування з усіх елементів
         document.querySelectorAll('.route-highlight').forEach(element => {
             element.classList.remove('route-highlight');
+            element.removeAttribute('aria-describedby');
         });
     }
 
@@ -200,6 +298,12 @@ class MapNavigation {
         const temp = fromSelect.value;
         fromSelect.value = toSelect.value;
         toSelect.value = temp;
+
+        // Оголошуємо зміну для screen readers
+        const fromText = fromSelect.options[fromSelect.selectedIndex]?.text || 'не вибрано';
+        const toText = toSelect.options[toSelect.selectedIndex]?.text || 'не вибрано';
+
+        this.mapCore.announceToScreenReader(`Маршрут змінено: з ${fromText} до ${toText}`);
     }
 
     async findNearest(category) {
@@ -221,11 +325,12 @@ class MapNavigation {
             const result = await response.json();
 
             if (result.results.length === 0) {
-                this.mapCore.showError(`Кімнати категорії "${this.mapCore.getCategoryName(category)}" не знайдено`);
+                const categoryName = this.mapCore.getCategoryName(category);
+                this.mapCore.showError(`Кімнати категорії "${categoryName}" не знайдено`);
                 return;
             }
 
-            // Знаходимо найближчу кімнату (спрощений алгоритм)
+            // Знаходимо найближчу кімнату
             const nearest = this.findNearestRoom(this.mapCore.selectedRoom, result.results);
 
             if (nearest) {
@@ -235,6 +340,9 @@ class MapNavigation {
 
                 // Будуємо маршрут
                 await this.buildRoute();
+
+                const categoryName = this.mapCore.getCategoryName(category);
+                this.mapCore.announceToScreenReader(`Знайдено найближчий ${categoryName.toLowerCase()}: ${nearest.label}`);
             }
 
         } catch (error) {
@@ -246,21 +354,15 @@ class MapNavigation {
     findNearestRoom(fromRoom, rooms) {
         if (!fromRoom || !rooms || rooms.length === 0) return null;
 
-        // Спрощений алгоритм - знаходимо кімнату з найменшою відстанню за координатами
         let nearest = null;
         let minDistance = Infinity;
 
-        const fromCenter = this.mapCore.calculateRoomCenter ?
-            this.mapCore.calculateRoomCenter(fromRoom.geometry) :
-            { x: 0, y: 0 };
+        const fromCenter = this.calculateRoomCenter(fromRoom);
 
         rooms.forEach(room => {
-            if (room.id === fromRoom.id) return; // Пропускаємо ту ж кімнату
+            if (room.id === fromRoom.id) return;
 
-            const roomCenter = this.mapCore.calculateRoomCenter ?
-                this.mapCore.calculateRoomCenter(room.geometry) :
-                { x: 0, y: 0 };
-
+            const roomCenter = this.calculateRoomCenter(room);
             const distance = Math.sqrt(
                 Math.pow(roomCenter.x - fromCenter.x, 2) +
                 Math.pow(roomCenter.y - fromCenter.y, 2)
@@ -275,88 +377,6 @@ class MapNavigation {
         return nearest;
     }
 
-    findExit() {
-        // Спрощена реалізація - шукаємо кімнати з ключовими словами "exit" або "вихід"
-        if (!this.mapCore.currentMapData || !this.mapCore.currentMapData.rooms) {
-            this.mapCore.showError('Карта не завантажена');
-            return;
-        }
-
-        const exits = this.mapCore.currentMapData.rooms.filter(room =>
-            room.keywords.some(keyword =>
-                keyword.toLowerCase().includes('exit') ||
-                keyword.toLowerCase().includes('вихід') ||
-                keyword.toLowerCase().includes('entrance') ||
-                keyword.toLowerCase().includes('вхід')
-            )
-        );
-
-        if (exits.length === 0) {
-            this.mapCore.showError('Виходи не знайдено на карті');
-            return;
-        }
-
-        // Підсвічуємо всі виходи
-        exits.forEach(exit => {
-            this.mapCore.highlightRoom(exit.id, true);
-        });
-
-        // Якщо є вибрана кімната, будуємо маршрут до найближчого виходу
-        if (this.mapCore.selectedRoom) {
-            const nearest = this.findNearestRoom(this.mapCore.selectedRoom, exits);
-            if (nearest) {
-                document.getElementById('from-select').value = this.mapCore.selectedRoom.id;
-                document.getElementById('to-select').value = nearest.id;
-                this.buildRoute();
-            }
-        }
-    }
-
-    routeToSelectedRoom() {
-        if (!this.mapCore.selectedRoom) return;
-
-        document.getElementById('to-select').value = this.mapCore.selectedRoom.id;
-    }
-
-    routeFromSelectedRoom() {
-        if (!this.mapCore.selectedRoom) return;
-
-        document.getElementById('from-select').value = this.mapCore.selectedRoom.id;
-    }
-
-    highlightSelectedRoom() {
-        if (!this.mapCore.selectedRoom) return;
-
-        this.mapCore.highlightRoom(this.mapCore.selectedRoom.id, true);
-
-        // Видаляємо підсвічування через 3 секунди
-        setTimeout(() => {
-            if (this.mapCore.selectedRoom) {
-                this.mapCore.highlightRoom(this.mapCore.selectedRoom.id, false);
-            }
-        }, 3000);
-    }
-
-    // Допоміжний метод для отримання всіх кімнат певної категорії
-    getRoomsByCategory(category) {
-        if (!this.mapCore.currentMapData || !this.mapCore.currentMapData.rooms) {
-            return [];
-        }
-
-        return this.mapCore.currentMapData.rooms.filter(room =>
-            room.category === category && room.access
-        );
-    }
-
-    // Метод для анімованого переходу до кімнати
-    panToRoom(roomId) {
-        const roomElement = document.getElementById(roomId);
-        if (roomElement && window.mapUI) {
-            window.mapUI.panToRoom(roomId);
-        }
-    }
-
-    // Обчислення центру кімнати для навігації
     calculateRoomCenter(room) {
         if (!room.geometry || !room.geometry.children || room.geometry.children.length === 0) {
             return { x: 0, y: 0 };
@@ -383,372 +403,89 @@ class MapNavigation {
         return { x: 0, y: 0 };
     }
 
-    // Обчислення відстані між двома точками
-    calculateDistance(point1, point2) {
-        return Math.sqrt(
-            Math.pow(point2.x - point1.x, 2) +
-            Math.pow(point2.y - point1.y, 2)
+    findExit() {
+        if (!this.mapCore.currentMapData || !this.mapCore.currentMapData.rooms) {
+            this.mapCore.showError('Карта не завантажена');
+            return;
+        }
+
+        const exits = this.mapCore.currentMapData.rooms.filter(room =>
+            room.keywords.some(keyword =>
+                keyword.toLowerCase().includes('exit') ||
+                keyword.toLowerCase().includes('вихід') ||
+                keyword.toLowerCase().includes('entrance') ||
+                keyword.toLowerCase().includes('вхід')
+            )
         );
-    }
 
-    // Створення маршруту з використанням A* алгоритму (альтернатива Дейкстрі)
-    async buildRouteAStar(fromRoomId, toRoomId) {
-        try {
-            const mapSelect = document.getElementById('map-list');
-            const currentMapId = mapSelect.value;
-
-            const response = await fetch('/map/route', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    mapId: currentMapId,
-                    fromRoomId: fromRoomId,
-                    toRoomId: toRoomId,
-                    algorithm: 'astar'
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json();
-
-            if (result.error) {
-                throw new Error(result.error);
-            }
-
-            this.displayRoute(result.route);
-
-        } catch (error) {
-            console.error('Error building A* route:', error);
-            this.mapCore.showError('Помилка побудови маршруту: ' + error.message);
-        }
-    }
-
-    // Розрахунок альтернативних маршрутів
-    async findAlternativeRoutes(fromRoomId, toRoomId) {
-        try {
-            const mapSelect = document.getElementById('map-list');
-            const currentMapId = mapSelect.value;
-
-            const response = await fetch('/map/route/alternatives', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    mapId: currentMapId,
-                    fromRoomId: fromRoomId,
-                    toRoomId: toRoomId,
-                    maxAlternatives: 3
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json();
-            this.displayAlternativeRoutes(result.routes);
-
-        } catch (error) {
-            console.error('Error finding alternative routes:', error);
-            this.mapCore.showError('Помилка пошуку альтернативних маршрутів: ' + error.message);
-        }
-    }
-
-    // Відображення альтернативних маршрутів
-    displayAlternativeRoutes(routes) {
-        if (!routes || routes.length === 0) {
-            this.mapCore.showError('Альтернативні маршрути не знайдено');
+        if (exits.length === 0) {
+            this.mapCore.showError('Виходи не знайдено на карті');
             return;
         }
 
-        // Створюємо модальне вікно для вибору маршруту
-        const modal = this.createRouteSelectionModal(routes);
-        document.body.appendChild(modal);
-    }
-
-    // Створення модального вікна для вибору маршруту
-    createRouteSelectionModal(routes) {
-        const modal = document.createElement('div');
-        modal.id = 'route-selection-modal';
-        modal.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        `;
-
-        const content = document.createElement('div');
-        content.style.cssText = `
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        `;
-
-        content.innerHTML = `
-            <h3>Виберіть маршрут</h3>
-            <div id="route-options"></div>
-            <div style="margin-top: 1rem; text-align: right;">
-                <button id="cancel-route-selection">Скасувати</button>
-            </div>
-        `;
-
-        const routeOptions = content.querySelector('#route-options');
-
-        routes.forEach((route, index) => {
-            const option = document.createElement('div');
-            option.style.cssText = `
-                border: 1px solid #dee2e6;
-                border-radius: 4px;
-                padding: 1rem;
-                margin-bottom: 1rem;
-                cursor: pointer;
-                transition: all 0.2s ease;
-            `;
-
-            option.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong>Маршрут ${index + 1}</strong>
-                        <div style="color: #6c757d; font-size: 0.9rem;">
-                            Відстань: ${Math.round(route.distance * 10) / 10} м
-                        </div>
-                        <div style="color: #6c757d; font-size: 0.9rem;">
-                            Кроків: ${route.nodes.length}
-                        </div>
-                    </div>
-                    <div style="color: ${index === 0 ? '#28a745' : '#6c757d'};">
-                        ${index === 0 ? '(Рекомендований)' : ''}
-                    </div>
-                </div>
-            `;
-
-            option.addEventListener('mouseenter', () => {
-                option.style.background = '#f8f9fa';
-                this.previewRoute(route);
-            });
-
-            option.addEventListener('mouseleave', () => {
-                option.style.background = 'white';
-                this.clearRoutePreview();
-            });
-
-            option.addEventListener('click', () => {
-                this.displayRoute(route);
-                document.body.removeChild(modal);
-            });
-
-            routeOptions.appendChild(option);
+        // Підсвічуємо всі виходи
+        exits.forEach(exit => {
+            this.mapCore.highlightRoom(exit.id, true);
         });
 
-        // Обробник закриття модального вікна
-        content.querySelector('#cancel-route-selection').addEventListener('click', () => {
-            document.body.removeChild(modal);
-        });
+        // Оголошуємо кількість знайдених виходів
+        this.mapCore.announceToScreenReader(`Знайдено ${exits.length} виходів`);
 
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                document.body.removeChild(modal);
+        // Якщо є вибрана кімната, будуємо маршрут до найближчого виходу
+        if (this.mapCore.selectedRoom) {
+            const nearest = this.findNearestRoom(this.mapCore.selectedRoom, exits);
+            if (nearest) {
+                document.getElementById('from-select').value = this.mapCore.selectedRoom.id;
+                document.getElementById('to-select').value = nearest.id;
+                this.buildRoute();
             }
-        });
+        }
 
-        modal.appendChild(content);
-        return modal;
-    }
-
-    // Попередній перегляд маршруту
-    previewRoute(route) {
-        this.clearRouteDisplay();
-
-        // Підсвічуємо маршрут з меншою прозорістю
-        route.path.forEach(nodeId => {
-            const nodeElement = document.getElementById(nodeId);
-            if (nodeElement) {
-                nodeElement.classList.add('route-preview');
-            }
-        });
-
-        if (route.edges) {
-            route.edges.forEach(edge => {
-                const edgeElement = document.getElementById(edge.id);
-                if (edgeElement) {
-                    edgeElement.classList.add('route-preview');
-                }
+        // Видаляємо підсвічування через 5 секунд
+        setTimeout(() => {
+            exits.forEach(exit => {
+                this.mapCore.highlightRoom(exit.id, false);
             });
-        }
+        }, 5000);
     }
 
-    // Очищення попереднього перегляду маршруту
-    clearRoutePreview() {
-        document.querySelectorAll('.route-preview').forEach(element => {
-            element.classList.remove('route-preview');
-        });
+    routeToSelectedRoom() {
+        if (!this.mapCore.selectedRoom) return;
+
+        document.getElementById('to-select').value = this.mapCore.selectedRoom.id;
+        this.mapCore.announceToScreenReader(`Встановлено кінцеву точку: ${this.mapCore.selectedRoom.label || this.mapCore.selectedRoom.id}`);
     }
 
-    // Збереження маршруту
-    saveRoute(routeName = null) {
-        if (!this.currentRoute) {
-            this.mapCore.showError('Немає маршруту для збереження');
-            return;
-        }
+    routeFromSelectedRoom() {
+        if (!this.mapCore.selectedRoom) return;
 
-        const name = routeName || prompt('Введіть назву маршруту:');
-        if (!name) return;
-
-        try {
-            let savedRoutes = JSON.parse(localStorage.getItem('savedRoutes') || '[]');
-
-            const routeData = {
-                id: Date.now().toString(),
-                name: name,
-                created: new Date().toISOString(),
-                fromRoomId: this.currentRoute.nodes[0]?.room?.id,
-                toRoomId: this.currentRoute.nodes[this.currentRoute.nodes.length - 1]?.room?.id,
-                distance: this.currentRoute.distance,
-                path: this.currentRoute.path
-            };
-
-            savedRoutes.unshift(routeData);
-
-            // Обмежуємо кількість збережених маршрутів
-            savedRoutes = savedRoutes.slice(0, 20);
-
-            localStorage.setItem('savedRoutes', JSON.stringify(savedRoutes));
-
-            this.mapCore.showMessage?.('Маршрут збережено', 'success');
-            this.updateSavedRoutesUI();
-
-        } catch (error) {
-            console.error('Error saving route:', error);
-            this.mapCore.showError('Помилка збереження маршруту');
-        }
+        document.getElementById('from-select').value = this.mapCore.selectedRoom.id;
+        this.mapCore.announceToScreenReader(`Встановлено початкову точку: ${this.mapCore.selectedRoom.label || this.mapCore.selectedRoom.id}`);
     }
 
-    // Завантаження збереженого маршруту
-    loadSavedRoute(routeId) {
-        try {
-            const savedRoutes = JSON.parse(localStorage.getItem('savedRoutes') || '[]');
-            const route = savedRoutes.find(r => r.id === routeId);
+    highlightSelectedRoom() {
+        if (!this.mapCore.selectedRoom) return;
 
-            if (!route) {
-                this.mapCore.showError('Збережений маршрут не знайдено');
-                return;
+        this.mapCore.highlightRoom(this.mapCore.selectedRoom.id, true);
+        this.mapCore.announceToScreenReader(`Підсвічено кімнату: ${this.mapCore.selectedRoom.label || this.mapCore.selectedRoom.id}`);
+
+        // Видаляємо підсвічування через 3 секунди
+        setTimeout(() => {
+            if (this.mapCore.selectedRoom) {
+                this.mapCore.highlightRoom(this.mapCore.selectedRoom.id, false);
             }
-
-            // Встановлюємо початкову та кінцеву точки
-            if (route.fromRoomId) {
-                document.getElementById('from-select').value = route.fromRoomId;
-            }
-
-            if (route.toRoomId) {
-                document.getElementById('to-select').value = route.toRoomId;
-            }
-
-            // Будуємо маршрут
-            this.buildRoute();
-
-        } catch (error) {
-            console.error('Error loading saved route:', error);
-            this.mapCore.showError('Помилка завантаження маршруту');
-        }
+        }, 3000);
     }
 
-    // Оновлення UI збережених маршрутів
-    updateSavedRoutesUI() {
-        let savedRoutesContainer = document.getElementById('saved-routes');
-
-        if (!savedRoutesContainer) {
-            // Створюємо секцію збережених маршрутів
-            savedRoutesContainer = document.createElement('div');
-            savedRoutesContainer.id = 'saved-routes';
-            savedRoutesContainer.innerHTML = `
-                <h3>Збережені маршрути</h3>
-                <div id="saved-routes-list"></div>
-            `;
-
-            const navigationSection = document.getElementById('navigation');
-            navigationSection.appendChild(savedRoutesContainer);
+    // Допоміжний метод для отримання всіх кімнат певної категорії
+    getRoomsByCategory(category) {
+        if (!this.mapCore.currentMapData || !this.mapCore.currentMapData.rooms) {
+            return [];
         }
 
-        const routesList = document.getElementById('saved-routes-list');
-        routesList.innerHTML = '';
-
-        try {
-            const savedRoutes = JSON.parse(localStorage.getItem('savedRoutes') || '[]');
-
-            if (savedRoutes.length === 0) {
-                routesList.innerHTML = '<p style="color: #6c757d; font-size: 0.9rem;">Немає збережених маршрутів</p>';
-                return;
-            }
-
-            savedRoutes.forEach(route => {
-                const routeItem = document.createElement('div');
-                routeItem.style.cssText = `
-                    padding: 0.75rem;
-                    border: 1px solid #e9ecef;
-                    border-radius: 4px;
-                    margin-bottom: 0.5rem;
-                    background: white;
-                `;
-
-                routeItem.innerHTML = `
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <div style="font-weight: 500;">${route.name}</div>
-                            <div style="font-size: 0.8rem; color: #6c757d;">
-                                ${Math.round(route.distance * 10) / 10} м • ${new Date(route.created).toLocaleDateString('uk-UA')}
-                            </div>
-                        </div>
-                        <div>
-                            <button onclick="window.mapNavigation.loadSavedRoute('${route.id}')" 
-                                    style="background: #007bff; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.8rem; margin-right: 0.25rem;">
-                                Завантажити
-                            </button>
-                            <button onclick="window.mapNavigation.deleteSavedRoute('${route.id}')" 
-                                    style="background: #dc3545; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 3px; font-size: 0.8rem;">
-                                ×
-                            </button>
-                        </div>
-                    </div>
-                `;
-
-                routesList.appendChild(routeItem);
-            });
-
-        } catch (error) {
-            console.error('Error updating saved routes UI:', error);
-        }
-    }
-
-    // Видалення збереженого маршруту
-    deleteSavedRoute(routeId) {
-        try {
-            let savedRoutes = JSON.parse(localStorage.getItem('savedRoutes') || '[]');
-            savedRoutes = savedRoutes.filter(r => r.id !== routeId);
-            localStorage.setItem('savedRoutes', JSON.stringify(savedRoutes));
-
-            this.updateSavedRoutesUI();
-            this.mapCore.showMessage?.('Маршрут видалено', 'info');
-
-        } catch (error) {
-            console.error('Error deleting saved route:', error);
-            this.mapCore.showError('Помилка видалення маршруту');
-        }
+        return this.mapCore.currentMapData.rooms.filter(room =>
+            room.category === category && room.access
+        );
     }
 
     // Експорт маршруту
@@ -761,6 +498,7 @@ class MapNavigation {
         const routeData = {
             created: new Date().toISOString(),
             distance: this.currentRoute.distance,
+            estimatedTime: this.calculateRouteTime(this.currentRoute),
             steps: this.currentRoute.nodes.map((node, index) => ({
                 step: index + 1,
                 room: node.room ? {
@@ -782,6 +520,7 @@ class MapNavigation {
         link.click();
 
         URL.revokeObjectURL(url);
+        this.mapCore.announceToScreenReader('Маршрут експортовано');
     }
 
     // Поділитися маршрутом
@@ -807,12 +546,20 @@ class MapNavigation {
         // Копіюємо URL до буферу обміну
         if (navigator.clipboard) {
             navigator.clipboard.writeText(shareUrl.toString()).then(() => {
-                this.mapCore.showMessage?.('Посилання скопійовано до буферу обміну', 'success');
+                this.mapCore.announceToScreenReader('Посилання скопійовано до буферу обміну');
+                this.showShareSuccess();
             }).catch(() => {
                 this.showShareModal(shareUrl.toString());
             });
         } else {
             this.showShareModal(shareUrl.toString());
+        }
+    }
+
+    // Показати повідомлення про успішне копіювання
+    showShareSuccess() {
+        if (window.mapUI && window.mapUI.showMessage) {
+            window.mapUI.showMessage('Посилання скопійовано до буферу обміну', 'success');
         }
     }
 
@@ -823,41 +570,70 @@ class MapNavigation {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.32);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             z-index: 2000;
         `;
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        modal.setAttribute('aria-labelledby', 'share-title');
 
         const content = document.createElement('div');
         content.style.cssText = `
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
+            background-color: var(--md-surface);
+            padding: var(--md-spacing-lg);
+            border-radius: var(--md-border-radius);
+            box-shadow: var(--md-elevation-4);
             max-width: 500px;
-            width: 90%;
+            width: calc(100% - var(--md-spacing-xl));
         `;
 
         content.innerHTML = `
-            <h3>Поділитися маршрутом</h3>
-            <p>Скопіюйте це посилання для поділу:</p>
-            <input type="text" value="${url}" readonly style="width: 100%; padding: 0.5rem; margin: 1rem 0;">
-            <div style="text-align: right;">
-                <button id="close-share-modal">Закрити</button>
+            <h3 id="share-title" style="margin-bottom: var(--md-spacing-md); color: var(--md-text-primary);">
+                Поділитися маршрутом
+            </h3>
+            <p style="margin-bottom: var(--md-spacing-md); color: var(--md-text-secondary);">
+                Скопіюйте це посилання для поділу:
+            </p>
+            <div class="md-text-field">
+                <input type="text" value="${url}" readonly style="font-family: monospace; font-size: 0.875rem;">
+            </div>
+            <div style="display: flex; gap: var(--md-spacing-sm); justify-content: flex-end; margin-top: var(--md-spacing-md);">
+                <button id="copy-link" class="md-button md-button-contained">Копіювати</button>
+                <button id="close-share-modal" class="md-button md-button-outlined">Закрити</button>
             </div>
         `;
 
+        // Обробники подій
         content.querySelector('#close-share-modal').addEventListener('click', () => {
             document.body.removeChild(modal);
         });
 
-        // Автоматично виділяємо текст
-        const input = content.querySelector('input');
-        input.focus();
-        input.select();
+        content.querySelector('#copy-link').addEventListener('click', () => {
+            const input = content.querySelector('input');
+            input.select();
+            document.execCommand('copy');
+            this.mapCore.announceToScreenReader('Посилання скопійовано');
+            document.body.removeChild(modal);
+        });
+
+        // Закриття по Escape
+        modal.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.body.removeChild(modal);
+            }
+        });
+
+        // Автоматично виділяємо текст та фокусуємо
+        setTimeout(() => {
+            const input = content.querySelector('input');
+            input.focus();
+            input.select();
+        }, 100);
 
         modal.appendChild(content);
         document.body.appendChild(modal);
@@ -873,8 +649,12 @@ class MapNavigation {
         if (fromRoomId && toRoomId && autoRoute === 'true') {
             // Затримка для завантаження карти
             setTimeout(() => {
-                document.getElementById('from-select').value = fromRoomId;
-                document.getElementById('to-select').value = toRoomId;
+                const fromSelect = document.getElementById('from-select');
+                const toSelect = document.getElementById('to-select');
+
+                fromSelect.value = fromRoomId;
+                toSelect.value = toRoomId;
+
                 this.buildRoute();
 
                 // Очищуємо URL параметри
@@ -883,38 +663,22 @@ class MapNavigation {
                 newUrl.searchParams.delete('to');
                 newUrl.searchParams.delete('autoRoute');
                 window.history.replaceState({}, '', newUrl);
-            }, 1000);
+
+                this.mapCore.announceToScreenReader('Автоматично побудовано маршрут з посилання');
+            }, 1500);
         }
     }
 
-    // Розрахунок часу проходження маршруту
-    calculateRouteTime(route, walkingSpeedKmh = 5) {
-        if (!route) return 0;
-
-        const distanceKm = route.distance / 1000;
-        const timeHours = distanceKm / walkingSpeedKmh;
-        const timeMinutes = Math.ceil(timeHours * 60);
-
-        return timeMinutes;
+    // Обчислення відстані між двома точками
+    calculateDistance(point1, point2) {
+        return Math.sqrt(
+            Math.pow(point2.x - point1.x, 2) +
+            Math.pow(point2.y - point1.y, 2)
+        );
     }
 
-    // Оновити інформацію про маршрут з часом
-    updateRouteInfoWithTime(route) {
-        const routeDistance = document.getElementById('route-distance');
-        const estimatedTime = this.calculateRouteTime(route);
-
-        if (routeDistance) {
-            routeDistance.innerHTML = `
-                <div>Відстань: <span>${Math.round(route.distance * 10) / 10}</span> м</div>
-                <div style="font-size: 0.9rem; color: #6c757d;">
-                    Приблизний час: ${estimatedTime} хв
-                </div>
-            `;
-        }
-    }
-
-    // Додати кнопки для збереження та поділу маршруту
-    addRouteActionButtons() {
+    // Створення доступних кнопок дій з маршрутом
+    createRouteActions() {
         const routeInfo = document.getElementById('route-info');
         if (!routeInfo) return;
 
@@ -923,30 +687,37 @@ class MapNavigation {
             actionsContainer = document.createElement('div');
             actionsContainer.id = 'route-actions';
             actionsContainer.style.cssText = `
-                margin-top: 1rem;
+                margin-top: var(--md-spacing-md);
                 display: flex;
-                gap: 0.5rem;
+                gap: var(--md-spacing-sm);
                 flex-wrap: wrap;
             `;
 
             actionsContainer.innerHTML = `
-                <button id="save-route" style="flex: 1; padding: 0.5rem; font-size: 0.9rem; background: #28a745;">
-                    Зберегти
-                </button>
-                <button id="share-route" style="flex: 1; padding: 0.5rem; font-size: 0.9rem; background: #17a2b8;">
-                    Поділитися
-                </button>
-                <button id="export-route" style="flex: 1; padding: 0.5rem; font-size: 0.9rem; background: #6f42c1;">
+                <button id="export-route" class="md-button md-button-outlined" 
+                        style="flex: 1; font-size: 0.75rem; padding: var(--md-spacing-sm);"
+                        aria-describedby="route-title">
                     Експорт
+                </button>
+                <button id="share-route" class="md-button md-button-outlined" 
+                        style="flex: 1; font-size: 0.75rem; padding: var(--md-spacing-sm);"
+                        aria-describedby="route-title">
+                    Поділитися
                 </button>
             `;
 
             routeInfo.appendChild(actionsContainer);
 
             // Додаємо обробники подій
-            document.getElementById('save-route').addEventListener('click', () => this.saveRoute());
-            document.getElementById('share-route').addEventListener('click', () => this.shareRoute());
             document.getElementById('export-route').addEventListener('click', () => this.exportRoute());
+            document.getElementById('share-route').addEventListener('click', () => this.shareRoute());
+        }
+    }
+
+    // Ініціалізація дій з маршрутом при відображенні
+    initializeRouteActions() {
+        if (this.currentRoute) {
+            this.createRouteActions();
         }
     }
 }
@@ -957,7 +728,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const initNavigation = () => {
         if (window.mapCore) {
             window.mapNavigation = new MapNavigation(window.mapCore);
-            window.mapNavigation.updateSavedRoutesUI();
             window.mapNavigation.handleAutoRoute();
         } else {
             setTimeout(initNavigation, 100);
