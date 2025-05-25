@@ -9,6 +9,7 @@ class SVGMapParser {
             building: {},
             floors: [],
             rooms: [],
+            walls: [],
             nodes: [],
             edges: [],
             metadata: {}
@@ -35,6 +36,7 @@ class SVGMapParser {
         this.parseMetadata(svgElement);
         this.parseBuilding(svgElement);
         this.parseFloors(svgElement);
+        this.parseWalls(svgElement);
         this.parseRooms(svgElement);
         this.parseNodes(svgElement);
         this.parseEdges(svgElement);
@@ -93,6 +95,22 @@ class SVGMapParser {
                 buildingId: '10-01'
             });
         }
+    }
+
+    /**
+     * Парсить стіни
+     */
+    parseWalls(svgElement) {
+        const wallElements = svgElement.querySelectorAll('[data-name="walls"], [data-name="hatch"]');
+        wallElements.forEach(wallElement => {
+            const wall = {
+                id: wallElement.id,
+                type: wallElement.getAttribute('data-name') || 'wall',
+                geometry: this.parseGeometry(wallElement),
+                style: this.parseStyle(wallElement)
+            };
+            this.mapData.walls.push(wall);
+        });
     }
 
     /**

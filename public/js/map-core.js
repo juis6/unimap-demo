@@ -133,19 +133,52 @@ class MapCore {
         defs.appendChild(style);
         svg.appendChild(defs);
 
-        // Рендеримо кімнати
-        this.renderRooms(svg);
-
-        // Рендеримо вузли
-        this.renderNodes(svg);
-
-        // Рендеримо ребра (коридори)
+        // Рендеримо в правильному порядку (стіни -> ребра -> кімнати -> вузли)
+        this.renderWalls(svg);
         this.renderEdges(svg);
+        this.renderRooms(svg);
+        this.renderNodes(svg);
 
         svgContainer.appendChild(svg);
 
         // Оновлюємо інформацію про будівлю
         this.updateBuildingInfo();
+    }
+
+    // Додаємо метод для рендерингу стін
+    renderWalls(svg) {
+        if (!this.currentMapData.walls) return;
+
+        const wallsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        wallsGroup.setAttribute('id', 'walls-group');
+
+        this.currentMapData.walls.forEach(wall => {
+            const wallElement = this.createWallElement(wall);
+            if (wallElement) {
+                wallsGroup.appendChild(wallElement);
+            }
+        });
+
+        svg.appendChild(wallsGroup);
+    }
+
+    createWallElement(wall) {
+        if (!wall.geometry || !wall.geometry.children || wall.geometry.children.length === 0) {
+            return null;
+        }
+
+        const wallGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        wallGroup.setAttribute('id', wall.id);
+        wallGroup.classList.add('wall');
+
+        wall.geometry.children.forEach(child => {
+            const element = this.createGeometryElement(child);
+            if (element) {
+                wallGroup.appendChild(element);
+            }
+        });
+
+        return wallGroup;
     }
 
     renderRooms(svg) {
@@ -250,39 +283,62 @@ class MapCore {
     renderNodes(svg) {
         if (!this.currentMapData.nodes) return;
 
-        const nodesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        nodesGroup.setAttribute('id', 'nodes-group');
+        // Просто копіюємо оригінальні nodes елементи без змін
+        const originalSvg = document.querySelector('#main-svg');
+        if (originalSvg) {
+            // Знаходимо оригінальні nodes в SVG
+            const originalNodes = svg.ownerDocument.querySelectorAll('[data-name="node"]');
 
-        this.currentMapData.nodes.forEach(node => {
-            const nodeElement = this.createNodeElement(node);
-            if (nodeElement) {
-                nodesGroup.appendChild(nodeElement);
-            }
-        });
+            // Створюємо групу для nodes
+            const nodesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            nodesGroup.setAttribute('id', 'nodes-group');
 
-        svg.appendChild(nodesGroup);
+            // Копіюємо кожен node як є
+            this.currentMapData.nodes.forEach(nodeData => {
+                // Створюємо копію оригінального node елемента
+                const nodeElement = this.createOriginalNodeCopy(nodeData);
+                if (nodeElement) {
+                    nodesGroup.appendChild(nodeElement);
+                }
+            });
+
+            svg.appendChild(nodesGroup);
+        }
     }
 
-    createNodeElement(node) {
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('cx', node.position.x);
-        circle.setAttribute('cy', node.position.y);
-        circle.setAttribute('r', 3);
-        circle.setAttribute('id', node.id);
-        circle.classList.add('node');
-        circle.classList.add(`node-${node.type}`);
+    createOriginalNodeCopy(nodeData) {
+        // Створюємо точну копію оригінального node з геометрією
+        if (!nodeData.geometry) return null;
 
-        return circle;
+        const nodeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        nodeGroup.setAttribute('id', nodeData.id);
+        nodeGroup.setAttribute('data-name', 'node');
+        nodeGroup.setAttribute('data-type', nodeData.type);
+        nodeGroup.setAttribute('data-room-id', nodeData.roomId);
+
+        // Копіюємо всю оригінальну геометрію
+        if (nodeData.geometry.children) {
+            nodeData.geometry.children.forEach(child => {
+                const element = this.createGeometryElement(child);
+                if (element) {
+                    nodeGroup.appendChild(element);
+                }
+            });
+        }
+
+        return nodeGroup;
     }
 
     renderEdges(svg) {
         if (!this.currentMapData.edges) return;
 
+        // Створюємо групу для edges
         const edgesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         edgesGroup.setAttribute('id', 'edges-group');
 
-        this.currentMapData.edges.forEach(edge => {
-            const edgeElement = this.createEdgeElement(edge);
+        // Копіюємо кожен edge як є
+        this.currentMapData.edges.forEach(edgeData => {
+            const edgeElement = this.createOriginalEdgeCopy(edgeData);
             if (edgeElement) {
                 edgesGroup.appendChild(edgeElement);
             }
@@ -291,21 +347,25 @@ class MapCore {
         svg.appendChild(edgesGroup);
     }
 
-    createEdgeElement(edge) {
-        if (!edge.geometry || !edge.geometry.children || edge.geometry.children.length === 0) {
-            return null;
-        }
+    createOriginalEdgeCopy(edgeData) {
+        // Створюємо точну копію оригінального edge з геометрією
+        if (!edgeData.geometry) return null;
 
         const edgeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-        edgeGroup.setAttribute('id', edge.id);
-        edgeGroup.classList.add('edge');
+        edgeGroup.setAttribute('id', edgeData.id);
+        edgeGroup.setAttribute('data-name', 'edge');
+        edgeGroup.setAttribute('data-weight', edgeData.weight);
+        edgeGroup.setAttribute('data-nodes-id', `${edgeData.fromNodeId},${edgeData.toNodeId}`);
 
-        edge.geometry.children.forEach(child => {
-            const element = this.createGeometryElement(child);
-            if (element) {
-                edgeGroup.appendChild(element);
-            }
-        });
+        // Копіюємо всю оригінальну геометрію
+        if (edgeData.geometry.children) {
+            edgeData.geometry.children.forEach(child => {
+                const element = this.createGeometryElement(child);
+                if (element) {
+                    edgeGroup.appendChild(element);
+                }
+            });
+        }
 
         return edgeGroup;
     }
@@ -574,8 +634,15 @@ class MapCore {
 
     getMapStyles() {
         return `
+            .wall {
+                fill: red;
+                stroke: darkred;
+                stroke-width: 1;
+                fill-rule: evenodd;
+            }
+            
             .room {
-                fill: #e3f2fd;
+                fill: aqua;
                 stroke: #1976d2;
                 stroke-width: 1;
                 cursor: pointer;
@@ -601,20 +668,13 @@ class MapCore {
             .category-recreation { fill: #e0f2f1; stroke: #009688; }
             .category-workspace { fill: #e3f2fd; stroke: #2196f3; }
             
-            .node {
-                fill: #1976d2;
-                stroke: #fff;
-                stroke-width: 1;
+            /* Оригінальні стилі з SVG для nodes та edges */
+            .cls-3 {
+                fill: yellow;
             }
             
-            .node-nav { fill: #1976d2; }
-            .node-sup { fill: #ff9800; }
-            
-            .edge {
-                fill: #ffeb3b;
-                stroke: #fbc02d;
-                stroke-width: 1;
-                opacity: 0.7;
+            .cls-4 {
+                fill: blue;
             }
             
             .route-highlight {
