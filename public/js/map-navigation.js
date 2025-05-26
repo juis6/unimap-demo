@@ -151,33 +151,35 @@ class MapNavigation {
     }
 
     highlightRoute(route) {
-        // Підсвічуємо вузли маршруту
-        route.path.forEach(nodeId => {
-            const nodeElement = document.getElementById(nodeId);
-            if (nodeElement) {
-                nodeElement.classList.add('route-highlight');
-            }
-        });
+        // Спочатку очищуємо всі попередні підсвічування
+        this.clearRouteDisplay();
 
-        // Підсвічуємо ребра маршруту
-        if (route.edges) {
-            route.edges.forEach(edge => {
-                const edgeElement = document.getElementById(edge.id);
-                if (edgeElement) {
-                    edgeElement.classList.add('route-highlight');
-                }
-            });
-        }
-
-        // Підсвічуємо кімнати маршруту
+        // Підсвічуємо тільки кімнати маршруту
         route.nodes.forEach(routeNode => {
             if (routeNode.room) {
                 const roomElement = document.getElementById(routeNode.room.id);
                 if (roomElement) {
                     roomElement.classList.add('route-highlight');
-                    // Додаємо ARIA-атрибут для індикації що кімната частина маршруту
                     roomElement.setAttribute('aria-describedby', 'route-description');
                 }
+            }
+        });
+
+        // Підсвічуємо тільки ребра що входять в маршрут
+        if (route.edges) {
+            route.edges.forEach(edge => {
+                const edgeElement = document.getElementById(edge.id);
+                if (edgeElement) {
+                    edgeElement.classList.add('route-active');
+                }
+            });
+        }
+
+        // Підсвічуємо тільки вузли що входять в маршрут
+        route.path.forEach(nodeId => {
+            const nodeElement = document.getElementById(nodeId);
+            if (nodeElement) {
+                nodeElement.classList.add('route-active');
             }
         });
 
@@ -285,8 +287,8 @@ class MapNavigation {
 
     clearRouteDisplay() {
         // Видаляємо підсвічування з усіх елементів
-        document.querySelectorAll('.route-highlight').forEach(element => {
-            element.classList.remove('route-highlight');
+        document.querySelectorAll('.route-highlight, .route-active').forEach(element => {
+            element.classList.remove('route-highlight', 'route-active');
             element.removeAttribute('aria-describedby');
         });
     }

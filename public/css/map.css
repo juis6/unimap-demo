@@ -48,7 +48,7 @@ body {
   padding: 0;
   background-color: var(--md-background);
   color: var(--md-text-primary);
-  overflow: hidden; /* Робимо сторінку статичною */
+  overflow: hidden;
 }
 
 /* Основний контейнер карти */
@@ -58,6 +58,11 @@ body {
   width: 100vw;
   background-color: var(--md-background);
   overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 /* Ліва частина - карта */
@@ -81,10 +86,11 @@ body {
 }
 
 #map-header h1 {
-  font-size: 1.25rem;
-  font-weight: 500;
+  font-size: 1.5rem;
+  font-weight: 600;
   margin: 0 0 var(--md-spacing-sm) 0;
   letter-spacing: 0.0125em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 #map-info {
@@ -101,8 +107,8 @@ body {
 /* Контроли карти */
 #map-controls {
   position: absolute;
-  top: var(--md-spacing-md);
-  right: var(--md-spacing-md);
+  bottom: var(--md-spacing-md);
+  left: var(--md-spacing-md);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -157,19 +163,32 @@ body {
 #map-svg svg {
   width: 100%;
   height: 100%;
-  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Приховуємо nodes та edges за замовчуванням */
+/* Приховуємо всі nodes та edges за замовчуванням */
 #map-svg [data-name="node"],
 #map-svg [data-name="edge"] {
-  opacity: 0;
-  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: none;
 }
 
-/* Показуємо nodes та edges тільки під час маршруту */
-.route-active #map-svg [data-name="node"],
-.route-active #map-svg [data-name="edge"] {
+/* Показуємо тільки активні елементи маршруту */
+#map-svg [data-name="node"].route-active,
+#map-svg [data-name="edge"].route-active {
+  display: block;
+}
+
+/* Стилі для активних елементів маршруту */
+.route-active[data-name="edge"] {
+  fill: #ff6f00 !important;
+  stroke: #e65100 !important;
+  stroke-width: 4 !important;
+  opacity: 0.9;
+}
+
+.route-active[data-name="node"] {
+  fill: #ff6f00 !important;
+  stroke: #e65100 !important;
+  stroke-width: 2 !important;
   opacity: 1;
 }
 
@@ -202,8 +221,8 @@ body {
 /* Інформація про маршрут */
 #route-info {
   position: absolute;
-  bottom: var(--md-spacing-md);
-  left: var(--md-spacing-md);
+  bottom: var(--md-spacing-xxl);
+  right: var(--md-spacing-md);
   background-color: var(--md-surface);
   padding: var(--md-spacing-md);
   border-radius: var(--md-border-radius);
@@ -253,6 +272,7 @@ body {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  height: 100vh;
 }
 
 .md-card {
@@ -553,17 +573,17 @@ body {
 
 /* SVG стилі для елементів карти */
 .room {
-  fill: #e3f2fd;
-  stroke: var(--md-primary);
+  fill: #f5f7fa;
+  stroke: #90a4ae;
   stroke-width: 1;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: fill 0.15s ease, stroke 0.15s ease;
 }
 
 .room:hover,
 .room.highlighted {
-  fill: #bbdefb;
-  stroke: var(--md-primary-variant);
+  fill: #e3f2fd;
+  stroke: var(--md-primary);
   stroke-width: 2;
 }
 
@@ -571,45 +591,58 @@ body {
   fill: var(--md-primary-light);
   stroke: var(--md-primary-variant);
   stroke-width: 2;
-  filter: drop-shadow(0 2px 4px rgba(25, 118, 210, 0.3));
+  filter: drop-shadow(0 2px 6px rgba(25, 118, 210, 0.4));
 }
 
 .room.route-highlight {
-  fill: var(--md-secondary);
-  stroke: #00796b;
-  stroke-width: 3;
-  filter: drop-shadow(0 2px 4px rgba(3, 218, 198, 0.4));
+  fill: #fff3e0 !important;
+  stroke: #ff6f00 !important;
+  stroke-width: 3 !important;
+  filter: drop-shadow(0 2px 8px rgba(255, 111, 0, 0.5)) !important;
+  animation: routePulse 2s infinite;
 }
 
-/* Категорії кімнат у синій палітрі */
+@keyframes routePulse {
+  0%,
+  100% {
+    fill-opacity: 1;
+    stroke-opacity: 1;
+  }
+  50% {
+    fill-opacity: 0.7;
+    stroke-opacity: 0.8;
+  }
+}
+
+/* Категорії кімнат в нейтральній палітрі */
 .category-laboratory {
-  fill: #e8eaf6;
-  stroke: #3f51b5;
-}
-
-.category-restroom {
-  fill: #e1f5fe;
-  stroke: #0288d1;
-}
-
-.category-food-service {
-  fill: #e0f7fa;
-  stroke: #0097a7;
-}
-
-.category-utility {
   fill: #f3e5f5;
   stroke: #7b1fa2;
 }
 
-.category-recreation {
+.category-restroom {
   fill: #e8f5e8;
-  stroke: #388e3c;
+  stroke: #2e7d32;
+}
+
+.category-food-service {
+  fill: #fff3e0;
+  stroke: #ef6c00;
+}
+
+.category-utility {
+  fill: #fce4ec;
+  stroke: #c2185b;
+}
+
+.category-recreation {
+  fill: #e1f5fe;
+  stroke: #0277bd;
 }
 
 .category-workspace {
-  fill: #e3f2fd;
-  stroke: var(--md-primary);
+  fill: #f5f7fa;
+  stroke: #546e7a;
 }
 
 /* Автодоповнення */
@@ -719,8 +752,8 @@ body {
   }
 
   #map-controls {
-    top: var(--md-spacing-sm);
-    right: var(--md-spacing-sm);
+    bottom: var(--md-spacing-sm);
+    left: var(--md-spacing-sm);
   }
 
   .md-fab {
@@ -732,7 +765,7 @@ body {
   #route-info {
     left: var(--md-spacing-sm);
     right: var(--md-spacing-sm);
-    bottom: var(--md-spacing-sm);
+    bottom: var(--md-spacing-xxl);
     max-width: none;
   }
 

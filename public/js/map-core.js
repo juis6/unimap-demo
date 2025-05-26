@@ -326,39 +326,61 @@ class MapCore {
             /* Material Design стилі для SVG елементів */
             .room {
                 cursor: pointer;
-                transition: all 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+                transition: fill 0.15s ease, stroke 0.15s ease;
                 outline: none;
             }
             
             .room:hover, .room.highlighted, .room:focus {
-                filter: brightness(0.9) drop-shadow(0 2px 4px rgba(25, 118, 210, 0.2));
+                filter: brightness(0.95) drop-shadow(0 1px 3px rgba(25, 118, 210, 0.2));
             }
             
             .room.selected {
-                filter: brightness(0.8) drop-shadow(0 2px 8px rgba(25, 118, 210, 0.4));
+                filter: brightness(0.9) drop-shadow(0 2px 6px rgba(25, 118, 210, 0.4));
                 stroke: #1565c0 !important;
                 stroke-width: 2 !important;
             }
             
             .room.route-highlight {
-                filter: brightness(0.7) drop-shadow(0 2px 8px rgba(3, 218, 198, 0.5)) !important;
-                stroke: #00796b !important;
+                fill: #fff3e0 !important;
+                stroke: #ff6f00 !important;
                 stroke-width: 3 !important;
+                filter: drop-shadow(0 2px 8px rgba(255, 111, 0, 0.5)) !important;
                 animation: routePulse 2s infinite;
             }
             
             @keyframes routePulse {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.8; }
+                0%, 100% { 
+                    fill-opacity: 1;
+                    stroke-opacity: 1;
+                }
+                50% { 
+                    fill-opacity: 0.7;
+                    stroke-opacity: 0.8;
+                }
             }
             
-            /* Стилі для категорій в синій палітрі */
-            .category-laboratory { fill: #e8eaf6; stroke: #3f51b5; }
-            .category-restroom { fill: #e1f5fe; stroke: #0288d1; }
-            .category-food-service { fill: #e0f7fa; stroke: #0097a7; }
-            .category-utility { fill: #f3e5f5; stroke: #7b1fa2; }
-            .category-recreation { fill: #e8f5e8; stroke: #388e3c; }
-            .category-workspace { fill: #e3f2fd; stroke: #1976d2; }
+            /* Стилі для категорій в нейтральній палітрі */
+            .category-laboratory { fill: #f3e5f5; stroke: #7b1fa2; }
+            .category-restroom { fill: #e8f5e8; stroke: #2e7d32; }
+            .category-food-service { fill: #fff3e0; stroke: #ef6c00; }
+            .category-utility { fill: #fce4ec; stroke: #c2185b; }
+            .category-recreation { fill: #e1f5fe; stroke: #0277bd; }
+            .category-workspace { fill: #f5f7fa; stroke: #546e7a; }
+            
+            /* Стилі для активних елементів маршруту */
+            .route-active[data-name="edge"] {
+                fill: #ff6f00 !important;
+                stroke: #e65100 !important;
+                stroke-width: 4 !important;
+                opacity: 0.9;
+            }
+            
+            .route-active[data-name="node"] {
+                fill: #ff6f00 !important;
+                stroke: #e65100 !important;
+                stroke-width: 2 !important;
+                opacity: 1;
+            }
         `;
     }
 
@@ -986,12 +1008,12 @@ class MapCore {
                 stroke-width: 2;
             }
             
-            .category-laboratory { fill: #e8eaf6; stroke: #3f51b5; }
-            .category-restroom { fill: #e1f5fe; stroke: #0288d1; }
-            .category-food-service { fill: #e0f7fa; stroke: #0097a7; }
-            .category-utility { fill: #f3e5f5; stroke: #7b1fa2; }
-            .category-recreation { fill: #e8f5e8; stroke: #388e3c; }
-            .category-workspace { fill: #e3f2fd; stroke: #1976d2; }
+            .category-laboratory { fill: #f3e5f5; stroke: #7b1fa2; }
+            .category-restroom { fill: #e8f5e8; stroke: #2e7d32; }
+            .category-food-service { fill: #fff3e0; stroke: #ef6c00; }
+            .category-utility { fill: #fce4ec; stroke: #c2185b; }
+            .category-recreation { fill: #e1f5fe; stroke: #0277bd; }
+            .category-workspace { fill: #f5f7fa; stroke: #546e7a; }
             
             .cls-3 {
                 fill: #fff9c4;
@@ -1004,11 +1026,289 @@ class MapCore {
             }
             
             .route-highlight {
-                fill: #00e5ff !important;
-                stroke: #00796b !important;
+                fill: #fff3e0 !important;
+                stroke: #ff6f00 !important;
                 stroke-width: 3 !important;
+                animation: routePulse 2s infinite;
+            }
+            
+            @keyframes routePulse {
+                0%, 100% { 
+                    fill-opacity: 1;
+                    stroke-opacity: 1;
+                }
+                50% { 
+                    fill-opacity: 0.7;
+                    stroke-opacity: 0.8;
+                }
             }
         `;
+    }
+
+    // Додаткові методи для роботи з маршрутами
+    highlightRouteElements(route) {
+        if (!route) return;
+
+        // Підсвічуємо вузли маршруту
+        route.path.forEach(nodeId => {
+            const nodeElement = document.getElementById(nodeId);
+            if (nodeElement) {
+                nodeElement.classList.add('route-active');
+            }
+        });
+
+        // Підсвічуємо ребра маршруту
+        if (route.edges) {
+            route.edges.forEach(edge => {
+                const edgeElement = document.getElementById(edge.id);
+                if (edgeElement) {
+                    edgeElement.classList.add('route-active');
+                }
+            });
+        }
+
+        // Підсвічуємо кімнати маршруту
+        route.nodes.forEach(routeNode => {
+            if (routeNode.room) {
+                const roomElement = document.getElementById(routeNode.room.id);
+                if (roomElement) {
+                    roomElement.classList.add('route-highlight');
+                }
+            }
+        });
+    }
+
+    clearRouteHighlight() {
+        // Видаляємо підсвічування з усіх елементів
+        document.querySelectorAll('.route-highlight, .route-active').forEach(element => {
+            element.classList.remove('route-highlight', 'route-active');
+        });
+    }
+
+    // Метод для експорту карти
+    exportMapData() {
+        if (!this.currentMapData) {
+            this.showError('Немає завантаженої карти для експорту');
+            return;
+        }
+
+        const dataStr = JSON.stringify(this.currentMapData, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `map-data-${new Date().toISOString().slice(0, 10)}.json`;
+        link.click();
+
+        URL.revokeObjectURL(url);
+        this.announceToScreenReader('Данні карти експортовано');
+    }
+
+    // Статистика карти
+    getMapStatistics() {
+        if (!this.currentMapData) return null;
+
+        const stats = {
+            totalRooms: this.currentMapData.rooms.length,
+            accessibleRooms: this.currentMapData.rooms.filter(room => room.access).length,
+            totalNodes: this.currentMapData.nodes.length,
+            totalEdges: this.currentMapData.edges.length,
+            categories: {}
+        };
+
+        // Підрахунок кімнат за категоріями
+        this.currentMapData.rooms.forEach(room => {
+            if (!stats.categories[room.category]) {
+                stats.categories[room.category] = 0;
+            }
+            stats.categories[room.category]++;
+        });
+
+        return stats;
+    }
+
+    // Валідація цілісності даних карти
+    validateMapData() {
+        if (!this.currentMapData) return false;
+
+        const errors = [];
+
+        // Перевіряємо наявність основних секцій
+        if (!this.currentMapData.rooms) errors.push('Відсутні дані про кімнати');
+        if (!this.currentMapData.nodes) errors.push('Відсутні навігаційні вузли');
+        if (!this.currentMapData.edges) errors.push('Відсутні з\'єднання між вузлами');
+
+        // Перевіряємо зв'язки між кімнатами та вузлами
+        if (this.currentMapData.rooms && this.currentMapData.nodes) {
+            this.currentMapData.rooms.forEach(room => {
+                if (room.nodeId && !this.currentMapData.nodes.find(n => n.id === room.nodeId)) {
+                    errors.push(`Кімната ${room.id} посилається на неіснуючий вузол ${room.nodeId}`);
+                }
+            });
+        }
+
+        // Перевіряємо зв'язки в ребрах
+        if (this.currentMapData.edges && this.currentMapData.nodes) {
+            this.currentMapData.edges.forEach(edge => {
+                const fromExists = this.currentMapData.nodes.find(n => n.id === edge.fromNodeId);
+                const toExists = this.currentMapData.nodes.find(n => n.id === edge.toNodeId);
+
+                if (!fromExists) {
+                    errors.push(`Ребро ${edge.id} посилається на неіснуючий початковий вузол ${edge.fromNodeId}`);
+                }
+                if (!toExists) {
+                    errors.push(`Ребро ${edge.id} посилається на неіснуючий кінцевий вузол ${edge.toNodeId}`);
+                }
+            });
+        }
+
+        if (errors.length > 0) {
+            console.warn('Помилки валідації карти:', errors);
+            return false;
+        }
+
+        return true;
+    }
+
+    // Пошук кімнати за координатами
+    findRoomAtPoint(x, y) {
+        if (!this.currentMapData || !this.currentMapData.rooms) return null;
+
+        // Конвертуємо координати екрану в координати SVG
+        const svg = document.getElementById('main-svg');
+        if (!svg) return null;
+
+        const pt = svg.createSVGPoint();
+        pt.x = x;
+        pt.y = y;
+        const svgPt = pt.matrixTransform(svg.getScreenCTM().inverse());
+
+        // Шукаємо кімнату, яка містить цю точку
+        for (const room of this.currentMapData.rooms) {
+            if (this.isPointInRoom(svgPt.x, svgPt.y, room)) {
+                return room;
+            }
+        }
+
+        return null;
+    }
+
+    // Перевірка, чи знаходиться точка в кімнаті
+    isPointInRoom(x, y, room) {
+        const roomElement = document.getElementById(room.id);
+        if (!roomElement) return false;
+
+        try {
+            // Використовуємо SVG API для перевірки
+            if (roomElement.tagName === 'g') {
+                // Для групи перевіряємо всі дочірні елементи
+                const children = roomElement.children;
+                for (let i = 0; i < children.length; i++) {
+                    const child = children[i];
+                    if (this.isPointInElement(x, y, child)) {
+                        return true;
+                    }
+                }
+            } else {
+                return this.isPointInElement(x, y, roomElement);
+            }
+        } catch (error) {
+            console.warn('Error checking point in room:', error);
+        }
+
+        return false;
+    }
+
+    // Перевірка, чи знаходиться точка в SVG елементі
+    isPointInElement(x, y, element) {
+        const svg = document.getElementById('main-svg');
+        const pt = svg.createSVGPoint();
+        pt.x = x;
+        pt.y = y;
+
+        switch (element.tagName.toLowerCase()) {
+            case 'rect':
+                const rect = element.getBBox();
+                return x >= rect.x && x <= rect.x + rect.width &&
+                    y >= rect.y && y <= rect.y + rect.height;
+
+            case 'polygon':
+            case 'path':
+                // Для складних фігур використовуємо isPointInFill (якщо доступно)
+                if (element.isPointInFill) {
+                    return element.isPointInFill(pt);
+                }
+                break;
+        }
+
+        return false;
+    }
+
+    // Обчислення відстані між двома кімнатами
+    calculateRoomDistance(room1, room2) {
+        if (!room1 || !room2) return Infinity;
+
+        const center1 = this.calculateRoomCenter(room1);
+        const center2 = this.calculateRoomCenter(room2);
+
+        return Math.sqrt(
+            Math.pow(center2.x - center1.x, 2) +
+            Math.pow(center2.y - center1.y, 2)
+        );
+    }
+
+    // Обчислення центру кімнати
+    calculateRoomCenter(room) {
+        if (!room.geometry || !room.geometry.children || room.geometry.children.length === 0) {
+            return { x: 0, y: 0 };
+        }
+
+        const shape = room.geometry.children[0];
+
+        if (shape.type === 'rect' && shape.coordinates) {
+            return {
+                x: shape.coordinates.x + shape.coordinates.width / 2,
+                y: shape.coordinates.y + shape.coordinates.height / 2
+            };
+        }
+
+        if (shape.type === 'polygon' || shape.type === 'polyline') {
+            const points = shape.coordinates;
+            if (points.length > 0) {
+                const centerX = points.reduce((sum, p) => sum + p.x, 0) / points.length;
+                const centerY = points.reduce((sum, p) => sum + p.y, 0) / points.length;
+                return { x: centerX, y: centerY };
+            }
+        }
+
+        return { x: 0, y: 0 };
+    }
+
+    // Метод для підтримки accessibility
+    updateAriaLabels() {
+        const svg = document.getElementById('main-svg');
+        if (!svg || !this.currentMapData) return;
+
+        // Оновлюємо aria-label для SVG
+        const totalRooms = this.currentMapData.rooms.length;
+        const accessibleRooms = this.currentMapData.rooms.filter(r => r.access).length;
+
+        svg.setAttribute('aria-label',
+            `Карта університету з ${totalRooms} кімнатами, ${accessibleRooms} з яких доступні для навігації`
+        );
+
+        // Оновлюємо описи кімнат
+        this.currentMapData.rooms.forEach(room => {
+            const roomElement = document.getElementById(room.id);
+            if (roomElement) {
+                const categoryName = this.getCategoryName(room.category);
+                const accessText = room.access ? 'доступна' : 'недоступна';
+                roomElement.setAttribute('aria-label',
+                    `${room.label || room.id}, категорія: ${categoryName}, ${accessText} для навігації`
+                );
+            }
+        });
     }
 }
 
