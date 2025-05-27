@@ -1,16 +1,16 @@
-// Клас для роботи з навігацією та побудовою маршрутів між поверхами
+// Class for navigation and route building between floors
 class MapNavigation {
     constructor(mapCore) {
         this.mapCore = mapCore;
         this.currentRoute = null;
-        this.buildingGraph = null; // Єдиний граф для всієї будівлі
+        this.buildingGraph = null; // Single graph for entire building
         this.init();
     }
 
     init() {
         this.setupEventListeners();
 
-        // Чекаємо завантаження всіх поверхів
+        // Wait for all floors to load
         const waitForMapsLoad = setInterval(() => {
             if (this.mapCore.allMapsData.size > 0) {
                 clearInterval(waitForMapsLoad);
@@ -21,35 +21,27 @@ class MapNavigation {
     }
 
     setupEventListeners() {
-        // Побудова маршруту
+        // Build route
         document.getElementById('build-route').addEventListener('click', () => {
             this.buildRoute();
         });
 
-        // Поміняти місцями початок і кінець маршруту
+        // Swap start and end
         document.getElementById('swap-route').addEventListener('click', () => {
             this.swapRoute();
         });
 
-        // Очистити маршрут
+        // Clear route
         document.getElementById('clear-route').addEventListener('click', () => {
             this.clearRoute();
         });
 
-        // Швидкі дії
+        // Quick actions
         document.getElementById('find-nearest-restroom').addEventListener('click', () => {
             this.findNearest('restroom');
         });
 
-        document.getElementById('find-nearest-food').addEventListener('click', () => {
-            this.findNearest('food-service');
-        });
-
-        document.getElementById('find-exit').addEventListener('click', () => {
-            this.findExit();
-        });
-
-        // Дії з вибраною кімнатою
+        // Actions for selected room
         document.getElementById('route-to-room').addEventListener('click', () => {
             this.routeToSelectedRoom();
         });
@@ -63,7 +55,7 @@ class MapNavigation {
         });
     }
 
-    // Побудова єдиного графа для всієї будівлі
+    // Build unified graph for entire building
     buildBuildingGraph() {
         this.buildingGraph = {
             nodes: new Map(),
@@ -75,7 +67,7 @@ class MapNavigation {
         console.log('=== Building Graph Debug ===');
         console.log('Total floors:', this.mapCore.allMapsData.size);
 
-        // Спочатку додаємо всі вузли, включаючи міжповерхові
+        // First add all nodes, including inter-floor ones
         for (const [floor, mapData] of this.mapCore.allMapsData) {
             console.log(`Processing floor ${floor}:`, {
                 nodes: mapData.nodes?.length || 0,
@@ -84,7 +76,7 @@ class MapNavigation {
                 interFloorNodes: mapData.interFloorNodes || []
             });
 
-            // Додаємо звичайні вузли
+            // Add regular nodes
             if (mapData.nodes) {
                 mapData.nodes.forEach(node => {
                     const globalNodeId = `${floor}-${node.id}`;
@@ -97,21 +89,21 @@ class MapNavigation {
                 });
             }
 
-            // ВАЖЛИВО: Додаємо міжповерхові вузли окремо
+            // IMPORTANT: Add inter-floor nodes separately
             if (mapData.interFloorNodes) {
                 mapData.interFloorNodes.forEach(nodeId => {
                     const globalNodeId = `${floor}-${nodeId}`;
-                    // Створюємо віртуальний вузол для сходів
+                    // Create virtual node for stairs
                     this.buildingGraph.nodes.set(globalNodeId, {
                         id: nodeId,
                         type: 'stairs',
                         floor: floor,
                         globalId: globalNodeId,
                         originalId: nodeId,
-                        position: { x: 297.5, y: 430 } // Приблизна позиція
+                        position: { x: 297.5, y: 430 } // Approximate position
                     });
 
-                    // Додаємо до списку сходів
+                    // Add to stairs list
                     if (!this.buildingGraph.stairs.has(nodeId)) {
                         this.buildingGraph.stairs.set(nodeId, []);
                     }
@@ -121,7 +113,7 @@ class MapNavigation {
                 });
             }
 
-            // Додаємо кімнати
+            // Add rooms
             if (mapData.rooms) {
                 mapData.rooms.forEach(room => {
                     const globalRoomId = `${floor}-${room.id}`;
@@ -135,14 +127,14 @@ class MapNavigation {
                 });
             }
 
-            // Додаємо ребра в межах поверху
+            // Add edges within floor
             if (mapData.edges) {
                 mapData.edges.forEach(edge => {
                     const globalFromId = `${floor}-${edge.fromNodeId}`;
                     const globalToId = `${floor}-${edge.toNodeId}`;
                     const globalEdgeId = `${floor}-${edge.id}`;
 
-                    // Перевіряємо чи обидва вузли існують в графі
+                    // Check if both nodes exist in graph
                     if (this.buildingGraph.nodes.has(globalFromId) ||
                         this.buildingGraph.nodes.has(globalToId) ||
                         edge.fromNodeId?.match(/^31-01-00-\d+$/) ||
@@ -157,7 +149,7 @@ class MapNavigation {
                             globalToId: globalToId
                         });
 
-                        // Оновлюємо список сходів якщо це ребро до сходів
+                        // Update stairs list if this edge leads to stairs
                         if (edge.fromNodeId?.match(/^31-01-00-\d+$/)) {
                             const stairNodeId = edge.fromNodeId;
                             if (!this.buildingGraph.stairs.has(stairNodeId)) {
@@ -187,11 +179,11 @@ class MapNavigation {
         console.log('Total rooms in building:', this.buildingGraph.rooms.size);
         console.log('Stairs found:', Array.from(this.buildingGraph.stairs.entries()));
 
-        // Додаємо міжповерхові з'єднання для сходів
+        // Add inter-floor connections through stairs
         this.connectFloorsThroughStairs();
     }
 
-    // З'єднуємо поверхи через сходи
+    // Connect floors through stairs
     connectFloorsThroughStairs() {
         console.log('=== Connecting Floors ===');
         console.log('Stair connections to create:', this.buildingGraph.stairs);
@@ -201,7 +193,7 @@ class MapNavigation {
         for (const [stairNodeId, floors] of this.buildingGraph.stairs) {
             console.log(`Processing stair ${stairNodeId} on floors:`, floors);
 
-            // Створюємо віртуальні з'єднання між сходами різних поверхів
+            // Create virtual connections between stairs on different floors
             for (let i = 0; i < floors.length - 1; i++) {
                 for (let j = i + 1; j < floors.length; j++) {
                     const floor1 = floors[i];
@@ -210,7 +202,7 @@ class MapNavigation {
                     const globalNodeId1 = `${floor1}-${stairNodeId}`;
                     const globalNodeId2 = `${floor2}-${stairNodeId}`;
 
-                    // Перевіряємо чи обидва вузли існують
+                    // Check if both nodes exist
                     if (!this.buildingGraph.nodes.has(globalNodeId1)) {
                         console.warn(`Stair node ${globalNodeId1} not found in graph`);
                         continue;
@@ -221,9 +213,9 @@ class MapNavigation {
                     }
 
                     const virtualEdgeId = `stairs-${floor1}-${floor2}-${stairNodeId}`;
-                    const weight = Math.abs(parseInt(floor2) - parseInt(floor1)) * 20; // Вага залежить від різниці поверхів
+                    const weight = Math.abs(parseInt(floor2) - parseInt(floor1)) * 20; // Weight depends on floor difference
 
-                    // Додаємо віртуальне ребро між поверхами
+                    // Add virtual edge between floors
                     this.buildingGraph.edges.set(virtualEdgeId, {
                         id: virtualEdgeId,
                         globalId: virtualEdgeId,
@@ -247,15 +239,15 @@ class MapNavigation {
         console.log(`Total stair connections created: ${stairConnectionsCreated}`);
     }
 
-    // Заповнення випадаючих списків кімнат зі всіх поверхів
+    // Populate room select dropdowns with all floors
     populateRoomSelects() {
         const fromSelect = document.getElementById('from-select');
         const toSelect = document.getElementById('to-select');
 
-        fromSelect.innerHTML = '<option value="">Виберіть початкову кімнату</option>';
-        toSelect.innerHTML = '<option value="">Виберіть кінцеву кімнату</option>';
+        fromSelect.innerHTML = '<option value="">Select starting room</option>';
+        toSelect.innerHTML = '<option value="">Select destination room</option>';
 
-        // Групуємо кімнати за поверхами
+        // Group rooms by floor
         const roomsByFloor = new Map();
 
         for (const [globalRoomId, room] of this.buildingGraph.rooms) {
@@ -268,20 +260,20 @@ class MapNavigation {
             }
         }
 
-        // Сортуємо поверхи та додаємо кімнати до селектів
+        // Sort floors and add rooms to selects
         const sortedFloors = Array.from(roomsByFloor.keys()).sort((a, b) => parseInt(a) - parseInt(b));
 
         sortedFloors.forEach(floor => {
-            // Створюємо групу для поверху
+            // Create group for floor
             const fromOptgroup = document.createElement('optgroup');
-            fromOptgroup.label = `Поверх ${floor}`;
+            fromOptgroup.label = `Floor ${floor}`;
 
             const toOptgroup = document.createElement('optgroup');
-            toOptgroup.label = `Поверх ${floor}`;
+            toOptgroup.label = `Floor ${floor}`;
 
-            // Сортуємо кімнати за назвою
+            // Sort rooms by name
             const rooms = roomsByFloor.get(floor).sort((a, b) =>
-                (a.label || a.originalId).localeCompare(b.label || b.originalId, 'uk')
+                (a.label || a.originalId).localeCompare(b.label || b.originalId, 'en')
             );
 
             rooms.forEach(room => {
@@ -313,53 +305,53 @@ class MapNavigation {
         const toRoomId = toSelect.value;
 
         if (!fromRoomId || !toRoomId) {
-            this.mapCore.showError('Будь ласка, виберіть початкову та кінцеву кімнати');
+            this.mapCore.showError('Please select both starting and destination rooms');
             return;
         }
 
         if (fromRoomId === toRoomId) {
-            this.mapCore.showError('Початкова та кінцева кімнати не можуть бути однаковими');
+            this.mapCore.showError('Starting and destination rooms cannot be the same');
             return;
         }
 
-        // Показуємо індикатор завантаження
+        // Show loading indicator
         this.showRouteBuilding();
 
         try {
-            // Знаходимо кімнати в графі будівлі
+            // Find rooms in building graph
             const fromRoom = this.buildingGraph.rooms.get(fromRoomId);
             const toRoom = this.buildingGraph.rooms.get(toRoomId);
 
             if (!fromRoom || !toRoom) {
-                throw new Error('Не вдалося знайти одну з кімнат');
+                throw new Error('Could not find one of the rooms');
             }
 
-            // Будуємо маршрут через загальний граф будівлі
+            // Build route through global building graph
             const route = await this.buildGlobalRoute(fromRoom, toRoom);
 
             if (!route) {
-                throw new Error('Маршрут не знайдено');
+                throw new Error('Route not found');
             }
 
             this.displayRoute(route);
-            this.mapCore.announceToScreenReader('Маршрут успішно побудовано');
+            this.mapCore.announceToScreenReader('Route successfully built');
 
-            // Переходимо на поверх початку маршруту
+            // Navigate to floor of route start
             if (fromRoom.floor !== this.mapCore.currentFloor) {
                 await this.mapCore.selectFloor(fromRoom.floor);
             }
 
         } catch (error) {
             console.error('Error building route:', error);
-            this.mapCore.showError('Помилка побудови маршруту: ' + error.message);
+            this.mapCore.showError('Error building route: ' + error.message);
         } finally {
             this.hideRouteBuilding();
         }
     }
 
-    // Побудова маршруту через глобальний граф будівлі
+    // Build route through global building graph
     async buildGlobalRoute(fromRoom, toRoom) {
-        // Знаходимо найближчі вузли до кімнат
+        // Find nearest nodes to rooms
         let fromNodeId = fromRoom.globalNodeId;
         let toNodeId = toRoom.globalNodeId;
 
@@ -376,25 +368,25 @@ class MapNavigation {
             return null;
         }
 
-        // Використовуємо алгоритм Дейкстри на глобальному графі
+        // Use Dijkstra's algorithm on global graph
         const path = this.dijkstraGlobal(fromNodeId, toNodeId);
 
         if (!path || path.length === 0) {
             return null;
         }
 
-        // Формуємо детальний маршрут
+        // Build detailed route
         const route = this.buildDetailedRoute(path, fromRoom, toRoom);
         return route;
     }
 
-    // Алгоритм Дейкстри для глобального графа
+    // Dijkstra's algorithm for global graph
     dijkstraGlobal(fromNodeId, toNodeId) {
         const distances = new Map();
         const previous = new Map();
         const unvisited = new Set();
 
-        // Ініціалізація
+        // Initialize
         for (const [nodeId, node] of this.buildingGraph.nodes) {
             distances.set(nodeId, Infinity);
             previous.set(nodeId, null);
@@ -404,7 +396,7 @@ class MapNavigation {
         distances.set(fromNodeId, 0);
 
         while (unvisited.size > 0) {
-            // Знаходимо вузол з найменшою відстанню
+            // Find node with smallest distance
             let currentNode = null;
             let minDistance = Infinity;
 
@@ -421,12 +413,12 @@ class MapNavigation {
 
             unvisited.delete(currentNode);
 
-            // Якщо досягли цілі
+            // If we reached destination
             if (currentNode === toNodeId) {
                 break;
             }
 
-            // Знаходимо всі ребра з поточного вузла
+            // Find all edges from current node
             const neighbors = this.getNeighbors(currentNode);
 
             for (const neighbor of neighbors) {
@@ -440,7 +432,7 @@ class MapNavigation {
             }
         }
 
-        // Відновлюємо шлях
+        // Reconstruct path
         const path = [];
         let currentNode = toNodeId;
 
@@ -450,13 +442,13 @@ class MapNavigation {
         }
 
         if (path[0] !== fromNodeId) {
-            return null; // Шлях не знайдено
+            return null; // Path not found
         }
 
         return path;
     }
 
-    // Отримання сусідів вузла
+    // Get neighbors of a node
     getNeighbors(nodeId) {
         const neighbors = [];
 
@@ -479,13 +471,13 @@ class MapNavigation {
         return neighbors;
     }
 
-    // Пошук найближчого глобального вузла
+    // Find nearest global node
     findNearestGlobalNode(room) {
         const roomCenter = this.calculateRoomCenter(room);
         let nearestNodeId = null;
         let minDistance = Infinity;
 
-        // Шукаємо тільки серед вузлів на тому ж поверсі
+        // Search only among nodes on same floor
         for (const [nodeId, node] of this.buildingGraph.nodes) {
             if (node.floor === room.floor && (node.type === 'nav' || node.type === 'sup')) {
                 const nodePos = node.position || { x: 0, y: 0 };
@@ -504,18 +496,18 @@ class MapNavigation {
         return nearestNodeId;
     }
 
-    // Побудова детального маршруту
+    // Build detailed route
     buildDetailedRoute(path, fromRoom, toRoom) {
         const route = {
             path: path,
             nodes: [],
             edges: [],
-            segments: [], // Сегменти маршруту по поверхах
+            segments: [], // Route segments by floor
             totalDistance: 0,
             isMultiFloor: false
         };
 
-        // Визначаємо чи маршрут міжповерховий
+        // Determine if route is multi-floor
         const floors = new Set();
         path.forEach(nodeId => {
             const node = this.buildingGraph.nodes.get(nodeId);
@@ -525,13 +517,13 @@ class MapNavigation {
         });
         route.isMultiFloor = floors.size > 1;
 
-        // Збираємо інформацію про вузли та ребра
+        // Collect information about nodes and edges
         for (let i = 0; i < path.length; i++) {
             const nodeId = path[i];
             const node = this.buildingGraph.nodes.get(nodeId);
 
             if (node) {
-                // Знаходимо кімнату для вузла
+                // Find room for node
                 let room = null;
                 for (const [roomId, r] of this.buildingGraph.rooms) {
                     if (r.globalNodeId === nodeId) {
@@ -548,7 +540,7 @@ class MapNavigation {
                 });
             }
 
-            // Знаходимо ребро до наступного вузла
+            // Find edge to next node
             if (i < path.length - 1) {
                 const nextNodeId = path[i + 1];
                 const edge = this.findEdgeBetweenNodes(nodeId, nextNodeId);
@@ -560,7 +552,7 @@ class MapNavigation {
             }
         }
 
-        // Розбиваємо маршрут на сегменти по поверхах
+        // Split route into segments by floor
         if (route.isMultiFloor) {
             route.segments = this.segmentRouteByFloor(route);
         }
@@ -568,7 +560,7 @@ class MapNavigation {
         return route;
     }
 
-    // Пошук ребра між двома вузлами
+    // Find edge between two nodes
     findEdgeBetweenNodes(nodeId1, nodeId2) {
         for (const [edgeId, edge] of this.buildingGraph.edges) {
             if ((edge.globalFromId === nodeId1 && edge.globalToId === nodeId2) ||
@@ -579,7 +571,7 @@ class MapNavigation {
         return null;
     }
 
-    // Розбиття маршруту на сегменти по поверхах
+    // Segment route by floor
     segmentRouteByFloor(route) {
         const segments = [];
         let currentSegment = null;
@@ -589,7 +581,7 @@ class MapNavigation {
             const floor = nodeInfo.floor;
 
             if (floor !== currentFloor) {
-                // Починаємо новий сегмент
+                // Start new segment
                 if (currentSegment) {
                     segments.push(currentSegment);
                 }
@@ -607,7 +599,7 @@ class MapNavigation {
             currentSegment.nodes.push(nodeInfo);
             currentSegment.endNode = nodeInfo;
 
-            // Додаємо ребро якщо воно на тому ж поверсі
+            // Add edge if it's on the same floor
             if (index < route.edges.length) {
                 const edge = route.edges[index];
                 if (!edge.isStairs) {
@@ -623,7 +615,7 @@ class MapNavigation {
         return segments;
     }
 
-    // Відображення маршруту
+    // Display route
     displayRoute(route) {
         if (!route) {
             console.error('No route to display');
@@ -633,31 +625,31 @@ class MapNavigation {
         this.currentRoute = route;
         this.clearRouteDisplay();
 
-        // Відображаємо маршрут залежно від типу
+        // Display route depending on type
         if (route.isMultiFloor) {
             this.displayMultiFloorRoute(route);
         } else {
             this.displaySingleFloorRoute(route);
         }
 
-        // Показуємо інформацію про маршрут
+        // Show route information
         document.getElementById('route-info').style.display = 'block';
         document.getElementById('route-distance').querySelector('span').textContent =
             Math.round(route.totalDistance);
 
-        // Додаємо кроки маршруту
+        // Add route steps
         this.displayRouteSteps(route);
 
-        // Анімація маршруту на поточному поверсі
+        // Animate route on current floor
         this.animateRouteOnCurrentFloor(route);
     }
 
-    // Відображення маршруту на одному поверсі
+    // Display single floor route
     displaySingleFloorRoute(route) {
-        // Активуємо елементи маршруту на поточному поверсі
+        // Activate route elements on current floor
         this.activateRouteElementsOnFloor(route, this.mapCore.currentFloor);
 
-        // Підсвічуємо кімнати початку та кінця якщо вони на поточному поверсі
+        // Highlight start and end rooms if on current floor
         if (route.nodes.length > 0) {
             const startRoom = route.nodes[0].room;
             const endRoom = route.nodes[route.nodes.length - 1].room;
@@ -671,22 +663,22 @@ class MapNavigation {
         }
     }
 
-    // Відображення маршруту між поверхами
+    // Display multi-floor route
     displayMultiFloorRoute(route) {
-        // Відображаємо сегмент маршруту для поточного поверху
+        // Display route segment for current floor
         const currentFloorSegment = route.segments.find(seg => seg.floor === this.mapCore.currentFloor);
 
         if (currentFloorSegment) {
             this.displayRouteSegment(currentFloorSegment);
         }
 
-        // Додаємо індикатори переходу між поверхами
+        // Add floor transition indicators
         this.addFloorTransitionIndicators(route);
     }
 
-    // Відображення сегменту маршруту
+    // Display route segment
     displayRouteSegment(segment) {
-        // Активуємо елементи сегменту
+        // Activate segment elements
         segment.edges.forEach(edge => {
             const edgeElement = document.getElementById(edge.originalId);
             if (edgeElement) {
@@ -705,7 +697,7 @@ class MapNavigation {
             }
         });
 
-        // Підсвічуємо кімнати в сегменті
+        // Highlight rooms in segment
         if (segment.startNode.room) {
             this.highlightRouteRoom(segment.startNode.room.originalId, 'segment-start');
         }
@@ -714,12 +706,12 @@ class MapNavigation {
         }
     }
 
-    // Активація елементів маршруту на конкретному поверсі
+    // Activate route elements on specific floor
     activateRouteElementsOnFloor(route, floor) {
         const svgElement = document.getElementById('main-svg');
         if (!svgElement) return;
 
-        // Активуємо ребра на поточному поверсі
+        // Activate edges on current floor
         route.edges.forEach(edge => {
             if (edge.floor === floor || (!edge.isStairs &&
                 (edge.fromFloor === floor || edge.toFloor === floor))) {
@@ -731,7 +723,7 @@ class MapNavigation {
             }
         });
 
-        // Активуємо вузли на поточному поверсі
+        // Activate nodes on current floor
         route.nodes.forEach(nodeInfo => {
             if (nodeInfo.floor === floor && nodeInfo.node && nodeInfo.node.originalId) {
                 const nodeElement = svgElement.getElementById(nodeInfo.node.originalId);
@@ -743,13 +735,13 @@ class MapNavigation {
         });
     }
 
-    // Додавання індикаторів переходу між поверхами
+    // Add floor transition indicators
     addFloorTransitionIndicators(route) {
-        // Знаходимо переходи між поверхами
+        // Find floor transitions
         for (let i = 0; i < route.edges.length; i++) {
             const edge = route.edges[i];
             if (edge.isStairs) {
-                // Додаємо візуальний індикатор на карті
+                // Add visual indicator on map
                 const fromNode = this.buildingGraph.nodes.get(edge.globalFromId);
                 const toNode = this.buildingGraph.nodes.get(edge.globalToId);
 
@@ -762,12 +754,12 @@ class MapNavigation {
         }
     }
 
-    // Додавання індикатора сходів
+    // Add stair indicator
     addStairIndicator(stairNode, targetNode, direction) {
         const svgElement = document.getElementById('main-svg');
         if (!svgElement) return;
 
-        // Створюємо SVG елемент для індикатора
+        // Create SVG element for indicator
         const indicator = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         indicator.setAttribute('class', 'stair-indicator');
         indicator.setAttribute('data-direction', direction);
@@ -790,17 +782,17 @@ class MapNavigation {
         indicator.appendChild(circle);
         indicator.appendChild(text);
 
-        // Додаємо tooltip
+        // Add tooltip
         const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
-        title.textContent = `Перейти на поверх ${targetNode.floor}`;
+        title.textContent = `Go to floor ${targetNode.floor}`;
         indicator.appendChild(title);
 
         svgElement.appendChild(indicator);
     }
 
-    // Очищення відображення маршруту
+    // Clear route display
     clearRouteDisplay() {
-        // Очищаємо активні елементи маршруту
+        // Clear active route elements
         document.querySelectorAll('.route-active').forEach(element => {
             element.classList.remove('route-active');
             if (element.getAttribute('data-name') === 'node' ||
@@ -809,27 +801,27 @@ class MapNavigation {
             }
         });
 
-        // Очищаємо підсвічування кімнат
+        // Clear room highlights
         document.querySelectorAll('.room.route-highlight').forEach(room => {
             room.classList.remove('route-highlight');
         });
 
-        // Видаляємо індикатори сходів
+        // Remove stair indicators
         document.querySelectorAll('.stair-indicator').forEach(indicator => {
             indicator.remove();
         });
 
-        // Приховуємо інформацію про маршрут
+        // Hide route information
         document.getElementById('route-info').style.display = 'none';
         document.getElementById('route-steps').innerHTML = '';
     }
 
-    // Відображення кроків маршруту
+    // Display route steps
     displayRouteSteps(route) {
         const stepsContainer = document.getElementById('route-steps');
         stepsContainer.innerHTML = '';
 
-        // Генеруємо кроки на основі сегментів маршруту
+        // Generate steps based on route segments
         const steps = this.generateDetailedRouteSteps(route);
 
         steps.forEach((step, index) => {
@@ -841,7 +833,7 @@ class MapNavigation {
             stepElement.setAttribute('role', 'listitem');
             stepElement.innerHTML = `<strong>${index + 1}.</strong> ${step.text}`;
 
-            // Додаємо обробник для переходу на відповідний поверх
+            // Add handler to navigate to corresponding floor
             if (step.floor) {
                 stepElement.style.cursor = 'pointer';
                 stepElement.addEventListener('click', () => {
@@ -853,90 +845,90 @@ class MapNavigation {
         });
     }
 
-    // Генерація детальних кроків маршруту
+    // Generate detailed route steps
     generateDetailedRouteSteps(route) {
         const steps = [];
 
         if (route.isMultiFloor) {
-            // Для міжповерхового маршруту
+            // For multi-floor route
             route.segments.forEach((segment, index) => {
-                // Початок сегменту
+                // Start of segment
                 if (index === 0 && segment.startNode.room) {
                     steps.push({
-                        text: `Початок маршруту: ${segment.startNode.room.label || segment.startNode.room.originalId} (Поверх ${segment.floor})`,
+                        text: `Start from: ${segment.startNode.room.label || segment.startNode.room.originalId} (Floor ${segment.floor})`,
                         type: 'start',
                         floor: segment.floor
                     });
                 }
 
-                // Проміжні кроки сегменту
+                // Intermediate segment steps
                 if (segment.nodes.length > 2) {
                     steps.push({
-                        text: `Пройдіть через поверх ${segment.floor}`,
+                        text: `Navigate through floor ${segment.floor}`,
                         type: 'path',
                         floor: segment.floor
                     });
                 }
 
-                // Перехід між поверхами
+                // Floor transition
                 if (index < route.segments.length - 1) {
                     const nextSegment = route.segments[index + 1];
-                    const direction = parseInt(nextSegment.floor) > parseInt(segment.floor) ? 'вгору' : 'вниз';
+                    const direction = parseInt(nextSegment.floor) > parseInt(segment.floor) ? 'up' : 'down';
                     steps.push({
-                        text: `⬆️ Перейдіть ${direction} на поверх ${nextSegment.floor} по сходах`,
+                        text: `⬆️ Take stairs ${direction} to floor ${nextSegment.floor}`,
                         type: 'stairs',
                         floor: nextSegment.floor
                     });
                 }
 
-                // Кінець маршруту
+                // End of route
                 if (index === route.segments.length - 1 && segment.endNode.room) {
                     steps.push({
-                        text: `Кінець маршруту: ${segment.endNode.room.label || segment.endNode.room.originalId} (Поверх ${segment.floor})`,
+                        text: `Destination: ${segment.endNode.room.label || segment.endNode.room.originalId} (Floor ${segment.floor})`,
                         type: 'end',
                         floor: segment.floor
                     });
                 }
             });
         } else {
-            // Для одноповерхового маршруту
+            // For single floor route
             if (route.nodes.length > 0) {
                 const startRoom = route.nodes[0].room;
                 const endRoom = route.nodes[route.nodes.length - 1].room;
 
                 if (startRoom) {
                     steps.push({
-                        text: `Початок маршруту: ${startRoom.label || startRoom.originalId}`,
+                        text: `Start from: ${startRoom.label || startRoom.originalId}`,
                         type: 'start'
                     });
                 }
 
                 if (route.nodes.length > 2) {
                     steps.push({
-                        text: `Пройдіть через коридор`,
+                        text: `Navigate through corridor`,
                         type: 'path'
                     });
                 }
 
                 if (endRoom) {
                     steps.push({
-                        text: `Кінець маршруту: ${endRoom.label || endRoom.originalId}`,
+                        text: `Destination: ${endRoom.label || endRoom.originalId}`,
                         type: 'end'
                     });
                 }
             }
         }
 
-        // Додаємо загальну відстань
+        // Add total distance
         steps.push({
-            text: `Загальна відстань: ${Math.round(route.totalDistance)} м`,
+            text: `Total distance: ${Math.round(route.totalDistance)} m`,
             type: 'distance'
         });
 
         return steps;
     }
 
-    // Анімація маршруту на поточному поверсі
+    // Animate route on current floor
     animateRouteOnCurrentFloor(route) {
         const currentFloorEdges = route.edges.filter(edge =>
             edge.floor === this.mapCore.currentFloor && !edge.isStairs
@@ -965,11 +957,11 @@ class MapNavigation {
             setTimeout(animateNext, 300);
         };
 
-        // Запускаємо анімацію через невелику затримку
+        // Start animation after short delay
         setTimeout(animateNext, 500);
     }
 
-    // Підсвічування кімнати маршруту
+    // Highlight route room
     highlightRouteRoom(roomId, type = 'default') {
         const roomElement = document.getElementById(roomId);
         if (roomElement) {
@@ -978,7 +970,7 @@ class MapNavigation {
         }
     }
 
-    // Обчислення центру кімнати
+    // Calculate room center
     calculateRoomCenter(room) {
         if (!room.geometry || !room.geometry.children || room.geometry.children.length === 0) {
             return { x: 0, y: 0 };
@@ -1005,19 +997,19 @@ class MapNavigation {
         return { x: 0, y: 0 };
     }
 
-    // Очищення маршруту
+    // Clear route
     clearRoute() {
         this.currentRoute = null;
         this.clearRouteDisplay();
 
-        // Очищаємо вибір у селектах
+        // Clear selections in dropdowns
         document.getElementById('from-select').value = '';
         document.getElementById('to-select').value = '';
 
-        this.mapCore.announceToScreenReader('Маршрут очищено');
+        this.mapCore.announceToScreenReader('Route cleared');
     }
 
-    // Поміняти місцями початок і кінець
+    // Swap start and end
     swapRoute() {
         const fromSelect = document.getElementById('from-select');
         const toSelect = document.getElementById('to-select');
@@ -1026,20 +1018,20 @@ class MapNavigation {
         fromSelect.value = toSelect.value;
         toSelect.value = tempValue;
 
-        this.mapCore.announceToScreenReader('Початкову та кінцеву точки помінено місцями');
+        this.mapCore.announceToScreenReader('Start and end points swapped');
     }
 
-    // Встановлення кінцевої точки маршруту
+    // Set route destination
     setRouteDestination(room) {
         const toSelect = document.getElementById('to-select');
         const globalRoomId = room.floor ? `${room.floor}-${room.id}` : room.id;
 
-        // Перевіряємо чи є така опція в селекті
+        // Check if option exists in select
         const option = toSelect.querySelector(`option[value="${globalRoomId}"]`);
         if (option) {
             toSelect.value = globalRoomId;
 
-            // Якщо початкова точка вже вибрана, будуємо маршрут
+            // If start point already selected, build route
             const fromSelect = document.getElementById('from-select');
             if (fromSelect.value) {
                 this.buildRoute();
@@ -1047,17 +1039,17 @@ class MapNavigation {
         }
     }
 
-    // Встановлення початкової точки маршруту
+    // Set route origin
     setRouteOrigin(room) {
         const fromSelect = document.getElementById('from-select');
         const globalRoomId = room.floor ? `${room.floor}-${room.id}` : room.id;
 
-        // Перевіряємо чи є така опція в селекті
+        // Check if option exists in select
         const option = fromSelect.querySelector(`option[value="${globalRoomId}"]`);
         if (option) {
             fromSelect.value = globalRoomId;
 
-            // Якщо кінцева точка вже вибрана, будуємо маршрут
+            // If end point already selected, build route
             const toSelect = document.getElementById('to-select');
             if (toSelect.value) {
                 this.buildRoute();
@@ -1065,19 +1057,19 @@ class MapNavigation {
         }
     }
 
-    // Пошук найближчої кімнати певної категорії
+    // Find nearest room of specific category
     findNearest(category) {
         const currentRoom = this.mapCore.selectedRoom;
         if (!currentRoom) {
-            this.mapCore.showError('Спочатку виберіть кімнату');
+            this.mapCore.showError('Please select a room first');
             return;
         }
 
-        // Шукаємо найближчу кімнату заданої категорії на всіх поверхах
+        // Find nearest room of given category on all floors
         const nearestRoom = this.findNearestRoomByCategoryGlobal(currentRoom, category);
 
         if (nearestRoom) {
-            // Встановлюємо маршрут
+            // Set up route
             const fromSelect = document.getElementById('from-select');
             const toSelect = document.getElementById('to-select');
 
@@ -1090,15 +1082,15 @@ class MapNavigation {
             this.buildRoute();
         } else {
             const categoryName = this.mapCore.getCategoryName(category);
-            this.mapCore.showError(`Не знайдено ${categoryName} в будівлі`);
+            this.mapCore.showError(`No ${categoryName} found in building`);
         }
     }
 
-    // Пошук найближчої кімнати за категорією в усій будівлі
+    // Find nearest room by category in entire building
     findNearestRoomByCategoryGlobal(fromRoom, category) {
         const candidateRooms = [];
 
-        // Збираємо всі кімнати заданої категорії
+        // Collect all rooms of given category
         for (const [globalRoomId, room] of this.buildingGraph.rooms) {
             if (room.category === category && room.access &&
                 room.globalId !== `${fromRoom.floor}-${fromRoom.id}`) {
@@ -1108,13 +1100,13 @@ class MapNavigation {
 
         if (candidateRooms.length === 0) return null;
 
-        // Спочатку шукаємо на тому ж поверсі
+        // First search on same floor
         const sameFloorRooms = candidateRooms.filter(room => room.floor === fromRoom.floor);
         if (sameFloorRooms.length > 0) {
             return this.findClosestRoom(fromRoom, sameFloorRooms);
         }
 
-        // Якщо на поверсі немає, шукаємо на найближчих поверхах
+        // If not on floor, search on nearest floors
         const floorDifferences = new Map();
         candidateRooms.forEach(room => {
             const diff = Math.abs(parseInt(room.floor) - parseInt(fromRoom.floor));
@@ -1124,20 +1116,20 @@ class MapNavigation {
             floorDifferences.get(diff).push(room);
         });
 
-        // Сортуємо за різницею поверхів
+        // Sort by floor difference
         const sortedDiffs = Array.from(floorDifferences.keys()).sort((a, b) => a - b);
 
         for (const diff of sortedDiffs) {
             const rooms = floorDifferences.get(diff);
             if (rooms.length > 0) {
-                return rooms[0]; // Повертаємо першу знайдену кімнату
+                return rooms[0]; // Return first found room
             }
         }
 
         return null;
     }
 
-    // Знаходження найближчої кімнати зі списку
+    // Find closest room from list
     findClosestRoom(fromRoom, candidateRooms) {
         const fromCenter = this.calculateRoomCenter(fromRoom);
         let closestRoom = null;
@@ -1159,51 +1151,11 @@ class MapNavigation {
         return closestRoom;
     }
 
-    // Пошук виходу
-    findExit() {
-        // Шукаємо кімнату з ключовими словами "exit", "вихід"
-        let exitRoom = null;
-
-        for (const [globalRoomId, room] of this.buildingGraph.rooms) {
-            if (room.keywords.some(keyword =>
-                keyword.toLowerCase().includes('exit') ||
-                keyword.toLowerCase().includes('вихід')
-            )) {
-                exitRoom = room;
-                break;
-            }
-        }
-
-        if (exitRoom) {
-            // Переходимо на поверх з виходом
-            if (exitRoom.floor !== this.mapCore.currentFloor) {
-                this.mapCore.selectFloor(exitRoom.floor).then(() => {
-                    this.mapCore.selectRoom({
-                        ...exitRoom,
-                        id: exitRoom.originalId
-                    });
-                    this.routeToSelectedRoom();
-                });
-            } else {
-                this.mapCore.selectRoom({
-                    ...exitRoom,
-                    id: exitRoom.originalId
-                });
-                this.routeToSelectedRoom();
-            }
-        } else {
-            // Якщо вихід не знайдено, шукаємо сходи на першому поверсі
-            this.mapCore.selectFloor('1').then(() => {
-                this.findNearest('utility');
-            });
-        }
-    }
-
-    // Маршрут до вибраної кімнати
+    // Route to selected room
     routeToSelectedRoom() {
         const selectedRoom = this.mapCore.selectedRoom;
         if (!selectedRoom) {
-            this.mapCore.showError('Кімната не вибрана');
+            this.mapCore.showError('No room selected');
             return;
         }
 
@@ -1213,20 +1165,20 @@ class MapNavigation {
 
         toSelect.value = globalRoomId;
 
-        // Якщо початкова точка вже вибрана, будуємо маршрут
+        // If start point already selected, build route
         const fromSelect = document.getElementById('from-select');
         if (fromSelect.value) {
             this.buildRoute();
         } else {
-            this.mapCore.showError('Виберіть початкову точку маршруту');
+            this.mapCore.showError('Please select a starting point');
         }
     }
 
-    // Маршрут від вибраної кімнати
+    // Route from selected room
     routeFromSelectedRoom() {
         const selectedRoom = this.mapCore.selectedRoom;
         if (!selectedRoom) {
-            this.mapCore.showError('Кімната не вибрана');
+            this.mapCore.showError('No room selected');
             return;
         }
 
@@ -1236,20 +1188,20 @@ class MapNavigation {
 
         fromSelect.value = globalRoomId;
 
-        // Якщо кінцева точка вже вибрана, будуємо маршрут
+        // If end point already selected, build route
         const toSelect = document.getElementById('to-select');
         if (toSelect.value) {
             this.buildRoute();
         } else {
-            this.mapCore.showError('Виберіть кінцеву точку маршруту');
+            this.mapCore.showError('Please select a destination');
         }
     }
 
-    // Підсвічування вибраної кімнати
+    // Highlight selected room
     highlightSelectedRoom() {
         const selectedRoom = this.mapCore.selectedRoom;
         if (!selectedRoom) {
-            this.mapCore.showError('Кімната не вибрана');
+            this.mapCore.showError('No room selected');
             return;
         }
 
@@ -1259,25 +1211,25 @@ class MapNavigation {
         }
     }
 
-    // Показати індикатор побудови маршруту
+    // Show route building indicator
     showRouteBuilding() {
         const buildButton = document.getElementById('build-route');
         buildButton.disabled = true;
-        buildButton.textContent = 'Побудова...';
-        this.mapCore.announceToScreenReader('Побудова маршруту');
+        buildButton.textContent = 'Building...';
+        this.mapCore.announceToScreenReader('Building route');
     }
 
-    // Приховати індикатор побудови маршруту
+    // Hide route building indicator
     hideRouteBuilding() {
         const buildButton = document.getElementById('build-route');
         buildButton.disabled = false;
-        buildButton.textContent = 'Побудувати маршрут';
+        buildButton.textContent = 'Build route';
     }
 }
 
-// Ініціалізуємо навігацію після завантаження DOM
+// Initialize navigation after DOM loads
 document.addEventListener('DOMContentLoaded', () => {
-    // Чекаємо ініціалізації MapCore
+    // Wait for MapCore initialization
     const initNavigation = () => {
         if (window.mapCore && window.mapCore.allMapsData.size > 0) {
             window.mapNavigation = new MapNavigation(window.mapCore);

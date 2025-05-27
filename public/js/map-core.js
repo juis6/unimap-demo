@@ -333,7 +333,7 @@ class MapCore {
     }
 
     // Select room (may be on another floor)
-    async selectRoom(room, fromSearch = false) {
+    async selectRoom(room, options = {}) {
         // Check if room is already selected to avoid circular calls
         if (this.selectedRoom && this.selectedRoom.id === room.id &&
             this.selectedRoom.floor === room.floor) {
@@ -406,4 +406,269 @@ class MapCore {
                 roomElement.setAttribute('aria-label', `Room ${roomData.label || roomId} on floor ${this.currentFloor}`);
                 roomElement.setAttribute('tabindex', '0');
 
-                roomElement.addEventListener('click', (e
+                roomElement.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.selectRoom(roomWithFloor);
+                });
+
+                roomElement.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    this.showContextMenu(e, roomWithFloor);
+                });
+
+                roomElement.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.selectRoom(roomWithFloor);
+                    }
+                });
+            }
+        });
+    }
+
+    // Inject custom SVG styles
+    injectSVGStyles(svgElement) {
+        const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+        styleElement.textContent = `
+            .room { cursor: pointer; transition: all 0.3s ease; }
+            .room:hover { stroke-width: 2.5; filter: brightness(1.1); }
+            .room.selected { stroke-width: 3; filter: brightness(1.2); }
+            .room.highlighted { animation: pulse 2s ease-in-out infinite; }
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.6; }
+            }
+        `;
+        svgElement.insertBefore(styleElement, svgElement.firstChild);
+    }
+
+    // Get category name
+    getCategoryName(category) {
+        const categoryNames = {
+            'laboratory': 'Laboratory',
+            'restroom': 'Restroom',
+            'food-service': 'Food Service',
+            'utility': 'Utility Room',
+            'recreation': 'Recreation',
+            'workspace': 'Workspace'
+        };
+        return categoryNames[category] || category;
+    }
+
+    // Show context menu
+    showContextMenu(event, room) {
+        if (window.mapUI) {
+            window.mapUI.showContextMenu(event, room);
+        }
+    }
+
+    // Zoom in
+    zoomIn() {
+        this.zoomLevel = Math.min(this.zoomLevel * 1.2, 5);
+        this.applyTransform();
+        this.announceToScreenReader('Zoomed in');
+    }
+
+    // Zoom out
+    zoomOut() {
+        this.zoomLevel = Math.max(this.zoomLevel / 1.2, 0.5);
+        this.applyTransform();
+        this.announceToScreenReader('Zoomed out');
+    }
+
+    // Reset view
+    resetView() {
+        this.zoomLevel = 1;
+        this.panX = 0;
+        this.panY = 0;
+        this.applyTransform();
+        this.announceToScreenReader('View reset');
+    }
+
+    // Apply transformation
+    applyTransform() {
+        const svgElement = document.getElementById('main-svg');
+        if (svgElement) {
+            svgElement.style.transform = `translate(${this.panX}px, ${this.panY}px) scale(${this.zoomLevel})`;
+            svgElement.style.transformOrigin = 'center center';
+        }
+    }
+
+    // Start dragging
+    startDrag(e) {
+        if (e.target.closest('.room')) return;
+        this.isDragging = true;
+        this.lastMouseX = e.clientX;
+        this.lastMouseY = e.clientY;
+        document.getElementById('svg-container').style.cursor = 'grabbing';
+    }
+
+    // Handle dragging
+    drag(e) {
+        if (!this.isDragging) return;
+
+        const deltaX = e.clientX - this.lastMouseX;
+        const deltaY = e.clientY - this.lastMouseY;
+
+        this.panX += deltaX;
+        this.panY += deltaY;
+
+        this.applyTransform();
+
+        this.lastMouseX = e.clientX;
+        this.lastMouseY = e.clientY;
+    }
+
+    // End dragging
+    endDrag() {
+        this.isDragging = false;
+        document.getElementById('svg-container').style.cursor = 'grab';
+    }
+
+    // Handle touch start
+    handleTouchStart(e) {
+        if (e.touches.length === 1) {
+            const touch = e.touches[0];
+            this.lastMouseX = touch.clientX;
+            this.lastMouseY = touch.clientY;
+            this.isDragging = true;
+        }
+    }
+
+    // Handle touch move
+    handleTouchMove(e) {
+        if (e.touches.length === 1 && this.isDragging) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const deltaX = touch.clientX - this.lastMouseX;
+            const deltaY = touch.clientY - this.lastMouseY;
+
+            this.panX += deltaX;
+            this.panY += deltaY;
+
+            this.applyTransform();
+
+            this.lastMouseX = touch.clientX;
+            this.lastMouseY = touch.clientY;
+        }
+    }
+
+    // Handle keyboard navigation
+    handleKeyNavigation(e) {
+        const step = 20;
+        switch (e.key) {
+            case 'ArrowUp':
+                e.preventDefault();
+                this.panY += step;
+                this.applyTransform();
+                break;
+            case 'ArrowDown':
+                e.preventDefault();
+                this.panY -= step;
+                this.applyTransform();
+                break;
+            case 'ArrowLeft':
+                e.preventDefault();
+                this.panX += step;
+                this.applyTransform();
+                break;
+            case 'ArrowRight':
+                e.preventDefault();
+                this.panX -= step;
+                this.applyTransform();
+                break;
+            case '+':
+            case '=':
+                e.preventDefault();
+                this.zoomIn();
+                break;
+            case '-':
+            case '_':
+                e.preventDefault();
+                this.zoomOut();
+                break;
+            case '0':
+                e.preventDefault();
+                this.resetView();
+                break;
+        }
+    }
+
+    // Update building information
+    updateBuildingInfo() {
+        const mapData = this.allMapsData.get(this.currentFloor);
+        if (mapData && mapData.building) {
+            document.getElementById('building-name').textContent = mapData.building.label || 'University Building';
+        }
+    }
+
+    // Update floor information
+    updateFloorInfo() {
+        document.getElementById('current-floor').textContent = this.currentFloor;
+    }
+
+    // Update system information
+    updateSystemInfo() {
+        const mapData = this.allMapsData.get(this.currentFloor);
+        if (mapData) {
+            document.getElementById('current-map-name').textContent = `Building 10, Floor ${this.currentFloor}`;
+            document.getElementById('rooms-count').textContent = mapData.rooms ? mapData.rooms.length : 0;
+            document.getElementById('nodes-count').textContent = mapData.nodes ? mapData.nodes.length : 0;
+        }
+    }
+
+    // Update connection status
+    updateConnectionStatus(status) {
+        const statusElement = document.getElementById('connection-status');
+        statusElement.textContent = status;
+
+        if (status === 'Connected') {
+            statusElement.style.color = '#2e7d32';
+        } else if (status === 'Loading...') {
+            statusElement.style.color = '#ff6f00';
+        } else {
+            statusElement.style.color = '#d32f2f';
+        }
+    }
+
+    // Show loading indicator
+    showLoading() {
+        document.getElementById('loading-indicator').style.display = 'flex';
+    }
+
+    // Hide loading indicator
+    hideLoading() {
+        document.getElementById('loading-indicator').style.display = 'none';
+    }
+
+    // Show error message
+    showError(message) {
+        document.getElementById('error-message').textContent = message;
+        document.getElementById('error-modal').style.display = 'flex';
+        this.announceToScreenReader(`Error: ${message}`);
+    }
+
+    // Hide error message
+    hideError() {
+        document.getElementById('error-modal').style.display = 'none';
+    }
+
+    // Announce to screen reader
+    announceToScreenReader(message) {
+        const announcement = document.createElement('div');
+        announcement.setAttribute('role', 'status');
+        announcement.setAttribute('aria-live', 'polite');
+        announcement.className = 'sr-only';
+        announcement.textContent = message;
+        document.body.appendChild(announcement);
+
+        setTimeout(() => {
+            document.body.removeChild(announcement);
+        }, 1000);
+    }
+}
+
+// Initialize MapCore after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    window.mapCore = new MapCore();
+});
