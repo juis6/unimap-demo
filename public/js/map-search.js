@@ -821,13 +821,13 @@ class MapSearch {
         }
     }
 
+    // Знайдіть рядок 828 і замініть його на:
+
     // Підсвічування тексту в результатах пошуку
     highlightSearchTerm(text, searchTerm) {
         if (!searchTerm.trim()) return text;
 
-        const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\        history.slice(0, 8).forEach(entry => {
-            const item = document.createElement('div');
-        item.className = 'autocomplete-item autocomplete-history-item'; ')})`, 'gi');
+        const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
         return text.replace(regex, '<mark class="search-highlight">$1</mark>');
     }
 
