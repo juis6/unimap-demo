@@ -23,11 +23,6 @@ class MapCore {
     }
 
     setupEventListeners() {
-        // Завантаження карти
-        document.getElementById('load-map').addEventListener('click', () => {
-            this.loadSelectedMap();
-        });
-
         // Контроли масштабування
         document.getElementById('zoom-in').addEventListener('click', () => {
             this.zoomIn();
@@ -338,7 +333,13 @@ class MapCore {
     }
 
     // Вибір кімнати (може бути на іншому поверсі)
-    async selectRoom(room) {
+    async selectRoom(room, fromSearch = false) {
+        // Перевіряємо чи кімната вже вибрана для уникнення циклічних викликів
+        if (this.selectedRoom && this.selectedRoom.id === room.id &&
+            this.selectedRoom.floor === room.floor) {
+            return;
+        }
+
         this.selectedRoom = room;
 
         // Якщо кімната на іншому поверсі, переключаємося
@@ -592,11 +593,6 @@ class MapCore {
 
             this.applyTransform();
         }
-    }
-
-    loadSelectedMap() {
-        // Для цієї версії не потрібно, оскільки ми завантажуємо всі поверхи відразу
-        this.announceToScreenReader('Всі поверхи вже завантажені');
     }
 
     zoomIn() {

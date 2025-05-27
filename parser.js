@@ -139,8 +139,16 @@ class SVGMapParser {
     parseNodes(svgElement) {
         const nodeElements = svgElement.querySelectorAll('[data-name="node"]');
         nodeElements.forEach(nodeElement => {
+            const nodeId = nodeElement.id;
+
+            // Пропускаємо вузли типу 31-01-00-xxx для звичайних поверхів
+            // Вони використовуються лише для міжповерхової навігації
+            if (nodeId && nodeId.match(/^31-01-00-\d+$/)) {
+                return;
+            }
+
             const node = {
-                id: nodeElement.id,
+                id: nodeId,
                 type: nodeElement.getAttribute('data-type') || 'nav',
                 roomId: nodeElement.getAttribute('data-room-id') || 'none',
                 position: this.parseNodePosition(nodeElement),
