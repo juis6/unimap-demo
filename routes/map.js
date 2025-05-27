@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const mapController = require('../controllers/mapController');
 
-// Маршрути для карти
 router.get('/', (req, res) => {
     mapController.getMapPage(req, res);
 });
@@ -11,7 +10,6 @@ router.get('/data/:mapId', (req, res) => {
     mapController.getMapData(req, res);
 });
 
-// НОВИЙ МАРШРУТ: Доступ до оригінального SVG файлу
 router.get('/svg/:mapId', (req, res) => {
     mapController.getSVGFile(req, res);
 });
