@@ -1,7 +1,7 @@
-// Main class for working with the map - updated version for working with floors
+// Головний клас для роботи з картою - оновлена версія для роботи з поверхами
 class MapCore {
     constructor() {
-        this.allMapsData = new Map(); // Store data for all floors
+        this.allMapsData = new Map(); // Зберігаємо дані для всіх поверхів
         this.currentFloor = '1';
         this.buildingId = null;
         this.selectedRoom = null;
@@ -23,7 +23,7 @@ class MapCore {
     }
 
     setupEventListeners() {
-        // Zoom controls
+        // Керування масштабом
         document.getElementById('zoom-in').addEventListener('click', () => {
             this.zoomIn();
         });
@@ -36,19 +36,19 @@ class MapCore {
             this.resetView();
         });
 
-        // Drag map handling
+        // Обробка перетягування карти
         const svgContainer = document.getElementById('svg-container');
         svgContainer.addEventListener('mousedown', (e) => this.startDrag(e));
         svgContainer.addEventListener('mousemove', (e) => this.drag(e));
         svgContainer.addEventListener('mouseup', () => this.endDrag());
         svgContainer.addEventListener('mouseleave', () => this.endDrag());
 
-        // Touch events for mobile devices
+        // Touch-події для мобільних пристроїв
         svgContainer.addEventListener('touchstart', (e) => this.handleTouchStart(e));
         svgContainer.addEventListener('touchmove', (e) => this.handleTouchMove(e));
         svgContainer.addEventListener('touchend', () => this.endDrag());
 
-        // Mouse wheel zoom
+        // Масштабування колесом миші
         svgContainer.addEventListener('wheel', (e) => {
             e.preventDefault();
             if (e.deltaY < 0) {
@@ -58,22 +58,22 @@ class MapCore {
             }
         });
 
-        // Close error modal
+        // Закрити модальне вікно помилки
         document.getElementById('close-error').addEventListener('click', () => {
             this.hideError();
         });
 
-        // Keyboard navigation for SVG container
+        // Навігація клавіатурою для SVG контейнера
         svgContainer.addEventListener('keydown', (e) => {
             this.handleKeyNavigation(e);
         });
     }
 
-    // Accessibility setup
+    // Налаштування доступності
     setupAccessibility() {
         const mapContainer = document.getElementById('map-container');
         mapContainer.setAttribute('role', 'application');
-        mapContainer.setAttribute('aria-label', 'Interactive university map');
+        mapContainer.setAttribute('aria-label', 'Інтерактивна карта університету');
 
         const loadingIndicator = document.getElementById('loading-indicator');
         loadingIndicator.setAttribute('aria-live', 'assertive');
@@ -85,35 +85,35 @@ class MapCore {
         const description = document.createElement('div');
         description.id = 'map-description';
         description.className = 'sr-only';
-        description.textContent = 'Interactive university map with floor navigation. Use the toolbar to search for rooms and build routes.';
+        description.textContent = 'Інтерактивна карта університету з навігацією по поверхах. Використовуйте панель інструментів для пошуку кімнат та побудови маршрутів.';
         document.body.appendChild(description);
 
         const svgContainer = document.getElementById('svg-container');
         svgContainer.setAttribute('aria-describedby', 'map-description');
     }
 
-    // Load all building floors
+    // Завантаження всіх поверхів будівлі
     async loadAllFloors() {
         this.showLoading();
-        this.updateConnectionStatus('Loading...');
+        this.updateConnectionStatus('Завантаження...');
 
         try {
-            // Get list of available maps
+            // Отримуємо список доступних карт
             const availableMaps = window.mapConfig.availableMaps;
             const buildingMaps = availableMaps.filter(map => map.id.startsWith('map-10-'));
 
             if (buildingMaps.length === 0) {
-                throw new Error('Building maps not found');
+                throw new Error('Карти будівлі не знайдено');
             }
 
-            // Load data for all floors
+            // Завантажуємо дані для всіх поверхів
             for (const mapInfo of buildingMaps) {
                 const mapData = await this.loadMapData(mapInfo.id);
                 if (mapData) {
                     const floorNumber = this.extractFloorNumber(mapInfo.id);
                     this.allMapsData.set(floorNumber, mapData);
 
-                    // Set buildingId from first map
+                    // Встановлюємо buildingId з першої карти
                     if (!this.buildingId && mapData.building) {
                         this.buildingId = mapData.building.id;
                     }
@@ -121,59 +121,59 @@ class MapCore {
             }
 
             if (this.allMapsData.size === 0) {
-                throw new Error('Failed to load floor data');
+                throw new Error('Не вдалося завантажити дані поверхів');
             }
 
-            // Load first floor by default
+            // Завантажуємо перший поверх за замовчуванням
             const floors = Array.from(this.allMapsData.keys()).sort();
             this.currentFloor = floors[0];
 
             await this.displayCurrentFloor();
             this.setupFloorButtons();
             this.updateSystemInfo();
-            this.updateConnectionStatus('Connected');
+            this.updateConnectionStatus('Підключено');
             this.hideLoading();
 
-            this.announceToScreenReader(`Loaded ${this.allMapsData.size} building floors`);
+            this.announceToScreenReader(`Завантажено ${this.allMapsData.size} поверхів будівлі`);
 
         } catch (error) {
-            console.error('Error loading floors:', error);
-            this.showError('Error loading floors: ' + error.message);
-            this.updateConnectionStatus('Error');
+            console.error('Помилка завантаження поверхів:', error);
+            this.showError('Помилка завантаження поверхів: ' + error.message);
+            this.updateConnectionStatus('Помилка');
             this.hideLoading();
         }
     }
 
-    // Extract floor number from map ID
+    // Витягнути номер поверху з ID карти
     extractFloorNumber(mapId) {
         const match = mapId.match(/map-\d+-(\d+)/);
         return match ? match[1] : '1';
     }
 
-    // Load individual map data
+    // Завантажити дані окремої карти
     async loadMapData(mapId) {
         try {
             const response = await fetch(`/map/data/${mapId}`);
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP помилка! статус: ${response.status}`);
             }
             return await response.json();
         } catch (error) {
-            console.error(`Error loading map ${mapId}:`, error);
+            console.error(`Помилка завантаження карти ${mapId}:`, error);
             return null;
         }
     }
 
-    // Display current floor
+    // Показати поточний поверх
     async displayCurrentFloor() {
         const mapData = this.allMapsData.get(this.currentFloor);
         if (!mapData) {
-            console.error('Map data not found for floor:', this.currentFloor);
+            console.error('Дані карти не знайдено для поверху:', this.currentFloor);
             return;
         }
 
         try {
-            // Load SVG for current floor
+            // Завантажуємо SVG для поточного поверху
             const mapId = `map-10-${this.currentFloor.padStart(2, '0')}`;
             await this.loadOriginalSVG(mapId, mapData);
 
@@ -181,17 +181,17 @@ class MapCore {
             this.updateFloorInfo();
 
         } catch (error) {
-            console.error('Error displaying floor:', error);
-            this.showError('Error displaying floor: ' + error.message);
+            console.error('Помилка відображення поверху:', error);
+            this.showError('Помилка відображення поверху: ' + error.message);
         }
     }
 
-    // Load original SVG
+    // Завантажити оригінальний SVG
     async loadOriginalSVG(mapId, mapData) {
         try {
             const svgResponse = await fetch(`/map/svg/${mapId}`);
             if (!svgResponse.ok) {
-                throw new Error('SVG file not found');
+                throw new Error('SVG файл не знайдено');
             }
 
             const svgContent = await svgResponse.text();
@@ -205,18 +205,18 @@ class MapCore {
                 svgElement.style.height = '100%';
 
                 svgElement.setAttribute('role', 'img');
-                svgElement.setAttribute('aria-label', `Floor ${this.currentFloor} map`);
+                svgElement.setAttribute('aria-label', `Карта поверху ${this.currentFloor}`);
 
                 this.setupRoomInteractions(svgElement, mapData);
                 this.injectSVGStyles(svgElement);
             }
         } catch (error) {
-            console.warn('Could not load original SVG:', error);
+            console.warn('Не вдалося завантажити оригінальний SVG:', error);
             await this.renderMap(mapData);
         }
     }
 
-    // Setup floor buttons
+    // Налаштувати кнопки поверхів
     setupFloorButtons() {
         const floorButtons = document.getElementById('floor-buttons');
         floorButtons.innerHTML = '';
@@ -225,7 +225,7 @@ class MapCore {
 
         floors.forEach(floorNumber => {
             const button = document.createElement('button');
-            button.textContent = `Floor ${floorNumber}`;
+            button.textContent = `Поверх ${floorNumber}`;
             button.setAttribute('data-floor', floorNumber);
             button.classList.add('md-chip');
             button.setAttribute('role', 'radio');
@@ -243,14 +243,14 @@ class MapCore {
         });
     }
 
-    // Select floor
+    // Вибрати поверх
     async selectFloor(floorNumber) {
         if (floorNumber === this.currentFloor) return;
 
         this.currentFloor = floorNumber;
         await this.displayCurrentFloor();
 
-        // Update floor button states
+        // Оновити стан кнопок поверхів
         document.querySelectorAll('#floor-buttons .md-chip').forEach(btn => {
             btn.classList.remove('active');
             btn.setAttribute('aria-checked', 'false');
@@ -263,10 +263,10 @@ class MapCore {
         }
 
         this.updateFloorInfo();
-        this.announceToScreenReader(`Selected floor ${floorNumber}`);
+        this.announceToScreenReader(`Вибрано поверх ${floorNumber}`);
     }
 
-    // Get all rooms from all floors
+    // Отримати всі кімнати з усіх поверхів
     getAllRooms() {
         const allRooms = [];
         for (const [floorNumber, mapData] of this.allMapsData) {
@@ -275,7 +275,7 @@ class MapCore {
                     allRooms.push({
                         ...room,
                         floor: floorNumber,
-                        floorLabel: `Floor ${floorNumber}`
+                        floorLabel: `Поверх ${floorNumber}`
                     });
                 });
             }
@@ -283,7 +283,7 @@ class MapCore {
         return allRooms;
     }
 
-    // Get all nodes from all floors
+    // Отримати всі вузли з усіх поверхів
     getAllNodes() {
         const allNodes = [];
         for (const [floorNumber, mapData] of this.allMapsData) {
@@ -299,7 +299,7 @@ class MapCore {
         return allNodes;
     }
 
-    // Get all edges from all floors
+    // Отримати всі ребра з усіх поверхів
     getAllEdges() {
         const allEdges = [];
         for (const [floorNumber, mapData] of this.allMapsData) {
@@ -315,7 +315,7 @@ class MapCore {
         return allEdges;
     }
 
-    // Find room by ID across all floors
+    // Знайти кімнату по ID на всіх поверхах
     findRoomById(roomId) {
         for (const [floorNumber, mapData] of this.allMapsData) {
             if (mapData.rooms) {
@@ -324,7 +324,7 @@ class MapCore {
                     return {
                         ...room,
                         floor: floorNumber,
-                        floorLabel: `Floor ${floorNumber}`
+                        floorLabel: `Поверх ${floorNumber}`
                     };
                 }
             }
@@ -332,9 +332,9 @@ class MapCore {
         return null;
     }
 
-    // Select room (may be on another floor)
+    // Вибрати кімнату (може бути на іншому поверсі)
     async selectRoom(room, options = {}) {
-        // Check if room is already selected to avoid circular calls
+        // Перевіряємо, чи кімната вже вибрана, щоб уникнути циклічних викликів
         if (this.selectedRoom && this.selectedRoom.id === room.id &&
             this.selectedRoom.floor === room.floor) {
             return;
@@ -342,18 +342,18 @@ class MapCore {
 
         this.selectedRoom = room;
 
-        // If room is on another floor, switch
+        // Якщо кімната на іншому поверсі, переключаємось
         if (room.floor && room.floor !== this.currentFloor) {
             await this.selectFloor(room.floor);
         }
 
-        // Reset previous selection
+        // Скидаємо попередній вибір
         document.querySelectorAll('.room.selected').forEach(r => {
             r.classList.remove('selected');
             r.setAttribute('aria-selected', 'false');
         });
 
-        // Highlight new room
+        // Підсвічуємо нову кімнату
         const roomElement = document.getElementById(room.id);
         if (roomElement) {
             roomElement.classList.add('selected');
@@ -365,24 +365,24 @@ class MapCore {
         document.getElementById('room-details').style.display = 'block';
 
         const roomDescription = room.floorLabel ?
-            `${room.label || room.id} on ${room.floorLabel}` :
+            `${room.label || room.id} на ${room.floorLabel}` :
             `${room.label || room.id}`;
-        this.announceToScreenReader(`Selected room ${roomDescription}`);
+        this.announceToScreenReader(`Вибрано кімнату ${roomDescription}`);
     }
 
-    // Update room information
+    // Оновити інформацію про кімнату
     updateRoomDetails(room) {
         const roomName = room.floorLabel ?
             `${room.label || room.id} (${room.floorLabel})` :
             (room.label || room.id);
 
         document.getElementById('room-name').textContent = roomName;
-        document.getElementById('room-category').textContent = `Category: ${this.getCategoryName(room.category)}`;
-        document.getElementById('room-keywords').textContent = `Keywords: ${room.keywords.join(', ')}`;
-        document.getElementById('room-access').textContent = `Access: ${room.access ? 'Allowed' : 'Restricted'}`;
+        document.getElementById('room-category').textContent = `Категорія: ${this.getCategoryName(room.category)}`;
+        document.getElementById('room-keywords').textContent = `Ключові слова: ${room.keywords.join(', ')}`;
+        document.getElementById('room-access').textContent = `Доступ: ${room.access ? 'Дозволено' : 'Обмежено'}`;
     }
 
-    // Setup room interactions
+    // Налаштувати взаємодію з кімнатами
     setupRoomInteractions(svgElement, mapData) {
         if (!mapData || !mapData.rooms) return;
 
@@ -393,17 +393,17 @@ class MapCore {
             const roomData = mapData.rooms.find(r => r.id === roomId);
 
             if (roomData) {
-                // Add floor info
+                // Додаємо інформацію про поверх
                 const roomWithFloor = {
                     ...roomData,
                     floor: this.currentFloor,
-                    floorLabel: `Floor ${this.currentFloor}`
+                    floorLabel: `Поверх ${this.currentFloor}`
                 };
 
                 roomElement.classList.add('room');
                 roomElement.classList.add(`category-${roomData.category}`);
                 roomElement.setAttribute('role', 'button');
-                roomElement.setAttribute('aria-label', `Room ${roomData.label || roomId} on floor ${this.currentFloor}`);
+                roomElement.setAttribute('aria-label', `Кімната ${roomData.label || roomId} на поверсі ${this.currentFloor}`);
                 roomElement.setAttribute('tabindex', '0');
 
                 roomElement.addEventListener('click', (e) => {
@@ -426,7 +426,7 @@ class MapCore {
         });
     }
 
-    // Inject custom SVG styles
+    // Впровадити користувацькі SVG стилі
     injectSVGStyles(svgElement) {
         const styleElement = document.createElementNS('http://www.w3.org/2000/svg', 'style');
         styleElement.textContent = `
@@ -442,50 +442,50 @@ class MapCore {
         svgElement.insertBefore(styleElement, svgElement.firstChild);
     }
 
-    // Get category name
+    // Отримати назву категорії
     getCategoryName(category) {
         const categoryNames = {
-            'laboratory': 'Laboratory',
-            'restroom': 'Restroom',
-            'food-service': 'Food Service',
-            'utility': 'Utility Room',
-            'recreation': 'Recreation',
-            'workspace': 'Workspace'
+            'laboratory': 'Лабораторія',
+            'restroom': 'Санвузол',
+            'food-service': 'Харчування',
+            'utility': 'Службове приміщення',
+            'recreation': 'Відпочинок',
+            'workspace': 'Робоче місце'
         };
         return categoryNames[category] || category;
     }
 
-    // Show context menu
+    // Показати контекстне меню
     showContextMenu(event, room) {
         if (window.mapUI) {
             window.mapUI.showContextMenu(event, room);
         }
     }
 
-    // Zoom in
+    // Збільшити
     zoomIn() {
         this.zoomLevel = Math.min(this.zoomLevel * 1.2, 5);
         this.applyTransform();
-        this.announceToScreenReader('Zoomed in');
+        this.announceToScreenReader('Збільшено');
     }
 
-    // Zoom out
+    // Зменшити
     zoomOut() {
         this.zoomLevel = Math.max(this.zoomLevel / 1.2, 0.5);
         this.applyTransform();
-        this.announceToScreenReader('Zoomed out');
+        this.announceToScreenReader('Зменшено');
     }
 
-    // Reset view
+    // Скинути вигляд
     resetView() {
         this.zoomLevel = 1;
         this.panX = 0;
         this.panY = 0;
         this.applyTransform();
-        this.announceToScreenReader('View reset');
+        this.announceToScreenReader('Вигляд скинуто');
     }
 
-    // Apply transformation
+    // Застосувати трансформацію
     applyTransform() {
         const svgElement = document.getElementById('main-svg');
         if (svgElement) {
@@ -494,7 +494,7 @@ class MapCore {
         }
     }
 
-    // Start dragging
+    // Почати перетягування
     startDrag(e) {
         if (e.target.closest('.room')) return;
         this.isDragging = true;
@@ -503,7 +503,7 @@ class MapCore {
         document.getElementById('svg-container').style.cursor = 'grabbing';
     }
 
-    // Handle dragging
+    // Обробити перетягування
     drag(e) {
         if (!this.isDragging) return;
 
@@ -519,13 +519,13 @@ class MapCore {
         this.lastMouseY = e.clientY;
     }
 
-    // End dragging
+    // Закінчити перетягування
     endDrag() {
         this.isDragging = false;
         document.getElementById('svg-container').style.cursor = 'grab';
     }
 
-    // Handle touch start
+    // Обробити початок дотику
     handleTouchStart(e) {
         if (e.touches.length === 1) {
             const touch = e.touches[0];
@@ -535,7 +535,7 @@ class MapCore {
         }
     }
 
-    // Handle touch move
+    // Обробити рух дотику
     handleTouchMove(e) {
         if (e.touches.length === 1 && this.isDragging) {
             e.preventDefault();
@@ -553,7 +553,7 @@ class MapCore {
         }
     }
 
-    // Handle keyboard navigation
+    // Обробити навігацію клавіатурою
     handleKeyNavigation(e) {
         const step = 20;
         switch (e.key) {
@@ -594,66 +594,66 @@ class MapCore {
         }
     }
 
-    // Update building information
+    // Оновити інформацію про будівлю
     updateBuildingInfo() {
         const mapData = this.allMapsData.get(this.currentFloor);
         if (mapData && mapData.building) {
-            document.getElementById('building-name').textContent = mapData.building.label || 'University Building';
+            document.getElementById('building-name').textContent = mapData.building.label || 'Університетська будівля';
         }
     }
 
-    // Update floor information
+    // Оновити інформацію про поверх
     updateFloorInfo() {
         document.getElementById('current-floor').textContent = this.currentFloor;
     }
 
-    // Update system information
+    // Оновити системну інформацію
     updateSystemInfo() {
         const mapData = this.allMapsData.get(this.currentFloor);
         if (mapData) {
-            document.getElementById('current-map-name').textContent = `Building 10, Floor ${this.currentFloor}`;
+            document.getElementById('current-map-name').textContent = `Корпус 10, поверх ${this.currentFloor}`;
             document.getElementById('rooms-count').textContent = mapData.rooms ? mapData.rooms.length : 0;
             document.getElementById('nodes-count').textContent = mapData.nodes ? mapData.nodes.length : 0;
         }
     }
 
-    // Update connection status
+    // Оновити статус з'єднання
     updateConnectionStatus(status) {
         const statusElement = document.getElementById('connection-status');
         statusElement.textContent = status;
 
-        if (status === 'Connected') {
+        if (status === 'Підключено') {
             statusElement.style.color = '#2e7d32';
-        } else if (status === 'Loading...') {
+        } else if (status === 'Завантаження...') {
             statusElement.style.color = '#ff6f00';
         } else {
             statusElement.style.color = '#d32f2f';
         }
     }
 
-    // Show loading indicator
+    // Показати індикатор завантаження
     showLoading() {
         document.getElementById('loading-indicator').style.display = 'flex';
     }
 
-    // Hide loading indicator
+    // Сховати індикатор завантаження
     hideLoading() {
         document.getElementById('loading-indicator').style.display = 'none';
     }
 
-    // Show error message
+    // Показати повідомлення про помилку
     showError(message) {
         document.getElementById('error-message').textContent = message;
         document.getElementById('error-modal').style.display = 'flex';
-        this.announceToScreenReader(`Error: ${message}`);
+        this.announceToScreenReader(`Помилка: ${message}`);
     }
 
-    // Hide error message
+    // Сховати повідомлення про помилку
     hideError() {
         document.getElementById('error-modal').style.display = 'none';
     }
 
-    // Announce to screen reader
+    // Оголосити для зчитувача екрану
     announceToScreenReader(message) {
         const announcement = document.createElement('div');
         announcement.setAttribute('role', 'status');
@@ -668,7 +668,7 @@ class MapCore {
     }
 }
 
-// Initialize MapCore after DOM is loaded
+// Ініціалізувати MapCore після завантаження DOM
 document.addEventListener('DOMContentLoaded', () => {
     window.mapCore = new MapCore();
 });

@@ -146,20 +146,29 @@ class SVGMapParser {
         nodeElements.forEach(nodeElement => {
             const nodeId = nodeElement.id;
 
-            // Зберігаємо міжповерхові вузли для edges, але не додаємо їх до nodes
+            // Зберігаємо міжповерхові вузли для edges
             if (nodeId && nodeId.match(/^31-01-00-\d+$/)) {
                 interFloorNodes.add(nodeId);
-                return; // Пропускаємо додавання до загального списку nodes
+                // Додаємо міжповерхові вузли до загального списку для навігації
+                const node = {
+                    id: nodeId,
+                    type: 'stairs',
+                    roomId: nodeElement.getAttribute('data-room-id') || 'none',
+                    position: this.parseNodePosition(nodeElement),
+                    geometry: this.parseGeometry(nodeElement)
+                };
+                this.mapData.nodes.push(node);
+            } else {
+                // Звичайні навігаційні вузли
+                const node = {
+                    id: nodeId,
+                    type: nodeElement.getAttribute('data-type') || 'nav',
+                    roomId: nodeElement.getAttribute('data-room-id') || 'none',
+                    position: this.parseNodePosition(nodeElement),
+                    geometry: this.parseGeometry(nodeElement)
+                };
+                this.mapData.nodes.push(node);
             }
-
-            const node = {
-                id: nodeId,
-                type: nodeElement.getAttribute('data-type') || 'nav',
-                roomId: nodeElement.getAttribute('data-room-id') || 'none',
-                position: this.parseNodePosition(nodeElement),
-                geometry: this.parseGeometry(nodeElement)
-            };
-            this.mapData.nodes.push(node);
         });
 
         // Зберігаємо список міжповерхових вузлів для подальшого використання

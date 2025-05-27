@@ -76,7 +76,7 @@ class MapNavigation {
                 interFloorNodes: mapData.interFloorNodes || []
             });
 
-            // Add regular nodes
+            // Add regular nodes (including stairs nodes)
             if (mapData.nodes) {
                 mapData.nodes.forEach(node => {
                     const globalNodeId = `${floor}-${node.id}`;
@@ -86,6 +86,16 @@ class MapNavigation {
                         globalId: globalNodeId,
                         originalId: node.id
                     });
+
+                    // Track stairs nodes
+                    if (node.id && node.id.match(/^31-01-00-\d+$/)) {
+                        if (!this.buildingGraph.stairs.has(node.id)) {
+                            this.buildingGraph.stairs.set(node.id, []);
+                        }
+                        if (!this.buildingGraph.stairs.get(node.id).includes(floor)) {
+                            this.buildingGraph.stairs.get(node.id).push(floor);
+                        }
+                    }
                 });
             }
 

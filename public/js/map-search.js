@@ -1,4 +1,4 @@
-// Class for search functionality across all floors
+// Клас для функціональності пошуку на всіх поверхах
 class MapSearch {
     constructor(mapCore) {
         this.mapCore = mapCore;
@@ -14,18 +14,18 @@ class MapSearch {
     }
 
     setupEventListeners() {
-        // Search on text input
+        // Пошук при введенні тексту
         const searchInput = document.getElementById('search-input');
         searchInput.addEventListener('input', (e) => {
             this.handleSearchInput(e.target.value);
         });
 
-        // Search on button click
+        // Пошук при натисканні кнопки
         document.getElementById('search-button').addEventListener('click', () => {
             this.performSearch(searchInput.value);
         });
 
-        // Search on Enter
+        // Пошук при натисканні Enter
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -33,19 +33,19 @@ class MapSearch {
             }
         });
 
-        // Filter by category
+        // Фільтрація по категорії
         document.getElementById('category-select').addEventListener('change', (e) => {
             this.filterByCategory(e.target.value);
         });
 
-        // Clear search
+        // Очистити пошук
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.clearSearch();
             }
         });
 
-        // Show history on focus with empty field
+        // Показати історію при фокусі з порожнім полем
         searchInput.addEventListener('focus', (e) => {
             if (!e.target.value.trim()) {
                 this.showSearchHistory();
@@ -53,7 +53,7 @@ class MapSearch {
         });
     }
 
-    // Setup autocomplete
+    // Налаштувати автодоповнення
     setupAutoComplete() {
         const searchInput = document.getElementById('search-input');
         let autocompleteContainer = document.getElementById('search-autocomplete');
@@ -63,14 +63,14 @@ class MapSearch {
             autocompleteContainer.id = 'search-autocomplete';
             autocompleteContainer.className = 'autocomplete-container';
             autocompleteContainer.setAttribute('role', 'listbox');
-            autocompleteContainer.setAttribute('aria-label', 'Search suggestions');
+            autocompleteContainer.setAttribute('aria-label', 'Пропозиції для пошуку');
 
             const searchContainer = document.getElementById('search-input-container');
             searchContainer.style.position = 'relative';
             searchContainer.appendChild(autocompleteContainer);
         }
 
-        // Handle autocomplete selection
+        // Обробити вибір автодоповнення
         autocompleteContainer.addEventListener('click', (e) => {
             const item = e.target.closest('.autocomplete-item');
             if (item) {
@@ -83,7 +83,7 @@ class MapSearch {
                         this.hideAutocomplete();
                     }
                 } else if (item.dataset.historyQuery) {
-                    // Select from history
+                    // Вибрати з історії
                     const query = item.dataset.historyQuery;
                     searchInput.value = query;
                     this.performSearch(query);
@@ -92,20 +92,20 @@ class MapSearch {
             }
         });
 
-        // Hide autocomplete on outside click
+        // Сховати автодоповнення при кліку поза
         document.addEventListener('click', (e) => {
             if (!e.target.closest('#search-input-container')) {
                 this.hideAutocomplete();
             }
         });
 
-        // Keyboard navigation for autocomplete
+        // Навігація клавіатурою для автодоповнення
         searchInput.addEventListener('keydown', (e) => {
             this.handleAutocompleteNavigation(e, autocompleteContainer);
         });
     }
 
-    // Keyboard navigation for autocomplete
+    // Навігація клавіатурою для автодоповнення
     handleAutocompleteNavigation(e, container) {
         const items = container.querySelectorAll('.autocomplete-item');
         if (items.length === 0) return;
@@ -143,16 +143,16 @@ class MapSearch {
         }
     }
 
-    // Handle search input
+    // Обробити введення для пошуку
     handleSearchInput(query) {
         this.currentQuery = query.trim();
 
-        // Clear previous timer
+        // Очистити попередній таймер
         if (this.searchTimeout) {
             clearTimeout(this.searchTimeout);
         }
 
-        // Set new timer for delayed search
+        // Встановити новий таймер для затриманого пошуку
         this.searchTimeout = setTimeout(() => {
             if (this.currentQuery.length >= 2) {
                 this.showAutocomplete(this.currentQuery);
@@ -164,7 +164,7 @@ class MapSearch {
         }, 300);
     }
 
-    // Perform search across all floors
+    // Виконати пошук на всіх поверхах
     performSearch(query) {
         if (!query.trim()) {
             this.clearSearch();
@@ -174,41 +174,41 @@ class MapSearch {
         try {
             const category = document.getElementById('category-select').value;
 
-            // Get all rooms from all floors
+            // Отримати всі кімнати з усіх поверхів
             let allRooms = this.mapCore.getAllRooms();
 
-            // Filter by category
+            // Фільтрувати по категорії
             if (category && category !== 'all') {
                 allRooms = allRooms.filter(room => room.category === category);
             }
 
-            // Search by query
+            // Пошук по запиту
             const results = this.fuzzySearch(query, allRooms);
 
             this.displaySearchResults(results);
             this.hideAutocomplete();
 
-            // Save to history
+            // Зберегти в історію
             this.saveSearchHistory(query, results);
 
-            // Announce result for screen reader
+            // Оголосити результат для зчитувача екрану
             const floorCount = [...new Set(results.map(r => r.floor))].length;
-            this.mapCore.announceToScreenReader(`Found ${results.length} results on ${floorCount} floors`);
+            this.mapCore.announceToScreenReader(`Знайдено ${results.length} результатів на ${floorCount} поверхах`);
 
         } catch (error) {
-            console.error('Search error:', error);
-            this.mapCore.showError('Search error: ' + error.message);
+            console.error('Помилка пошуку:', error);
+            this.mapCore.showError('Помилка пошуку: ' + error.message);
         }
     }
 
-    // Show autocomplete
+    // Показати автодоповнення
     showAutocomplete(query) {
         const allRooms = this.mapCore.getAllRooms();
         if (!allRooms || allRooms.length === 0) {
             return;
         }
 
-        const matches = this.fuzzySearch(query, allRooms, 8); // Maximum 8 results
+        const matches = this.fuzzySearch(query, allRooms, 8); // Максимум 8 результатів
 
         const autocompleteContainer = document.getElementById('search-autocomplete');
         autocompleteContainer.innerHTML = '';
@@ -225,7 +225,7 @@ class MapSearch {
                     `${room.label || room.id} (${room.floorLabel})` :
                     (room.label || room.id);
 
-                // Highlight matches in text
+                // Підсвітити збіги в тексті
                 const highlightedName = this.highlightSearchTerm(displayName, query);
 
                 item.innerHTML = `
@@ -234,7 +234,7 @@ class MapSearch {
                 `;
 
                 item.addEventListener('mouseenter', () => {
-                    // Remove active state from other elements
+                    // Видалити активний стан з інших елементів
                     autocompleteContainer.querySelectorAll('.autocomplete-item.active')
                         .forEach(el => el.classList.remove('active'));
                     item.classList.add('active');
@@ -245,16 +245,16 @@ class MapSearch {
 
             autocompleteContainer.style.display = 'block';
         } else {
-            // Show no results message
+            // Показати повідомлення про відсутність результатів
             const noResults = document.createElement('div');
             noResults.className = 'autocomplete-no-results';
-            noResults.textContent = 'No results found';
+            noResults.textContent = 'Результатів не знайдено';
             autocompleteContainer.appendChild(noResults);
             autocompleteContainer.style.display = 'block';
         }
     }
 
-    // Hide autocomplete
+    // Сховати автодоповнення
     hideAutocomplete() {
         const autocompleteContainer = document.getElementById('search-autocomplete');
         if (autocompleteContainer) {
@@ -263,7 +263,7 @@ class MapSearch {
         }
     }
 
-    // Fuzzy search across all floors
+    // Нечіткий пошук на всіх поверхах
     fuzzySearch(query, rooms, maxResults = 20) {
         query = query.toLowerCase();
         const results = [];
@@ -276,7 +276,7 @@ class MapSearch {
             const keywords = room.keywords.join(' ').toLowerCase();
             const floorLabel = room.floorLabel ? room.floorLabel.toLowerCase() : '';
 
-            // Exact match in name - highest priority
+            // Точний збіг в назві - найвищий пріоритет
             if (label === query) {
                 score += 200;
             } else if (label.includes(query)) {
@@ -286,22 +286,22 @@ class MapSearch {
                 }
             }
 
-            // Match in category
+            // Збіг в категорії
             if (category.includes(query) || categoryName.includes(query)) {
                 score += 40;
             }
 
-            // Match in keywords
+            // Збіг в ключових словах
             if (keywords.includes(query)) {
                 score += 30;
             }
 
-            // Match in floor info
+            // Збіг в інформації про поверх
             if (floorLabel.includes(query)) {
                 score += 25;
             }
 
-            // Match individual words
+            // Збіг окремих слів
             const queryWords = query.split(' ').filter(word => word.length >= 2);
             queryWords.forEach(word => {
                 if (label.includes(word)) score += 15;
@@ -310,7 +310,7 @@ class MapSearch {
                 if (floorLabel.includes(word)) score += 5;
             });
 
-            // Bonus for accessibility
+            // Бонус за доступність
             if (room.access) {
                 score += 5;
             }
@@ -320,13 +320,13 @@ class MapSearch {
             }
         });
 
-        // Sort by score and return limited number
+        // Сортувати по балу та повернути обмежену кількість
         return results
             .sort((a, b) => b.searchScore - a.searchScore)
             .slice(0, maxResults);
     }
 
-    // Display search results
+    // Показати результати пошуку
     displaySearchResults(results) {
         this.searchResults = results;
         const resultsContainer = document.getElementById('search-results');
@@ -336,39 +336,39 @@ class MapSearch {
             resultsContainer.innerHTML = `
                 <div class="search-no-results">
                     <div class="search-no-results-icon">🔍</div>
-                    <div class="search-no-results-text">No results found</div>
+                    <div class="search-no-results-text">Результатів не знайдено</div>
                     <div class="search-no-results-suggestion">
-                        Try changing your search or select a different category
+                        Спробуйте змінити запит або виберіть іншу категорію
                     </div>
                 </div>
             `;
             return;
         }
 
-        // Create header with result count and buttons
+        // Створити заголовок з кількістю результатів та кнопками
         const header = document.createElement('div');
         header.className = 'search-results-header';
 
-        // Group results by floor for better visualization
+        // Групувати результати по поверхах для кращої візуалізації
         const groupedResults = this.groupResultsByFloor(results);
         const floorCount = Object.keys(groupedResults).length;
 
         header.innerHTML = `
             <div class="search-results-count">
-                Found: <strong>${results.length}</strong> on ${floorCount} floors
+                Знайдено: <strong>${results.length}</strong> на ${floorCount} поверхах
             </div>
             <div class="search-results-actions">
                 <button id="export-search-results" class="md-button md-button-text" style="font-size: 0.75rem;">
-                    Export
+                    Експорт
                 </button>
                 <button id="clear-search-results" class="md-button md-button-text" style="font-size: 0.75rem;">
-                    Clear
+                    Очистити
                 </button>
             </div>
         `;
         resultsContainer.appendChild(header);
 
-        // Add handlers for buttons
+        // Додати обробники для кнопок
         document.getElementById('export-search-results').addEventListener('click', () => {
             this.exportSearchResults();
         });
@@ -377,7 +377,7 @@ class MapSearch {
             this.clearSearch();
         });
 
-        // Display results grouped by floor
+        // Показати результати згруповані по поверхах
         Object.keys(groupedResults).sort((a, b) => parseInt(a) - parseInt(b)).forEach(floor => {
             const floorGroup = document.createElement('div');
             floorGroup.className = 'search-floor-group';
@@ -385,7 +385,7 @@ class MapSearch {
             const floorHeader = document.createElement('div');
             floorHeader.className = 'search-floor-header';
             floorHeader.innerHTML = `
-                <span class="search-floor-title">Floor ${floor}</span>
+                <span class="search-floor-title">Поверх ${floor}</span>
                 <span class="search-floor-count">${groupedResults[floor].length}</span>
             `;
             floorGroup.appendChild(floorHeader);
@@ -402,11 +402,11 @@ class MapSearch {
             resultsContainer.appendChild(floorGroup);
         });
 
-        // Automatically highlight and select first result if few results
+        // Автоматично підсвітити та вибрати перший результат якщо мало результатів
         if (results.length === 1) {
             this.selectRoom(results[0]);
         } else if (results.length <= 3) {
-            // Highlight all results on current floor
+            // Підсвітити всі результати на поточному поверсі
             results.forEach(room => {
                 if (room.floor === this.mapCore.currentFloor) {
                     this.highlightRoomOnFloor(room.id, room.floor, true);
@@ -415,7 +415,7 @@ class MapSearch {
         }
     }
 
-    // Group results by floor
+    // Групувати результати по поверхах
     groupResultsByFloor(results) {
         const grouped = {};
         results.forEach(room => {
@@ -428,7 +428,7 @@ class MapSearch {
         return grouped;
     }
 
-    // Create search result element
+    // Створити елемент результату пошуку
     createSearchResultElement(room, index) {
         const element = document.createElement('div');
         element.className = 'search-result';
@@ -437,11 +437,11 @@ class MapSearch {
         element.setAttribute('role', 'button');
         element.setAttribute('tabindex', '0');
 
-        // Check if room is on current floor
+        // Перевірити, чи кімната на поточному поверсі
         const isCurrentFloor = room.floor === this.mapCore.currentFloor;
         const floorIndicator = isCurrentFloor ? '' : ' 🔄';
 
-        // Highlight query text in results
+        // Підсвітити текст запиту в результатах
         const highlightedLabel = this.highlightSearchTerm(room.label || room.id, this.currentQuery);
         const keywordsText = room.keywords.slice(0, 3).join(', ') + (room.keywords.length > 3 ? '...' : '');
 
@@ -456,22 +456,22 @@ class MapSearch {
             </div>
         `;
 
-        // Add accessibility indicator
+        // Додати індикатор доступності
         if (!room.access) {
             element.classList.add('search-result-restricted');
             const restrictedIcon = document.createElement('div');
             restrictedIcon.className = 'search-result-restricted-icon';
             restrictedIcon.textContent = '🔒';
-            restrictedIcon.title = 'Restricted access';
+            restrictedIcon.title = 'Обмежений доступ';
             element.appendChild(restrictedIcon);
         }
 
-        // Style for rooms on other floors
+        // Стиль для кімнат на інших поверхах
         if (!isCurrentFloor) {
             element.classList.add('search-result-other-floor');
         }
 
-        // Add event handlers
+        // Додати обробники подій
         element.addEventListener('click', () => {
             this.selectRoom(room);
         });
@@ -486,7 +486,7 @@ class MapSearch {
         element.addEventListener('mouseenter', () => {
             this.highlightRoomOnFloor(room.id, room.floor, true);
 
-            // Show additional info in tooltip
+            // Показати додаткову інформацію в підказці
             this.showRoomTooltip(element, room);
         });
 
@@ -506,9 +506,9 @@ class MapSearch {
         return element;
     }
 
-    // Highlight room on specific floor
+    // Підсвітити кімнату на конкретному поверсі
     highlightRoomOnFloor(roomId, floor, highlight) {
-        // If room is on current floor, highlight it
+        // Якщо кімната на поточному поверсі, підсвітити її
         if (floor === this.mapCore.currentFloor) {
             const roomElement = document.getElementById(roomId);
             if (roomElement) {
@@ -521,7 +521,7 @@ class MapSearch {
         }
     }
 
-    // Show room tooltip
+    // Показати підказку кімнати
     showRoomTooltip(element, room) {
         let tooltip = document.getElementById('room-tooltip');
         if (!tooltip) {
@@ -533,14 +533,14 @@ class MapSearch {
 
         const rect = element.getBoundingClientRect();
         const floorStatus = room.floor === this.mapCore.currentFloor ?
-            'Current floor' : 'Different floor (click to navigate)';
+            'Поточний поверх' : 'Інший поверх (клацніть для переходу)';
 
         tooltip.innerHTML = `
             <div class="room-tooltip-title">${room.label || room.id}</div>
             <div class="room-tooltip-info">
-                <div>Category: ${this.mapCore.getCategoryName(room.category)}</div>
-                <div>Floor: ${room.floor} (${floorStatus})</div>
-                <div>Access: ${room.access ? 'Allowed' : 'Restricted'}</div>
+                <div>Категорія: ${this.mapCore.getCategoryName(room.category)}</div>
+                <div>Поверх: ${room.floor} (${floorStatus})</div>
+                <div>Доступ: ${room.access ? 'Дозволено' : 'Обмежено'}</div>
             </div>
         `;
 
@@ -548,7 +548,7 @@ class MapSearch {
         tooltip.style.top = rect.top + 'px';
         tooltip.style.display = 'block';
 
-        // Check if tooltip goes off screen
+        // Перевірити, чи підказка не виходить за межі екрану
         const tooltipRect = tooltip.getBoundingClientRect();
         if (tooltipRect.right > window.innerWidth) {
             tooltip.style.left = (rect.left - tooltipRect.width - 10) + 'px';
@@ -558,7 +558,7 @@ class MapSearch {
         }
     }
 
-    // Hide room tooltip
+    // Сховати підказку кімнати
     hideRoomTooltip() {
         const tooltip = document.getElementById('room-tooltip');
         if (tooltip) {
@@ -566,40 +566,40 @@ class MapSearch {
         }
     }
 
-    // Filter by category across all floors
+    // Фільтрувати по категорії на всіх поверхах
     filterByCategory(category) {
         try {
-            // Clear search input
+            // Очистити поле пошуку
             document.getElementById('search-input').value = '';
             this.currentQuery = '';
 
-            // Get all rooms from all floors
+            // Отримати всі кімнати з усіх поверхів
             let allRooms = this.mapCore.getAllRooms();
 
-            // Filter by category
+            // Фільтрувати по категорії
             if (category && category !== 'all') {
                 allRooms = allRooms.filter(room => room.category === category);
             }
 
             this.displaySearchResults(allRooms);
 
-            // Announce filter result
-            const categoryName = category === 'all' ? 'all categories' : this.mapCore.getCategoryName(category);
+            // Оголосити результат фільтрації
+            const categoryName = category === 'all' ? 'усі категорії' : this.mapCore.getCategoryName(category);
             const floorCount = [...new Set(allRooms.map(r => r.floor))].length;
-            this.mapCore.announceToScreenReader(`Filtered: ${categoryName}, found ${allRooms.length} rooms on ${floorCount} floors`);
+            this.mapCore.announceToScreenReader(`Відфільтровано: ${categoryName}, знайдено ${allRooms.length} кімнат на ${floorCount} поверхах`);
 
         } catch (error) {
-            console.error('Filter error:', error);
-            this.mapCore.showError('Filter error: ' + error.message);
+            console.error('Помилка фільтрації:', error);
+            this.mapCore.showError('Помилка фільтрації: ' + error.message);
         }
     }
 
-    // Select room from search results
+    // Вибрати кімнату з результатів пошуку
     async selectRoom(room) {
-        // Select room on map with fromSearch option
+        // Вибрати кімнату на карті з опцією fromSearch
         await this.mapCore.selectRoom(room, { fromSearch: true });
 
-        // Highlight result in list
+        // Підсвітити результат в списку
         document.querySelectorAll('.search-result').forEach(el => {
             el.classList.remove('selected');
         });
@@ -610,7 +610,7 @@ class MapSearch {
             resultElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // Pan map to room
+        // Панорамувати карту до кімнати
         if (window.mapUI) {
             setTimeout(() => {
                 window.mapUI.panToRoom(room.id);
@@ -618,14 +618,14 @@ class MapSearch {
             }, 500);
         }
 
-        // Announce selection
+        // Оголосити вибір
         const roomDescription = room.floorLabel ?
-            `${room.label || room.id} on ${room.floorLabel}` :
+            `${room.label || room.id} на ${room.floorLabel}` :
             `${room.label || room.id}`;
-        this.mapCore.announceToScreenReader(`Selected room ${roomDescription}`);
+        this.mapCore.announceToScreenReader(`Вибрано кімнату ${roomDescription}`);
     }
 
-    // Clear search
+    // Очистити пошук
     clearSearch() {
         document.getElementById('search-input').value = '';
         document.getElementById('category-select').value = 'all';
@@ -636,18 +636,18 @@ class MapSearch {
         this.searchResults = [];
         this.currentQuery = '';
 
-        // Clear room highlights on all floors
+        // Очистити підсвічування кімнат на всіх поверхах
         document.querySelectorAll('.room.highlighted').forEach(room => {
             room.classList.remove('highlighted');
         });
 
-        this.mapCore.announceToScreenReader('Search cleared');
+        this.mapCore.announceToScreenReader('Пошук очищено');
     }
 
-    // Export search results
+    // Експортувати результати пошуку
     exportSearchResults() {
         if (this.searchResults.length === 0) {
-            this.mapCore.showError('No results to export');
+            this.mapCore.showError('Немає результатів для експорту');
             return;
         }
 
@@ -659,23 +659,23 @@ class MapSearch {
         link.href = url;
         const timestamp = new Date().toISOString().slice(0, 10);
         const query = this.currentQuery ? `-${this.currentQuery.replace(/[^a-zA-Z0-9]/g, '_')}` : '';
-        link.download = `search-results${query}-${timestamp}.csv`;
+        link.download = `результати-пошуку${query}-${timestamp}.csv`;
         link.click();
 
         URL.revokeObjectURL(url);
-        this.mapCore.announceToScreenReader('Search results exported');
+        this.mapCore.announceToScreenReader('Результати пошуку експортовано');
     }
 
-    // Convert to CSV
+    // Конвертувати в CSV
     convertToCSV(data) {
-        const headers = ['ID', 'Name', 'Floor', 'Category', 'Keywords', 'Access', 'Search Score'];
+        const headers = ['ID', 'Назва', 'Поверх', 'Категорія', 'Ключові слова', 'Доступ', 'Бал пошуку'];
         const rows = data.map(room => [
             room.id,
             room.label || '',
-            room.floorLabel || `Floor ${room.floor}`,
+            room.floorLabel || `Поверх ${room.floor}`,
             this.mapCore.getCategoryName(room.category),
             room.keywords.join('; '),
-            room.access ? 'Yes' : 'No',
+            room.access ? 'Так' : 'Ні',
             room.searchScore || 0
         ]);
 
@@ -683,11 +683,11 @@ class MapSearch {
             .map(row => row.map(field => `"${String(field).replace(/"/g, '""')}"`).join(','))
             .join('\n');
 
-        // Add BOM for proper Unicode display
+        // Додати BOM для правильного відображення Unicode
         return '\ufeff' + csvContent;
     }
 
-    // Save search history
+    // Зберегти історію пошуку
     saveSearchHistory(query, results) {
         try {
             let history = JSON.parse(localStorage.getItem('searchHistory') || '[]');
@@ -705,38 +705,38 @@ class MapSearch {
                 }))
             };
 
-            // Check if query already exists
+            // Перевірити чи запит вже існує
             const existingIndex = history.findIndex(entry => entry.query.toLowerCase() === query.toLowerCase());
             if (existingIndex !== -1) {
-                // Update existing entry
+                // Оновити існуючий запис
                 history[existingIndex] = searchEntry;
-                // Move to beginning
+                // Перемістити на початок
                 history.unshift(history.splice(existingIndex, 1)[0]);
             } else {
-                // Add new entry at beginning
+                // Додати новий запис на початок
                 history.unshift(searchEntry);
             }
 
-            // Limit history size
+            // Обмежити розмір історії
             history = history.slice(0, 15);
 
             localStorage.setItem('searchHistory', JSON.stringify(history));
         } catch (error) {
-            console.warn('Failed to save search history:', error);
+            console.warn('Не вдалося зберегти історію пошуку:', error);
         }
     }
 
-    // Get search history
+    // Отримати історію пошуку
     getSearchHistory() {
         try {
             return JSON.parse(localStorage.getItem('searchHistory') || '[]');
         } catch (error) {
-            console.warn('Failed to load search history:', error);
+            console.warn('Не вдалося завантажити історію пошуку:', error);
             return [];
         }
     }
 
-    // Show search history
+    // Показати історію пошуку
     showSearchHistory() {
         const history = this.getSearchHistory();
         const autocompleteContainer = document.getElementById('search-autocomplete');
@@ -747,16 +747,16 @@ class MapSearch {
 
         autocompleteContainer.innerHTML = '';
 
-        // History header
+        // Заголовок історії
         const historyHeader = document.createElement('div');
         historyHeader.className = 'autocomplete-history-header';
         historyHeader.innerHTML = `
-            <span>Search history</span>
-            <button id="clear-history-btn" class="autocomplete-clear-history" title="Clear history">×</button>
+            <span>Історія пошуку</span>
+            <button id="clear-history-btn" class="autocomplete-clear-history" title="Очистити історію">×</button>
         `;
         autocompleteContainer.appendChild(historyHeader);
 
-        // Add handler for clearing history
+        // Додати обробник для очищення історії
         document.getElementById('clear-history-btn').addEventListener('click', (e) => {
             e.stopPropagation();
             this.clearSearchHistory();
@@ -770,7 +770,7 @@ class MapSearch {
             item.setAttribute('tabindex', '-1');
 
             const timeAgo = this.formatTimeAgo(new Date(entry.timestamp));
-            const floorsText = entry.floorsFound > 1 ? ` on ${entry.floorsFound} floors` : '';
+            const floorsText = entry.floorsFound > 1 ? ` на ${entry.floorsFound} поверхах` : '';
 
             item.innerHTML = `
                 <div class="autocomplete-main">
@@ -778,7 +778,7 @@ class MapSearch {
                     ${entry.query}
                 </div>
                 <div class="autocomplete-secondary">
-                    ${entry.resultsCount} results${floorsText} • ${timeAgo}
+                    ${entry.resultsCount} результатів${floorsText} • ${timeAgo}
                 </div>
             `;
 
@@ -794,7 +794,7 @@ class MapSearch {
         autocompleteContainer.style.display = 'block';
     }
 
-    // Format time ago
+    // Форматувати час тому
     formatTimeAgo(date) {
         const now = new Date();
         const diffMs = now - date;
@@ -802,26 +802,26 @@ class MapSearch {
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
 
-        if (diffMinutes < 1) return 'just now';
-        if (diffMinutes < 60) return `${diffMinutes} min ago`;
-        if (diffHours < 24) return `${diffHours} hr ago`;
-        if (diffDays < 7) return `${diffDays} days ago`;
+        if (diffMinutes < 1) return 'щойно';
+        if (diffMinutes < 60) return `${diffMinutes} хв тому`;
+        if (diffHours < 24) return `${diffHours} год тому`;
+        if (diffDays < 7) return `${diffDays} днів тому`;
 
-        return date.toLocaleDateString('en-US');
+        return date.toLocaleDateString('uk-UA');
     }
 
-    // Clear search history
+    // Очистити історію пошуку
     clearSearchHistory() {
         try {
             localStorage.removeItem('searchHistory');
             this.hideAutocomplete();
-            this.mapCore.announceToScreenReader('Search history cleared');
+            this.mapCore.announceToScreenReader('Історію пошуку очищено');
         } catch (error) {
-            console.warn('Failed to clear search history:', error);
+            console.warn('Не вдалося очистити історію пошуку:', error);
         }
     }
 
-    // Highlight search term in results
+    // Підсвітити пошуковий термін в результатах
     highlightSearchTerm(text, searchTerm) {
         if (!searchTerm.trim()) return text;
 
@@ -829,13 +829,13 @@ class MapSearch {
         return text.replace(regex, '<mark class="search-highlight">$1</mark>');
     }
 
-    // Find nearest rooms to given point (within floor)
+    // Знайти найближчі кімнати до заданої точки (в межах поверху)
     findNearestRooms(targetRoom, maxResults = 5) {
         if (!targetRoom) {
             return [];
         }
 
-        // Search rooms on same floor
+        // Шукати кімнати на тому ж поверсі
         const mapData = this.mapCore.allMapsData.get(targetRoom.floor);
         if (!mapData || !mapData.rooms) {
             return [];
@@ -854,7 +854,7 @@ class MapSearch {
             return {
                 ...room,
                 floor: targetRoom.floor,
-                floorLabel: `Floor ${targetRoom.floor}`,
+                floorLabel: `Поверх ${targetRoom.floor}`,
                 distance: distance
             };
         });
@@ -864,7 +864,7 @@ class MapSearch {
             .slice(0, maxResults);
     }
 
-    // Calculate room center
+    // Обчислити центр кімнати
     calculateRoomCenter(room) {
         if (!room.geometry || !room.geometry.children || room.geometry.children.length === 0) {
             return { x: 0, y: 0 };
@@ -891,7 +891,7 @@ class MapSearch {
         return { x: 0, y: 0 };
     }
 
-    // Calculate distance between two points
+    // Обчислити відстань між двома точками
     calculateDistance(point1, point2) {
         return Math.sqrt(
             Math.pow(point2.x - point1.x, 2) +
@@ -899,7 +899,7 @@ class MapSearch {
         );
     }
 
-    // Advanced search with filters
+    // Розширений пошук з фільтрами
     advancedSearch(options = {}) {
         const {
             query = '',
@@ -911,36 +911,36 @@ class MapSearch {
 
         let results = this.mapCore.getAllRooms();
 
-        // Filter by accessibility
+        // Фільтрувати за доступністю
         if (accessibleOnly) {
             results = results.filter(room => room.access);
         }
 
-        // Filter by category
+        // Фільтрувати за категорією
         if (category !== 'all') {
             results = results.filter(room => room.category === category);
         }
 
-        // Filter by floor
+        // Фільтрувати за поверхом
         if (floor !== 'all') {
             results = results.filter(room => room.floor === floor);
         }
 
-        // Search by query
+        // Пошук за запитом
         if (query.trim()) {
             results = this.fuzzySearch(query, results, results.length);
         }
 
-        // Sort
+        // Сортування
         switch (sortBy) {
             case 'name':
-                results.sort((a, b) => (a.label || a.id).localeCompare(b.label || b.id, 'en'));
+                results.sort((a, b) => (a.label || a.id).localeCompare(b.label || b.id, 'uk'));
                 break;
             case 'category':
                 results.sort((a, b) => {
                     const catA = this.mapCore.getCategoryName(a.category);
                     const catB = this.mapCore.getCategoryName(b.category);
-                    return catA.localeCompare(catB, 'en');
+                    return catA.localeCompare(catB, 'uk');
                 });
                 break;
             case 'floor':
@@ -948,14 +948,14 @@ class MapSearch {
                 break;
             case 'relevance':
             default:
-                // Already sorted by search score
+                // Вже відсортовано за балом пошуку
                 break;
         }
 
         return results;
     }
 
-    // Search statistics
+    // Статистика пошуку
     getSearchStats() {
         const history = this.getSearchHistory();
         const allRooms = this.mapCore.getAllRooms();
@@ -970,18 +970,18 @@ class MapSearch {
             roomsByFloor: {}
         };
 
-        // Count room statistics
+        // Підрахувати статистику кімнат
         allRooms.forEach(room => {
-            // By category
+            // За категорією
             const category = room.category;
             stats.roomsByCategory[category] = (stats.roomsByCategory[category] || 0) + 1;
 
-            // By floor
+            // За поверхом
             const floor = room.floor;
             stats.roomsByFloor[floor] = (stats.roomsByFloor[floor] || 0) + 1;
         });
 
-        // Count most frequent queries and floors
+        // Підрахувати найчастіші запити та поверхи
         history.forEach(entry => {
             const term = entry.query.toLowerCase();
             stats.mostSearchedTerms[term] = (stats.mostSearchedTerms[term] || 0) + 1;
@@ -995,7 +995,7 @@ class MapSearch {
             }
         });
 
-        // Average results count
+        // Середня кількість результатів
         if (history.length > 0) {
             const totalResults = history.reduce((sum, entry) => sum + entry.resultsCount, 0);
             stats.averageResults = Math.round(totalResults / history.length);
@@ -1004,13 +1004,13 @@ class MapSearch {
         return stats;
     }
 
-    // Search by QR code or ID
+    // Пошук за QR кодом або ID
     searchByQR(qrData) {
         try {
-            // Try to parse QR data
+            // Спробувати розпарсити QR дані
             let roomId = qrData;
 
-            // If it's a URL, extract room ID
+            // Якщо це URL, витягнути ID кімнати
             if (qrData.includes('room=')) {
                 const urlParams = new URLSearchParams(qrData.split('?')[1]);
                 roomId = urlParams.get('room');
@@ -1020,21 +1020,21 @@ class MapSearch {
                 const room = this.mapCore.findRoomById(roomId);
                 if (room) {
                     this.selectRoom(room);
-                    this.mapCore.announceToScreenReader(`Found room by QR code: ${room.label || room.id}`);
+                    this.mapCore.announceToScreenReader(`Знайдено кімнату за QR кодом: ${room.label || room.id}`);
                     return true;
                 } else {
-                    this.mapCore.showError('Room from QR code not found');
+                    this.mapCore.showError('Кімнату з QR коду не знайдено');
                     return false;
                 }
             }
         } catch (error) {
-            console.error('QR search error:', error);
-            this.mapCore.showError('Error processing QR code');
+            console.error('Помилка пошуку QR:', error);
+            this.mapCore.showError('Помилка обробки QR коду');
             return false;
         }
     }
 
-    // Voice search (if supported by browser)
+    // Голосовий пошук (якщо підтримується браузером)
     initVoiceSearch() {
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
             return false;
@@ -1043,16 +1043,16 @@ class MapSearch {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
 
-        recognition.lang = 'en-US';
+        recognition.lang = 'uk-UA';
         recognition.continuous = false;
         recognition.interimResults = false;
 
-        // Create voice search button
+        // Створити кнопку голосового пошуку
         const voiceButton = document.createElement('button');
         voiceButton.id = 'voice-search-btn';
         voiceButton.className = 'md-button md-button-outlined';
         voiceButton.innerHTML = '🎤';
-        voiceButton.title = 'Voice search';
+        voiceButton.title = 'Голосовий пошук';
         voiceButton.style.marginLeft = '8px';
 
         const searchButton = document.getElementById('search-button');
@@ -1062,14 +1062,14 @@ class MapSearch {
             recognition.start();
             voiceButton.textContent = '🔴';
             voiceButton.disabled = true;
-            this.mapCore.announceToScreenReader('Voice search started');
+            this.mapCore.announceToScreenReader('Голосовий пошук розпочато');
         });
 
         recognition.onresult = (event) => {
             const query = event.results[0][0].transcript;
             document.getElementById('search-input').value = query;
             this.performSearch(query);
-            this.mapCore.announceToScreenReader(`Voice search: ${query}`);
+            this.mapCore.announceToScreenReader(`Голосовий пошук: ${query}`);
         };
 
         recognition.onend = () => {
@@ -1078,42 +1078,42 @@ class MapSearch {
         };
 
         recognition.onerror = (event) => {
-            console.error('Voice recognition error:', event.error);
+            console.error('Помилка розпізнавання мовлення:', event.error);
             voiceButton.textContent = '🎤';
             voiceButton.disabled = false;
-            this.mapCore.showError('Voice search error');
+            this.mapCore.showError('Помилка голосового пошуку');
         };
 
         return true;
     }
 
-    // Intelligent search suggestions
+    // Інтелектуальні пропозиції пошуку
     getSuggestions(query) {
         const suggestions = [];
         const allRooms = this.mapCore.getAllRooms();
 
-        // Suggestions based on popular categories
+        // Пропозиції на основі популярних категорій
         const categories = [...new Set(allRooms.map(room => room.category))];
         categories.forEach(category => {
             const categoryName = this.mapCore.getCategoryName(category);
             if (categoryName.toLowerCase().includes(query.toLowerCase())) {
                 suggestions.push({
                     type: 'category',
-                    text: `All ${categoryName.toLowerCase()}`,
+                    text: `Усі ${categoryName.toLowerCase()}`,
                     query: categoryName,
                     count: allRooms.filter(room => room.category === category).length
                 });
             }
         });
 
-        // Suggestions based on floors
+        // Пропозиції на основі поверхів
         const floors = [...new Set(allRooms.map(room => room.floor))].sort();
         floors.forEach(floor => {
-            const floorQuery = `floor ${floor}`;
+            const floorQuery = `поверх ${floor}`;
             if (floorQuery.includes(query.toLowerCase())) {
                 suggestions.push({
                     type: 'floor',
-                    text: `Floor ${floor}`,
+                    text: `Поверх ${floor}`,
                     query: floorQuery,
                     count: allRooms.filter(room => room.floor === floor).length
                 });
@@ -1123,7 +1123,7 @@ class MapSearch {
         return suggestions.slice(0, 5);
     }
 
-    // Context search (search near selected room)
+    // Контекстний пошук (пошук поблизу вибраної кімнати)
     searchNearby(room, category = 'all', maxDistance = 100) {
         if (!room) {
             return [];
@@ -1136,7 +1136,7 @@ class MapSearch {
 
         let nearbyRooms = mapData.rooms.filter(r => r.id !== room.id);
 
-        // Filter by category
+        // Фільтрувати за категорією
         if (category !== 'all') {
             nearbyRooms = nearbyRooms.filter(r => r.category === category);
         }
@@ -1150,7 +1150,7 @@ class MapSearch {
             return {
                 ...r,
                 floor: room.floor,
-                floorLabel: `Floor ${room.floor}`,
+                floorLabel: `Поверх ${room.floor}`,
                 distance: distance
             };
         }).filter(r => r.distance <= maxDistance);
@@ -1159,16 +1159,16 @@ class MapSearch {
     }
 }
 
-// Initialize search after DOM loads
+// Ініціалізувати пошук після завантаження DOM
 document.addEventListener('DOMContentLoaded', () => {
-    // Wait for MapCore initialization
+    // Очікувати ініціалізації MapCore
     const initSearch = () => {
         if (window.mapCore && window.mapCore.allMapsData.size > 0) {
             window.mapSearch = new MapSearch(window.mapCore);
 
-            // Initialize voice search if possible
+            // Ініціалізувати голосовий пошук якщо можливо
             if (window.mapSearch.initVoiceSearch()) {
-                console.log('Voice search initialized');
+                console.log('Голосовий пошук ініціалізовано');
             }
         } else {
             setTimeout(initSearch, 200);
