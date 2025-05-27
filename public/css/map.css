@@ -1,23 +1,23 @@
-/* Material Design стилі для інтерактивної карти */
+/* Material Design styles for interactive map */
 
-/* CSS змінні для Material Design палітри */
+/* CSS variables for Material Design palette - Updated color scheme */
 :root {
-  --md-primary: #1976d2;
-  --md-primary-variant: #1565c0;
-  --md-primary-light: #42a5f5;
-  --md-secondary: #03dac6;
+  --md-primary: #1a237e; /* Deep blue */
+  --md-primary-variant: #0d47a1;
+  --md-primary-light: #3949ab;
+  --md-secondary: #00acc1; /* Cyan accent */
   --md-surface: #ffffff;
-  --md-background: #fafafa;
-  --md-error: #b00020;
+  --md-background: #f5f5f5;
+  --md-error: #d32f2f;
   --md-on-primary: #ffffff;
-  --md-on-surface: #000000;
-  --md-on-background: #000000;
+  --md-on-surface: #212121;
+  --md-on-background: #212121;
   --md-text-primary: rgba(0, 0, 0, 0.87);
   --md-text-secondary: rgba(0, 0, 0, 0.6);
   --md-text-disabled: rgba(0, 0, 0, 0.38);
   --md-divider: rgba(0, 0, 0, 0.12);
 
-  /* Система відступів (Material Design 8dp grid) */
+  /* Material Design 8dp grid system */
   --md-spacing-xs: 4px;
   --md-spacing-sm: 8px;
   --md-spacing-md: 16px;
@@ -25,7 +25,7 @@
   --md-spacing-xl: 32px;
   --md-spacing-xxl: 48px;
 
-  /* Типографіка */
+  /* Typography */
   --md-font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   --md-border-radius: 4px;
@@ -37,7 +37,7 @@
     0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-/* Глобальні стилі */
+/* Global styles */
 * {
   box-sizing: border-box;
 }
@@ -51,7 +51,7 @@ body {
   overflow: hidden;
 }
 
-/* Основний контейнер карти */
+/* Main map container */
 #map-container {
   display: flex;
   height: 100vh;
@@ -65,7 +65,7 @@ body {
   bottom: 0;
 }
 
-/* Ліва частина - карта */
+/* Left part - map */
 #map-area {
   flex: 1;
   display: flex;
@@ -75,7 +75,7 @@ body {
   overflow: hidden;
 }
 
-/* Заголовок карти - БІЛИЙ ТЕКСТ */
+/* Map header */
 #map-header {
   background-color: var(--md-primary);
   color: var(--md-on-primary);
@@ -91,7 +91,7 @@ body {
   margin: 0 0 var(--md-spacing-sm) 0;
   letter-spacing: 0.0125em;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  color: #ffffff; /* ЯВНО БІЛИЙ КОЛІР */
+  color: #ffffff;
 }
 
 #map-info {
@@ -103,14 +103,14 @@ body {
 
 #building-name {
   font-weight: 500;
-  color: #ffffff; /* БІЛИЙ КОЛІР */
+  color: #ffffff;
 }
 
 #floor-info {
-  color: rgba(255, 255, 255, 0.9); /* НАПІВПРОЗОРИЙ БІЛИЙ */
+  color: rgba(255, 255, 255, 0.9);
 }
 
-/* Контроли карти */
+/* Map controls */
 #map-controls {
   position: absolute;
   bottom: var(--md-spacing-md);
@@ -148,7 +148,7 @@ body {
   transform: translateY(0);
 }
 
-/* SVG контейнер */
+/* SVG container */
 #svg-container {
   flex: 1;
   position: relative;
@@ -171,19 +171,19 @@ body {
   height: 100%;
 }
 
-/* Приховуємо всі nodes та edges за замовчуванням */
+/* Hide all nodes and edges by default */
 #map-svg [data-name="node"],
 #map-svg [data-name="edge"] {
   display: none;
 }
 
-/* Показуємо тільки активні елементи маршруту */
+/* Show only active route elements */
 #map-svg [data-name="node"].route-active,
 #map-svg [data-name="edge"].route-active {
   display: block;
 }
 
-/* Стилі для активних елементів маршруту */
+/* Styles for active route elements */
 .route-active[data-name="edge"] {
   fill: #ff6f00 !important;
   stroke: #e65100 !important;
@@ -200,7 +200,7 @@ body {
   filter: drop-shadow(0 2px 4px rgba(255, 111, 0, 0.4));
 }
 
-/* Анімація для елементів маршруту */
+/* Route animation */
 .route-animate {
   animation: routeHighlight 0.5s ease-in-out;
 }
@@ -220,7 +220,7 @@ body {
   }
 }
 
-/* Спеціальний крок для сходів */
+/* Special step for stairs */
 .route-step-stairs {
   background-color: #fff3e0;
   border-left: 3px solid #ff6f00;
@@ -228,7 +228,7 @@ body {
   margin: var(--md-spacing-sm) 0;
 }
 
-/* Індикатор завантаження */
+/* Loading indicator */
 #loading-indicator {
   position: absolute;
   top: 50%;
@@ -254,7 +254,7 @@ body {
   animation: spin 1s linear infinite;
 }
 
-/* Інформація про маршрут */
+/* Route information */
 #route-info {
   position: absolute;
   bottom: var(--md-spacing-xxl);
@@ -299,7 +299,7 @@ body {
   border-bottom: none;
 }
 
-/* Права частина - панель інструментів */
+/* Right part - tools panel */
 #tools-panel {
   width: 400px;
   background-color: var(--md-surface);
@@ -338,7 +338,7 @@ body {
   color: var(--md-text-secondary);
 }
 
-/* Material Design кнопки */
+/* Material Design buttons */
 .md-button {
   height: 36px;
   padding: 0 var(--md-spacing-md);
@@ -378,7 +378,7 @@ body {
 }
 
 .md-button-outlined:hover {
-  background-color: rgba(25, 118, 210, 0.04);
+  background-color: rgba(26, 35, 126, 0.04);
 }
 
 .md-button-text {
@@ -387,10 +387,10 @@ body {
 }
 
 .md-button-text:hover {
-  background-color: rgba(25, 118, 210, 0.04);
+  background-color: rgba(26, 35, 126, 0.04);
 }
 
-/* Material Design поля вводу */
+/* Material Design input fields */
 .md-text-field {
   position: relative;
   margin-bottom: var(--md-spacing-md);
@@ -429,7 +429,7 @@ body {
   letter-spacing: 0.0333333333em;
 }
 
-/* Група кнопок поверхів */
+/* Floor button group */
 .md-button-group {
   display: flex;
   gap: var(--md-spacing-sm);
@@ -453,7 +453,7 @@ body {
 }
 
 .md-chip:hover {
-  background-color: rgba(25, 118, 210, 0.04);
+  background-color: rgba(26, 35, 126, 0.04);
 }
 
 .md-chip.active {
@@ -462,7 +462,7 @@ body {
   border-color: var(--md-primary);
 }
 
-/* Автодоповнення та результати пошуку */
+/* Autocomplete and search results */
 #search-autocomplete {
   position: absolute;
   top: 100%;
@@ -488,7 +488,7 @@ body {
 
 .autocomplete-item:hover,
 .autocomplete-item.active {
-  background-color: rgba(25, 118, 210, 0.04);
+  background-color: rgba(26, 35, 126, 0.04);
 }
 
 .autocomplete-item:last-child {
@@ -553,7 +553,7 @@ body {
   font-style: italic;
 }
 
-/* Результати пошуку */
+/* Search results */
 #search-results {
   max-height: 400px;
   overflow-y: auto;
@@ -617,7 +617,7 @@ body {
   margin-bottom: var(--md-spacing-sm);
   padding: 0 var(--md-spacing-sm);
   border-left: 3px solid var(--md-primary);
-  background-color: rgba(25, 118, 210, 0.04);
+  background-color: rgba(26, 35, 126, 0.04);
   padding: var(--md-spacing-xs) var(--md-spacing-sm);
   border-radius: var(--md-border-radius);
 }
@@ -651,14 +651,14 @@ body {
 }
 
 .search-result:hover {
-  background-color: rgba(25, 118, 210, 0.04);
+  background-color: rgba(26, 35, 126, 0.04);
   border-color: var(--md-primary);
   transform: translateY(-1px);
   box-shadow: var(--md-elevation-1);
 }
 
 .search-result.selected {
-  background-color: rgba(25, 118, 210, 0.08);
+  background-color: rgba(26, 35, 126, 0.08);
   border-color: var(--md-primary);
   box-shadow: var(--md-elevation-2);
 }
@@ -729,18 +729,24 @@ body {
   font-weight: 600;
 }
 
-/* Tooltip для кімнат */
+/* Enhanced room tooltip */
 .room-tooltip {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.9);
+  background: linear-gradient(
+    135deg,
+    rgba(26, 35, 126, 0.95),
+    rgba(13, 71, 161, 0.95)
+  );
   color: white;
-  padding: var(--md-spacing-sm);
-  border-radius: var(--md-border-radius);
-  font-size: 0.8rem;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
   z-index: 2000;
-  max-width: 250px;
+  max-width: 280px;
   pointer-events: none;
-  box-shadow: var(--md-elevation-3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .room-tooltip-title {
@@ -754,10 +760,10 @@ body {
   margin: 2px 0;
 }
 
-/* Деталі кімнати */
+/* Room details */
 #room-details {
-  background-color: rgba(25, 118, 210, 0.04);
-  border: 1px solid rgba(25, 118, 210, 0.12);
+  background-color: rgba(26, 35, 126, 0.04);
+  border: 1px solid rgba(26, 35, 126, 0.12);
 }
 
 #selected-room-info div {
@@ -773,7 +779,7 @@ body {
   margin-bottom: var(--md-spacing-sm);
 }
 
-/* Системна інформація */
+/* System information */
 #system-status div {
   display: flex;
   justify-content: space-between;
@@ -787,7 +793,7 @@ body {
   font-weight: 500;
 }
 
-/* Модальні вікна */
+/* Modal windows */
 #error-modal {
   position: fixed;
   top: 0;
@@ -824,7 +830,7 @@ body {
   margin: 0 0 var(--md-spacing-lg) 0;
 }
 
-/* Контекстне меню */
+/* Context menu */
 #context-menu {
   position: fixed;
   background-color: var(--md-surface);
@@ -859,35 +865,47 @@ body {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
-/* SVG стилі для елементів карти */
+/* Enhanced room styles with distinct category colors */
 .room {
-  fill: #f5f7fa;
-  stroke: #90a4ae;
-  stroke-width: 1;
   cursor: pointer;
-  transition: fill 0.15s ease, stroke 0.15s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+  filter: none;
 }
 
+/* Enhanced hover effect with glow */
 .room:hover,
 .room.highlighted {
-  fill: #e3f2fd;
-  stroke: var(--md-primary);
-  stroke-width: 2;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 8px rgba(26, 35, 126, 0.6));
+  transform: translateZ(0);
 }
 
+/* Selected room with stronger effect */
 .room.selected {
-  fill: var(--md-primary-light);
-  stroke: var(--md-primary-variant);
-  stroke-width: 2;
-  filter: drop-shadow(0 2px 6px rgba(25, 118, 210, 0.4));
+  stroke-width: 3;
+  filter: drop-shadow(0 0 12px rgba(26, 35, 126, 0.8));
+  animation: pulseGlow 2s ease-in-out infinite;
 }
 
+/* Enhanced route highlighting */
 .room.route-highlight {
-  fill: #fff3e0 !important;
-  stroke: #ff6f00 !important;
-  stroke-width: 3 !important;
-  filter: drop-shadow(0 2px 8px rgba(255, 111, 0, 0.5)) !important;
-  animation: routePulse 2s infinite;
+  fill: #ffeb3b !important;
+  stroke: #f57c00 !important;
+  stroke-width: 4 !important;
+  filter: drop-shadow(0 0 16px rgba(255, 152, 0, 0.8)) !important;
+  animation: routePulse 1.5s ease-in-out infinite;
+}
+
+/* Improved animations */
+@keyframes pulseGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 12px rgba(26, 35, 126, 0.8));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px rgba(26, 35, 126, 1));
+  }
 }
 
 @keyframes routePulse {
@@ -895,45 +913,70 @@ body {
   100% {
     fill-opacity: 1;
     stroke-opacity: 1;
+    filter: drop-shadow(0 0 16px rgba(255, 152, 0, 0.8));
   }
   50% {
-    fill-opacity: 0.7;
-    stroke-opacity: 0.8;
+    fill-opacity: 0.85;
+    stroke-opacity: 0.9;
+    filter: drop-shadow(0 0 24px rgba(255, 152, 0, 1));
   }
 }
 
-/* Категорії кімнат в нейтральній палітрі */
+/* Room focus state for accessibility */
+.room:focus {
+  outline: 3px solid var(--md-secondary);
+  outline-offset: 2px;
+}
+
+/* Different highlight intensities */
+.highlight-level-1 {
+  filter: drop-shadow(0 0 4px currentColor);
+}
+.highlight-level-2 {
+  filter: drop-shadow(0 0 8px currentColor);
+}
+.highlight-level-3 {
+  filter: drop-shadow(0 0 16px currentColor);
+}
+
+/* Enhanced room category colors */
 .category-laboratory {
-  fill: #f3e5f5;
-  stroke: #7b1fa2;
+  fill: #e3f2fd;
+  stroke: #1565c0;
+  stroke-width: 1.5;
 }
 
 .category-restroom {
-  fill: #e8f5e8;
+  fill: #e8f5e9;
   stroke: #2e7d32;
+  stroke-width: 1.5;
 }
 
 .category-food-service {
   fill: #fff3e0;
   stroke: #ef6c00;
+  stroke-width: 1.5;
 }
 
 .category-utility {
-  fill: #fce4ec;
-  stroke: #c2185b;
+  fill: #f3e5f5;
+  stroke: #7b1fa2;
+  stroke-width: 1.5;
 }
 
 .category-recreation {
-  fill: #e1f5fe;
-  stroke: #0277bd;
+  fill: #fce4ec;
+  stroke: #c2185b;
+  stroke-width: 1.5;
 }
 
 .category-workspace {
-  fill: #f5f7fa;
-  stroke: #546e7a;
+  fill: #e0f2f1;
+  stroke: #00695c;
+  stroke-width: 1.5;
 }
 
-/* Повідомлення */
+/* Messages */
 #message-container {
   position: fixed;
   top: var(--md-spacing-md);
@@ -968,7 +1011,7 @@ body {
   border-left: 4px solid var(--md-primary);
 }
 
-/* Адаптивність */
+/* Responsive design */
 @media (max-width: 1200px) {
   #tools-panel {
     width: 350px;
@@ -1066,7 +1109,7 @@ body {
   }
 }
 
-/* Утиліти */
+/* Utilities */
 .hidden {
   display: none !important;
 }
@@ -1083,7 +1126,7 @@ body {
   border: 0;
 }
 
-/* Анімації */
+/* Animations */
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -1093,7 +1136,7 @@ body {
   }
 }
 
-/* Скролбари для Material Design */
+/* Material Design scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -1111,7 +1154,7 @@ body {
   background: rgba(0, 0, 0, 0.24);
 }
 
-/* Покращення доступності */
+/* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -1122,7 +1165,7 @@ body {
   }
 }
 
-/* Високий контраст */
+/* High contrast */
 @media (prefers-contrast: high) {
   :root {
     --md-divider: rgba(0, 0, 0, 0.24);
@@ -1139,7 +1182,7 @@ body {
   }
 }
 
-/* Фокус для доступності */
+/* Focus for accessibility */
 .md-button:focus,
 .md-chip:focus,
 .search-result:focus,
@@ -1148,7 +1191,7 @@ body {
   outline-offset: 2px;
 }
 
-/* Спеціальні стилі для голосового пошуку */
+/* Voice search button */
 #voice-search-btn {
   min-width: 40px;
   height: 40px;

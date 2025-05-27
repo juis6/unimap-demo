@@ -1,136 +1,130 @@
 <div id="map-container">
-  <!-- Ліва частина - карта -->
-  <div id="map-area" role="main" aria-label="Інтерактивна карта університету">
+  <!-- Left side - map -->
+  <div id="map-area" role="main" aria-label="Interactive university map">
     <header id="map-header">
-      <h1>Навігаційна карта університету</h1>
+      <h1>University Navigation Map</h1>
       <div id="map-info">
-        <span id="building-name" aria-live="polite">Завантаження...</span>
-        <span id="floor-info">Поверх: <span id="current-floor" aria-live="polite">-</span></span>
+        <span id="building-name" aria-live="polite">Loading...</span>
+        <span id="floor-info">Floor: <span id="current-floor" aria-live="polite">-</span></span>
       </div>
     </header>
 
-    <nav id="map-controls" aria-label="Контроли карти">
-      <button id="zoom-in" class="md-fab" aria-label="Збільшити карту" title="Збільшити">+</button>
-      <button id="zoom-out" class="md-fab" aria-label="Зменшити карту" title="Зменшити">−</button>
-      <button id="reset-view" class="md-fab" aria-label="Скинути вигляд карти" title="Скинути вигляд">⌂</button>
+    <nav id="map-controls" aria-label="Map controls">
+      <button id="zoom-in" class="md-fab" aria-label="Zoom in" title="Zoom in">+</button>
+      <button id="zoom-out" class="md-fab" aria-label="Zoom out" title="Zoom out">−</button>
+      <button id="reset-view" class="md-fab" aria-label="Reset view" title="Reset view">⌂</button>
     </nav>
 
-    <div id="svg-container" role="img" aria-label="Карта університету" tabindex="0">
+    <div id="svg-container" role="img" aria-label="University map" tabindex="0">
       <div id="loading-indicator" aria-live="assertive">
         <div class="md-spinner" aria-hidden="true"></div>
-        <span>Завантаження карти...</span>
+        <span>Loading map...</span>
       </div>
       <div id="map-svg"></div>
     </div>
 
     <aside id="route-info" role="complementary" aria-labelledby="route-title" style="display: none;">
-      <h3 id="route-title">Маршрут</h3>
+      <h3 id="route-title">Route</h3>
       <div id="route-details">
-        <div id="route-distance" aria-live="polite">Відстань: <span>0</span> м</div>
-        <div id="route-steps" role="list" aria-label="Кроки маршруту"></div>
+        <div id="route-distance" aria-live="polite">Distance: <span>0</span> m</div>
+        <div id="route-steps" role="list" aria-label="Route steps"></div>
       </div>
-      <button id="clear-route" class="md-button md-button-outlined" aria-describedby="route-title">Очистити маршрут</button>
+      <button id="clear-route" class="md-button md-button-outlined" aria-describedby="route-title">Clear route</button>
     </aside>
   </div>
 
-  <!-- Права частина - панель інструментів -->
-  <aside id="tools-panel" role="complementary" aria-label="Панель інструментів">
+  <!-- Right side - tools panel -->
+  <aside id="tools-panel" role="complementary" aria-label="Tools panel">
 
-    <!-- Вибір поверху -->
+    <!-- Floor selector -->
     <section class="md-card" aria-labelledby="floor-selector-title">
-      <h2 id="floor-selector-title">Поверхи</h2>
+      <h2 id="floor-selector-title">Floors</h2>
       <div id="floor-buttons" class="md-button-group" role="radiogroup" aria-labelledby="floor-selector-title">
-        <!-- Поверхи будуть додані динамічно -->
+        <!-- Floors will be added dynamically -->
       </div>
     </section>
 
-    <!-- Пошук кімнат -->
+    <!-- Room search -->
     <section class="md-card" aria-labelledby="room-search-title">
-      <h2 id="room-search-title">Пошук кімнат</h2>
+      <h2 id="room-search-title">Room Search</h2>
       
       <div id="search-input-container" style="position: relative;">
         <div class="md-text-field">
-          <label for="search-input">Назва кімнати або номер</label>
+          <label for="search-input">Room name or number</label>
           <input 
             type="text" 
             id="search-input" 
-            placeholder="Введіть назву кімнати або номер"
+            placeholder="Enter room name or number"
             autocomplete="off"
             aria-describedby="search-help"
           />
         </div>
         <button id="search-button" class="md-button md-button-contained" style="width: 100%; margin-top: 8px;">
-          Знайти
+          Search
         </button>
-        <div id="search-autocomplete" role="listbox" aria-label="Пропозиції пошуку"></div>
+        <div id="search-autocomplete" role="listbox" aria-label="Search suggestions"></div>
       </div>
 
       <div class="md-text-field">
-        <label for="category-select">Категорія</label>
+        <label for="category-select">Category</label>
         <select id="category-select" aria-describedby="room-search-title">
-          <option value="all">Всі категорії</option>
-          <option value="laboratory">Лабораторії</option>
-          <option value="restroom">Туалети</option>
-          <option value="food-service">Їдальня</option>
-          <option value="utility">Підсобні приміщення</option>
-          <option value="recreation">Відпочинок</option>
-          <option value="workspace">Робочі зони</option>
+          <option value="all">All categories</option>
+          <option value="laboratory">Laboratories</option>
+          <option value="restroom">Restrooms</option>
+          <option value="food-service">Food service</option>
+          <option value="utility">Utility rooms</option>
+          <option value="recreation">Recreation</option>
+          <option value="workspace">Workspaces</option>
         </select>
       </div>
 
-      <div id="search-results" role="region" aria-live="polite" aria-label="Результати пошуку">
-        <!-- Результати пошуку -->
+      <div id="search-results" role="region" aria-live="polite" aria-label="Search results">
+        <!-- Search results -->
       </div>
-      <span id="search-help" class="sr-only">Використовуйте пошук для знаходження потрібних кімнат</span>
+      <span id="search-help" class="sr-only">Use search to find the rooms you need</span>
     </section>
 
-    <!-- Навігація між кімнатами -->
+    <!-- Navigation between rooms -->
     <section class="md-card" aria-labelledby="navigation-title">
-      <h2 id="navigation-title">Навігація</h2>
+      <h2 id="navigation-title">Navigation</h2>
       
       <div id="route-builder">
         <div class="md-text-field">
-          <label for="from-select">Звідки</label>
+          <label for="from-select">From</label>
           <select id="from-select" aria-describedby="navigation-title">
-            <option value="">Виберіть початкову кімнату</option>
+            <option value="">Select starting room</option>
           </select>
         </div>
 
         <div class="md-text-field">
-          <label for="to-select">Куди</label>
+          <label for="to-select">To</label>
           <select id="to-select" aria-describedby="navigation-title">
-            <option value="">Виберіть кінцеву кімнату</option>
+            <option value="">Select destination room</option>
           </select>
         </div>
 
         <div style="display: flex; gap: 8px; margin-bottom: 16px;">
           <button id="build-route" class="md-button md-button-contained" style="flex: 1;">
-            Побудувати маршрут
+            Build route
           </button>
           <button id="swap-route" class="md-button md-button-outlined" style="width: 48px;" 
-                  aria-label="Поміняти місцями початкову та кінцеву точки" title="Поміняти місцями">
+                  aria-label="Swap starting and ending points" title="Swap">
             ⇅
           </button>
         </div>
       </div>
 
       <div id="quick-actions">
-        <h3>Швидкі дії</h3>
-        <button id="find-nearest-restroom" class="md-button md-button-text" style="width: 100%; margin-bottom: 8px;">
-          Найближчий туалет
-        </button>
-        <button id="find-nearest-food" class="md-button md-button-text" style="width: 100%; margin-bottom: 8px;">
-          Найближча їдальня
-        </button>
-        <button id="find-exit" class="md-button md-button-text" style="width: 100%;">
-          Знайти вихід
+        <h3>Quick actions</h3>
+        <button id="find-nearest-restroom" class="md-button md-button-text" style="width: 100%;">
+          Nearest restroom
         </button>
       </div>
     </section>
 
-    <!-- Вибрана кімната -->
+    <!-- Selected room -->
     <section class="md-card" id="room-details" aria-labelledby="room-details-title" style="display: none;">
-      <h2 id="room-details-title">Деталі кімнати</h2>
+      <h2 id="room-details-title">Room details</h2>
       <div id="selected-room-info" aria-live="polite">
         <div id="room-name" style="font-size: 1rem; font-weight: 500; margin-bottom: 12px;"></div>
         <div id="room-category"></div>
@@ -139,35 +133,35 @@
       </div>
       <div id="room-actions" style="margin-top: 16px;">
         <button id="route-to-room" class="md-button md-button-contained" style="width: 100%; margin-bottom: 8px;">
-          Маршрут до цієї кімнати
+          Route to this room
         </button>
         <button id="route-from-room" class="md-button md-button-outlined" style="width: 100%; margin-bottom: 8px;">
-          Маршрут з цієї кімнати
+          Route from this room
         </button>
         <button id="highlight-room" class="md-button md-button-text" style="width: 100%;">
-          Підсвітити кімнату
+          Highlight room
         </button>
       </div>
     </section>
 
-    <!-- Інформація про систему -->
+    <!-- System information -->
     <section class="md-card" aria-labelledby="system-info-title">
-      <h2 id="system-info-title">Інформація про систему</h2>
+      <h2 id="system-info-title">System information</h2>
       <div id="system-status" role="status">
         <div>
-          <span>Статус:</span>
-          <span id="connection-status" aria-live="polite">Підключено</span>
+          <span>Status:</span>
+          <span id="connection-status" aria-live="polite">Connected</span>
         </div>
         <div>
-          <span>Карта:</span>
+          <span>Map:</span>
           <span id="current-map-name" aria-live="polite">-</span>
         </div>
         <div>
-          <span>Кімнат:</span>
+          <span>Rooms:</span>
           <span id="rooms-count" aria-live="polite">0</span>
         </div>
         <div>
-          <span>Вузлів:</span>
+          <span>Nodes:</span>
           <span id="nodes-count" aria-live="polite">0</span>
         </div>
       </div>
@@ -175,27 +169,27 @@
   </aside>
 </div>
 
-<!-- Модальне вікно для помилок -->
+<!-- Error modal -->
 <div id="error-modal" role="dialog" aria-labelledby="error-title" aria-modal="true" style="display: none;">
   <div id="error-content">
-    <h3 id="error-title">Помилка</h3>
+    <h3 id="error-title">Error</h3>
     <p id="error-message" role="alert"></p>
     <button id="close-error" class="md-button md-button-contained" style="width: 100%;">
-      Закрити
+      Close
     </button>
   </div>
 </div>
 
-<!-- Контекстне меню для кімнат -->
+<!-- Context menu for rooms -->
 <nav id="context-menu" role="menu" style="display: none;">
   <div id="context-room-name" role="presentation"></div>
-  <button id="context-route-to" role="menuitem">Маршрут сюди</button>
-  <button id="context-route-from" role="menuitem">Маршрут звідси</button>
-  <button id="context-room-info" role="menuitem">Детальна інформація</button>
+  <button id="context-route-to" role="menuitem">Route here</button>
+  <button id="context-route-from" role="menuitem">Route from here</button>
+  <button id="context-room-info" role="menuitem">Detailed information</button>
 </nav>
 
 <script>
-// Глобальні змінні для роботи з картою
+// Global variables for map functionality
 window.mapConfig = {
   defaultMapId: '<%= defaultMapId %>',
   availableMaps: <%- JSON.stringify(availableMaps) %>,
