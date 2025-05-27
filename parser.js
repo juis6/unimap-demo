@@ -41,6 +41,9 @@ class SVGMapParser {
         this.parseNodes(svgElement);
         this.parseEdges(svgElement);
 
+        // Додаткова фільтрація для видалення міжповерхових вузлів з візуалізації
+        this.filterInterFloorNodes();
+
         return this.mapData;
     }
 
@@ -138,13 +141,15 @@ class SVGMapParser {
      */
     parseNodes(svgElement) {
         const nodeElements = svgElement.querySelectorAll('[data-name="node"]');
+        const interFloorNodes = new Set(); // Зберігаємо ID міжповерхових вузлів
+
         nodeElements.forEach(nodeElement => {
             const nodeId = nodeElement.id;
 
-            // Пропускаємо вузли типу 31-01-00-xxx для звичайних поверхів
-            // Вони використовуються лише для міжповерхової навігації
+            // Зберігаємо міжповерхові вузли для edges, але не додаємо їх до nodes
             if (nodeId && nodeId.match(/^31-01-00-\d+$/)) {
-                return;
+                interFloorNodes.add(nodeId);
+                return; // Пропускаємо додавання до загального списку nodes
             }
 
             const node = {
@@ -156,6 +161,9 @@ class SVGMapParser {
             };
             this.mapData.nodes.push(node);
         });
+
+        // Зберігаємо список міжповерхових вузлів для подальшого використання
+        this.mapData.interFloorNodes = Array.from(interFloorNodes);
     }
 
     /**
@@ -172,10 +180,40 @@ class SVGMapParser {
                 fromNodeId: fromNodeId?.trim() || '',
                 toNodeId: toNodeId?.trim() || '',
                 weight: parseFloat(edgeElement.getAttribute('data-weight')) || 1,
-                geometry: this.parseGeometry(edgeElement)
+                geometry: this.parseGeometry(edgeElement),
+                isInterFloor: false // Додаємо флаг для міжповерхових з'єднань
             };
+
+            // Позначаємо міжповерхові edges
+            if ((edge.fromNodeId && edge.fromNodeId.match(/^31-01-00-\d+$/)) ||
+                (edge.toNodeId && edge.toNodeId.match(/^31-01-00-\d+$/))) {
+                edge.isInterFloor = true;
+            }
+
             this.mapData.edges.push(edge);
         });
+    }
+
+    /**
+     * Фільтрує міжповерхові вузли з візуальних елементів
+     */
+    filterInterFloorNodes() {
+        // Видаляємо геометрію міжповерхових вузлів з стін/hatches
+        if (this.mapData.walls) {
+            this.mapData.walls = this.mapData.walls.map(wall => {
+                if (wall.geometry && wall.geometry.children) {
+                    // Фільтруємо дочірні елементи, що можуть містити вузли сходів
+                    wall.geometry.children = wall.geometry.children.filter(child => {
+                        // Перевіряємо чи це не геометрія вузла сходів
+                        if (child.attributes && child.attributes.id) {
+                            return !child.attributes.id.match(/^31-01-00-\d+$/);
+                        }
+                        return true;
+                    });
+                }
+                return wall;
+            });
+        }
     }
 
     /**
@@ -195,6 +233,11 @@ class SVGMapParser {
             coordinates: [],
             attributes: {}
         };
+
+        // Зберігаємо ID для подальшої фільтрації
+        if (element.id) {
+            geometry.attributes.id = element.id;
+        }
 
         switch (element.tagName.toLowerCase()) {
             case 'rect':

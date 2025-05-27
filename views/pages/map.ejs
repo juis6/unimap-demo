@@ -35,28 +35,6 @@
 
   <!-- Права частина - панель інструментів -->
   <aside id="tools-panel" role="complementary" aria-label="Панель інструментів">
-    
-    <!-- Вибір карти -->
-    <section class="md-card" aria-labelledby="map-selector-title">
-      <h2 id="map-selector-title">Вибір карти</h2>
-      <div class="md-text-field">
-        <label for="map-list">Доступні карти</label>
-        <select id="map-list" aria-describedby="map-selector-title">
-          <% if (availableMaps && availableMaps.length > 0) { %>
-            <% availableMaps.forEach(map => { %>
-              <option value="<%= map.id %>" <%= map.id === defaultMapId ? 'selected' : '' %>>
-                <%= map.name %>
-              </option>
-            <% }) %>
-          <% } else { %>
-            <option disabled>Карти не знайдено</option>
-          <% } %>
-        </select>
-      </div>
-      <button id="load-map" class="md-button md-button-contained" style="width: 100%;">
-        Завантажити карту
-      </button>
-    </section>
 
     <!-- Вибір поверху -->
     <section class="md-card" aria-labelledby="floor-selector-title">

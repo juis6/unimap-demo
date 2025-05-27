@@ -596,8 +596,8 @@ class MapSearch {
 
     // Вибір кімнати з результатів пошуку
     async selectRoom(room) {
-        // Виділяємо кімнату на карті (може потребувати переключення поверху)
-        await this.mapCore.selectRoom(room);
+        // Виділяємо кімнату на карті з опцією fromSearch
+        await this.mapCore.selectRoom(room, { fromSearch: true });
 
         // Підсвічуємо результат в списку
         document.querySelectorAll('.search-result').forEach(el => {
@@ -610,7 +610,7 @@ class MapSearch {
             resultElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        // Переміщуємо карту до кімнати (тепер завжди, оскільки автоматично переключаємо поверх)
+        // Переміщуємо карту до кімнати
         if (window.mapUI) {
             setTimeout(() => {
                 window.mapUI.panToRoom(room.id);

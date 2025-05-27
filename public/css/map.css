@@ -189,6 +189,7 @@ body {
   stroke: #e65100 !important;
   stroke-width: 4 !important;
   opacity: 0.9;
+  filter: drop-shadow(0 2px 4px rgba(255, 111, 0, 0.4));
 }
 
 .route-active[data-name="node"] {
@@ -196,6 +197,35 @@ body {
   stroke: #e65100 !important;
   stroke-width: 2 !important;
   opacity: 1;
+  filter: drop-shadow(0 2px 4px rgba(255, 111, 0, 0.4));
+}
+
+/* Анімація для елементів маршруту */
+.route-animate {
+  animation: routeHighlight 0.5s ease-in-out;
+}
+
+@keyframes routeHighlight {
+  0% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+
+/* Спеціальний крок для сходів */
+.route-step-stairs {
+  background-color: #fff3e0;
+  border-left: 3px solid #ff6f00;
+  padding-left: var(--md-spacing-md);
+  margin: var(--md-spacing-sm) 0;
 }
 
 /* Індикатор завантаження */
