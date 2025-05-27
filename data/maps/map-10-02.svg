@@ -1,0 +1,1276 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 586.52">
+	<defs>
+		<style>
+			.cls-1 {
+				fill: red;
+				fill-rule: evenodd;
+			}
+
+			.cls-2 {
+				fill: aqua;
+			}
+
+			.cls-3 {
+				fill: yellow;
+			}
+
+			.cls-4 {
+				fill: blue;
+			}
+		</style>
+	</defs>
+
+	<g id="10-01" data-name="building" data-label="Main Building" data-address="University Street, 1">
+		<g id="20-01-02" data-name="floor" data-floor="2">
+
+			<g id="34-01-02-000" data-name="walls">
+				<g id="34-01-02-001" data-name="hatch">
+					<path class="cls-1" d="M306.6,140.9l-8.1-2.4l-13.4,4.1l-1.2-3.9l2.3-0.7l-1.4-4.6l-4.8-1.4l0.9-2.9l24.4,7.3l2.4,0.7L306.6,140.9
+					 M337.4,150.1l1.2-3.9l8.1,2.4l-1.2,3.9L337.4,150.1 M318,144.3l1.2-3.9l8.1,2.4l-1.2,3.9L318,144.3 M181,88.6l-1.2,2.3
+					c-1.2,2.4-1.9,5.1-2,7.8l-4.8,1.5l-0.5-1.7l-15,4.7l-4.2-2.2l1.9-3.6l2.6,1.4l17.2-5.4l2.8-5.3l-15.1-7.9l1.4-2.7l17.8,9.3
+					l16.1,8.4c1.1,0.6,1.9,1.6,2.3,2.7l3.1,10l-1.9,0.6l-3.1-10c-0.2-0.7-0.7-1.2-1.3-1.5L181,88.6L181,88.6 M218.8,119.8l-0.9-2.9
+					l11-3.3l21.7,6.5l-0.9,2.9l-3.6-1.1l2.6,8.5l-1.9,0.6l-3-9.8l-17.6,5.3l8.3,27.2l3.1-0.9l1.2,3.9l-8.6,2.6l-1.2-3.9l2.5-0.8
+					l-10.8-35.4L218.8,119.8 M209,119.6l-1.7,0.5l-0.3,0.1l-1-3.2l-1.9,0.6l1,3.2l-7.2,2.2l0.9,2.9l3.8-1.1l10.8,35.4l-2.5,0.8
+					l1.2,3.9l7-2.1l-1.2-3.9l-2.5,0.8l-10.8-35.4l3.7-1.1l1.7-0.5L209,119.6 M217.4,72.1l0.3-0.5l7.5-14.4l5.7,1.7l1.2-3.9l-4-1.2
+					l3.2-6.2l-6.3-3.3l-1.9,3.6l2.7,1.4l-9.5,18.2l-1.4,2.7l-0.3,0.5L217.4,72.1 M170.5,36l6.4-12.3l2,1l1.9-3.6l-6.7-3.5l-1.9,3.6
+					l2,1l-6.4,12.4L170.5,36 M151.1,25.8l2.7,1.4l6.4-12.3l1.6,0.8l1.9-3.6l-6.5-3.4l-1.9,3.6l2.2,1.2L151.1,25.8 M149.4,35.5
+					l-2.7-1.4l-6.4,12.3l-3.3-1.8l-1.4,2.7l8.7,4.6l1.4-2.7l-2.7-1.4L149.4,35.5 M142,90.6l-2.7-1.4l-2.8-1.4l-1.9,3.6l8.1,4.2
+					l1.9-3.5L142,90.6 M117.2,53l6.2-11.9l3.8,2l1.4-2.7l-3.8-2l6.3-12l-6.3,12l6.3-12l10.9-20.9l2.7,1.4l1.9-3.6L140.4,0
+					l-38.7,74.1l6.4,3.3l1.9-3.6l-2.8-1.5l8.7-16.6L117.2,53 M150.7,73.9l3.8,2l1.4-2.7l-3.8-2l-2.7-1.4l-16.8-8.8l-10.1,19.3
+					l-2.1-1.1l-1.9,3.6l5.6,2.9l1.9-3.6l-0.8-0.4l8.7-16.6l14.1,7.3L150.7,73.9 M265.4,69.1l1.9,0.6l2,0.6l1.2-3.9l-6.4-1.9
+					l-1.2,3.9L265.4,69.1 M177.8,61.9l-1.7,3.2l10.8,5.7l2.7,1.4l19.1,10l1.7-3.2l2.7,1.4l-1.7,3.2l2.2,1.1l1.4,4.7l9.8,2.9
+					l-1.9,6.2l-4.7,1.4l-2.9,0.9l-2.1-6.8c-1.4-4.7-4.7-8.6-9-10.8l-16.1-8.4l-2.7-1.4l-27.1-14.2l-2.7-1.4l-3.1-1.6l1.4-2.7
+					l3.1,1.6l1-1.9l4.3-8.2l1-1.9l0.2-0.3l2.7,1.4l-0.2,0.3l-1,1.9l-4.3,8.2l-1,1.9l14.5,7.6l1.7-3.2L177.8,61.9 M182,53.6l-1.8-0.9
+					l1.7-3.2l9.5-18.2l-2-1l1.9-3.6l6,3.1l-1.9,3.6l-2.2-1.2l-9.5,18.2L182,53.6 M317.5,123.2l-7.5-2.3l-24.4-7.3l0.9-2.9l4.8,1.4
+					l2.9,0.9l16.7,5l0.8-2.7l2.6-8.9l0.8-2.7l0.9-2.9l0.9-3l2.6-8.9l1-3.4l-2.7-0.8l1.1-4l6.6,2l2.5,0.7l-1.2,3.9l-2.5-0.7l-1-0.3
+					l-9.7,32.5l1,0.3l3.7,1.1L317.5,123.2 M214,292.7h13.8v-22.1h3v37.8h21.7v23.2c12.4,6.7,26.2,10.5,40.4,11.2v3
+					c-2.1-0.1-4.3-0.3-6.4-0.5c-10.7-1.2-21.2-4.2-30.9-8.8c-1-0.5-2-1-3-1.5c-2.9-1.5-5.7-3.1-8.5-4.9c-0.9-0.5-1.7-1.1-2.5-1.7
+					c-4.9-3.4-9.5-7.3-13.7-11.5v-21.1H214V292.7 M369,95.7l-1.2,3.9l2.5,0.7l1,0.3l-9.7,32.5l-34.3-10.2l-0.9,2.9l33.3,9.9l8.4,2.5
+					l0.9-2.9l-4.5-1.3l8.7-29.2l1-3.4l3.8,1.1l1.2-3.9l-7.6-2.3L369,95.7 M354.2,91.3l-1.2,3.9l3.5,1l1.2-3.9L354.2,91.3
+					 M339.4,86.9l-1.2,3.9l3.4,1l1.2-3.9L339.4,86.9 M436.8,326.5v-3.1h3v3.1h3.1v4.1h-14.6v-4.1H436.8 M64.1,314.5h37.2v3.4h4.1
+					v-9.5h-4.1v3H64.1v-7h-3.1v13.4h3.1L64.1,314.5 M101.3,229.3v5.4h4.1v-9.2h-4.1V229.3 M101.3,377.9v-3.4h4.1v8.8h-4.1V377.9
+					 M285.4,510.6H313v3h-31v-3H285.4 M204.6,532.7v19.6h7.2v4.1h-14.2v-4.1h5v-19.6H204.6 M137.1,532.7v19.6h18.6v-19.6h3.1v19.6h5
+					v4.1h-35.1v-4.1h5.5v-19.6H137.1 M202.6,523.4h2v-9.8h26.2v7.1h3v-7.1h4.6v-3h-42.1v3h6.3L202.6,523.4 M155.8,523.4h3.1v-9.8
+					H187v-3h-35.8v3h4.6V523.4 M457.8,532.7v19.6h-18.6v-19.6h-3v19.6h-5v4.1h35.2v-4.1h-5.5v-19.6H457.8 M443.9,513.6h-4.6v9.8h-3
+					v-9.8H408v-3h35.9L443.9,513.6 M454.5,487.9h14.5v4.1h-14.5L454.5,487.9 M442.6,487.9h-14.5v4.1h14.5L442.6,487.9 M152.4,487.9
+					h14.5v4.1h-14.5L152.4,487.9 M140.6,487.9h-14.5v4.1h14.5V487.9 M64.1,223.7v-14.9h37.2v4.9h4.1v-3.9h81l12.4-40.9l1.8-0.5
+					l-1.2-3.9l-2.5,0.8l-10.8-35.4l3.8-1.1l-0.9-2.9l-3.7,1.1l-0.5-1.7l-3.9,1.2l2.8,9.3H21.8v199.1h19.1v5.8H45V208.7h16.1v27.2
+					h3.1V223.7 M42,223.7v5.6H25.9v-20.6H42L42,223.7 M42,327.2v3.4H25.9v-54.4H42V327.2 M230.8,442v26.1h3v-75.3h-3V442 M190.8,440
+					v7.8h-4.1v-12h4.1V440 M252.5,480.8h5.1v1.5h5.7v-1.5h5.1v1.5h16.1v-1.5h1.5v-16.1h-1.5v-5.1h1.5v-16.1h-1.5v-5.1h5.1v1.5h16.1
+					v-1.5h5.1v5.1h-1.5v16.1h1.5v5.1h-1.5v16.1h1.5v1.5h16.1v-1.5h5.1v1.5h5.7v-1.5h5.1V492h-90L252.5,480.8 M288,380.1h1.5V375H288
+					v-10.9c-11.1-0.9-22-3.4-32.4-7.4c-1-0.4-2-0.8-3-1.2v24.6h1.4v16.1h-1.5v5.1h1.5v16.1h-1.5v5.1h1.5v16.1h-1.5v5.1h1.5v16.1
+					h-1.5v5.1h5.1v-1.5h5.7v1.5h5.1v-5.1h-1.5v-16.1h1.5v-5.1h-1.5v-16.1h1.5v-1.5h16.1v1.5h5.1v-5.1h-1.5v-16.1h1.5v-5.1h-1.5
+					L288,380.1 M194.9,328.6h18.3c1,1,1.9,2,2.9,3l-3.3,3.7c-1.1-0.3-2.3-0.5-3.5-0.5h-8.8c-4.7,0-8.9,2.8-10.8,7.1h-3v-11.2h-8.4
+					v-4.1h9.4v-3.1h3v5.2H194.9 M231.2,343.9c0.9,0.6,1.8,1.2,2.7,1.8v37.8h-3v-4.4h-40v4.2h-4.1v-10.1h4.1v2.8h37v-14.9H213v-3.6
+					c6.1-2,9.5-8.5,7.6-14.7c-0.2-0.6-0.4-1.1-0.7-1.6l3.2-3.5c2.7,2.2,5.4,4.3,8.3,6.3L231.2,343.9 M190.8,364v-2.8h6.1v-3.6
+					c-3.2-1.1-5.8-3.4-7.1-6.5h-3V364H190.8 M230.8,261.3v-8.4H255v-24h85v24h24.2v8.4h3v-8.4H380v-4.1h-12.4v-24H227.4v24H215v4.1
+					h12.8v8.4L230.8,261.3 M400.1,328.6h-18.2c-1,1-2,2-2.9,3l3.3,3.7c1.1-0.3,2.3-0.5,3.5-0.5h8.8c4.7,0,8.9,2.8,10.8,7.1h3v-11.2
+					h8.4v-4.1h-9.4v-3.1h-3v5.2H400.1 M363.8,343.9c-0.9,0.6-1.8,1.2-2.7,1.8v37.8h3v-4.4h40v4.2h4.1v-10.1h-4.1v2.8h-37v-14.9H382
+					v-3.6c-0.5-0.2-1-0.4-1.5-0.6c-5.8-2.8-8.3-9.9-5.4-15.7c0,0,0,0,0,0l-3.1-3.5c-2.7,2.2-5.4,4.3-8.3,6.3L363.8,343.9 M457,330.6
+					h-2.1v-4.1h14.5v4.1H457 M461,270h-6.2v-4h14.5v4H461 M436.8,270h6.2v-4h-14.6v4H436.8 M353.5,328.4
+					c-15.1,10.5-32.9,16.6-51.4,17.4v-3c14.1-0.7,27.9-4.5,40.4-11.2v-23.2h21.7v-37.8h3v22.1H381v3h-13.8v21.1
+					C363,321.1,358.4,324.9,353.5,328.4 M390.3,295.7v-3h13.8V284h3v23.9H443v3h-3.1v3.1h-3V311h-29.7v3.1h-3v-18.4L390.3,295.7
+					 M533.9,245.5h-3v-37.8l-37.3-11.1v8.5h-4.1v-9.7l-6.8-2l1.1-3.9l50,14.9L533.9,245.5 M531,291.7h3v-36.9h-3v24.5h-9.3v2h9.3
+					V291.7 M512.4,307.9h-18.7v-26.5h18.6v-2h-21.7v28.6h-35.8v3h35.8v3.4h3V311h37.2v3.4h3V301h-3v6.9L512.4,307.9 M550,311v3.4
+					h4.1v-12.1H550V311 M533.9,434.5h-3v5h-37.3v-3.7h-4.1v12.1h4.1v-5.3h37.2V492h3L533.9,434.5 M530.9,425.2h3v-51.9h-3v24.4h-9.3
+					v2h9.3V425.2 M154.1,205.7h29.3l10.8-35.4l-9.3-30.6h-159v66.1H154.1 M101.3,296.6h4.1v-6h-4.1V296.6 M64.1,252.9v-7.7h-3.1
+					v49.9h3.1v-19.5h14v-2h-14V252.9 M101.3,252.9v4.2h4.1v-10.6h-4.1V252.9 M105.4,268.9h-4.1v4.7h-14v2h14v3h4.1V269 M42,231.3
+					H25.9v41.8H42V231.3 M41,362.7h4v-10.4h-4.1L41,362.7 M45,374.5h-4.1v8.8H45V374.5 M177.4,114.9l3.9-1.2l-1-3.4l-3.9,1.2
+					L177.4,114.9 M40.9,404.3v-3.4H19.3v-4.1h21.6v-1.7H45v9.1H40.9 M40.9,413.6H45v10.3h-4.1v-2.9H19.3V417h21.6V413.6 M64.1,418.2
+					h37.2v-2.7h4.1v8.5h-4.1v-2.7H64.1v4.5h-3.1v-12.1h3.1L64.1,418.2 M64.1,435h-3.1v57h3.1v-49.4h37.2v5.3h4.1v-12.1h-4.1v3.7
+					H64.1V435 M87.4,397.7v2h14v3.9h4.1v-8.5h-4.1v2.5L87.4,397.7 M61.1,351h3.1v5h37.2v-3.7h4.1v10.4h-4.1V359H64.1v5h-3.1V351
+					 M64.1,327.2v3.4h37.2v-3.4h4.1v13.3h-4.1v-6.9H64.1v8.1h-3.1v-14.5L64.1,327.2 M61.1,393.5v10.8h3v-4.6h14v-2h-14v-24.5h-3.1
+					L61.1,393.5 M249.5,139.9l2.6,8.5l-3.1,1l1.2,3.9l6.1-1.9l-1.2-3.9l-1.1,0.3l-2.6-8.5L249.5,139.9 M281.7,77.5l1-3.2l-2-0.6
+					l1.2-3.9l6.4,1.9l-1.2,3.9l-2.5-0.7l-1,3.2L281.7,77.5 M210,41l-1.8-0.9l-2.2-1.2l1.9-3.6l6.7,3.5l-1.9,3.6L210,41 M242.9,85.2
+					l-2.7,8.9l-0.8,2.7l16.6,4.9l-0.9,2.9L232.8,98l0.9-2.9l2.9,0.9l0.8-2.7l2.6-9l0.8-2.7l0.9-2.9l4.6-15.3l-4-1.2l1.2-3.9l9.4,2.8
+					l-1.1,3.9l-2.5-0.7l-4.6,15.3l-0.9,2.9L242.9,85.2 M274.9,107.3l5.1-17.2l1-3.2l-1.9-0.6l-1,3.2l-5.1,17.2l-8-2.4l-0.9,2.9
+					l12.5,3.7l0.9-2.9L274.9,107.3 M538.2,163.1l12.8,1.2v25.2l-19-5.7L538.2,163.1 M377,140.9l0.9-2.9l4.5,1.3l9.7-32.5l-2.8-0.8
+					l1.2-3.9l7.5,2.2l-1.2,3.9l-2.8-0.8l-9.7,32.5l17,5.1l1.1-3.7l1.9,0.6l-1.1,3.7l1,0.3l3,0.9l-0.9,2.9L377,140.9 M303.8,80.5
+					l2.7,0.8l1.2-3.9l-8.1-2.4l-1.2,3.9l2.5,0.7L303.8,80.5 M267.6,147.9l6.3-1.9l-1.2-3.9l-2.3,0.7l-4.6-15.1l5.4,1.6l0.9-2.9
+					l-12.5-3.7l-0.9,2.9l3.6,1.1l5.2,17l-1,0.3L267.6,147.9 M356.8,155.8l8.1,2.4l1.2-3.9l-8.1-2.4L356.8,155.8 M377.4,157.7
+					l-1.2,3.9l4.3,1.3l3.7,1.1l1.2-3.9l-3.8-1.1L377.4,157.7 M466,124.5l3.8,1.1l2-6.7l6.7,0.7l-0.4,4l-4.4-0.4l-11.8,39.7l13,3.9
+					l-0.9,2.9l-21-6.2l0.9-2.9l5,1.5l9.7-32.5l-3.8-1.1L466,124.5 M490.2,120.7l-0.4,4l4.4,0.4l0.4-4L490.2,120.7 M473.6,123.2
+					l4.4,0.4L473.6,123.2 M547.9,130.5l6.5,0.6L547.9,130.5 M557.4,217.5h-3.4v3.6H550v-11.2h4.1v3.6h3.4L557.4,217.5 M407,132.9
+					l5.9-19.9l1,0.3l1.8,0.5l1.2-3.9l-7.5-2.2l-1.2,3.9l2.8,0.8l-5.9,19.9L407,132.9 M446.8,137l-2-0.6l-5.9,19.7l-4-1.1l-8.9-2.6
+					l-4-1.2l9.7-32.5l2.8,0.8l1.1-3.9l-7.5-2.2l-1.2,3.8l2.8,0.8l-9.7,32.5l-4-1.2l-0.9,2.9l10,3l8.9,2.6l10,3l0.9-2.9l-4-1.2
+					l5.9-19.7 M447.6,127.6l1.9,0.6l1.2-3.9l2.8,0.8l1.2-3.9l-7.5-2.2l-1.1,3.9l2.8,0.8L447.6,127.6 M527.3,128.5l3.8,0.4l0.4-4
+					l-3.8-0.4L527.3,128.5 M568.3,163l4.4,0.4v-30.6l-6.5-0.6l6.5,0.6l-6.5-0.6l0.4-4l10.2,1v88.3h-7.5v-4.1h3.4v-47L568,166
+					l-9.3-0.9l-4.7-0.4V198H550v-5.6l-32.1-9.6l0.9-2.9l10.3,3.1l8.5-28.6l2.9,0.9l-0.3,0.9l-0.6,2l-0.6,2l20,1.9L568.3,163
+					 M540.3,145.5l4.5-15.3L543,130l0.4-4l11.5,1.1l-0.4,4l-6.5-0.6l-4.7,15.9L540.3,145.5 M551,126.7L551,126.7 M493.6,362.7v-4.2
+					h18.6v-2h-18.6v-4.2h-4.1v10.4L493.6,362.7M493.7,257.5V270h-12.4v-4h8.4v-8.5L493.7,257.5 M493.7,245.7h-4.1v-8.5h4.1V245.7
+					 M493.7,225.4h-4.1v-8.5h4.1V225.4 M81.7,486.9v-23.2h-1.5v-5.1h5.1v5.1h-1.5v23.2h1.5v5.1h-5.1v-5.1L81.7,486.9 M511.3,486.9
+					v-23.2h-1.5v-5.1h5.1v5.1h-1.5v23.2h1.5v5.1h-5.1v-5.1H511.3 M533.9,341.8h-3v-11.7h-37.3v10.4h-4.1v-9.9h-8.4v-4.1h9.4v-2.9h3
+					v3.4h37.2v-3.4h3L533.9,341.8 M530.8,351h3v13h-3v-5.5h-9.3v-2h9.3V351 M554,326.2h-4v14.3h4.1L554,326.2 M554.1,362.7v-10.4
+					H550v10.4L554.1,362.7 M550,374.5h4.1v8.8H550V374.5 M391.8,248.8v4.1h12.4v21.8h3V270h9.4v-4h-8.4v-17.2H391.8 M204.7,292.7
+					h-13.8v-39.8h12.4v-4.1h-16.4V266h-12v4h13v22.7h-8.2v14.1h-6.1v3h13.2v3.7h4.1v-17.7h13.8L204.7,292.7 M179.6,306.9
+					L179.6,306.9 M358.8,246.8l-12.8-13v13H358.8 M363.7,233.9c0-2.8-2.2-5-5-5s-5,2.2-5,5s2.2,5,5,5S363.7,236.7,363.7,233.9
+					 M236.1,246.8l12.8-13v13H236.1 M241.2,233.9c0-2.8-2.2-5-5-5s-5,2.2-5,5s2.2,5,5,5S241.2,236.6,241.2,233.9 M164.2,306.9v3
+					h-6.1v16.6h4.8v4.1h-8.9V266h8.9v4h-4.8v36.9L164.2,306.9 M30.1,495H42v18.6h6.4v-3H45v-52.2h-3V492H23.4v-12.6h-4.1V496H0v17.1
+					h4.1v-13h24v8.9h2L30.1,495 M4.1,543.3v13.1h13.3v4.1H0v-17.1H4.1 M30.1,527.2h10.8v2H4.1v2.2H0V525h4.1v2.2h24v-9h2L30.1,527.2
+					 M64.1,552.3h5.4v4.1h-5.3v4.1H47.7v-4.1h13.3v-27.2H50.2v-2h10.8v-13.7h-3.4v-3h9.8v3h-3.4L64.1,552.3 M116.8,556.4h-12.9v-4.1
+					h5.4v-19.6h2v19.6h5.5L116.8,556.4 M134.1,523.4h3v-9.8h4.7v-3h-65v3h32.5v9.8h2v-9.8h22.8L134.1,523.4 M81.3,556.4v-4.1h10.8
+					v4.1H81.3 M272.7,513.6h-17.2v42.8h4.1v4.1h-29.8v-4.1h-6.1v-4.1h7.2v-3h3v7.1h18.7v-42.8h-4.6v-3h24.9V513.6 M175.7,556.4h10
+					v-4.1h-10V556.4 M29.2,560.5v-4.1h6.7v4.1H29.2 M114.3,487.9h-8.9v-4.8h-4.1v8.9h12.9L114.3,487.9 M105.4,471.3v-11.6h-4.1v11.6
+					L105.4,471.3 M186.8,459.7v11.6h4.1v-11.6H186.8 M186.8,491.9h-8v-4.1h8v-4.8h4.1v5.8h40v-11.5h3V492L186.8,491.9 M190.8,403.7
+					h-4.1v-8.5h4.1V403.7 M190.8,424h-4.1v-8.5h4.1V424 M40.9,439.5H19.3v28.1h4.1v-25H42v6.6h3v-13.4h-4.1V439.5 M275.7,560.5v-4.1
+					h13.8v4.1H275.7 M493.7,374.6v8.8h-4.1v-8.8H493.7 M404.2,364v-2.8h-6.1v-3.6c3.2-1.1,5.8-3.4,7.1-6.5h3V364H404.2 M564.9,495
+					H553v18.6h-6.4v-3h3.4v-52.2h3V492h18.6v-12.6h4.1V496H595v17.1h-4.1v-13h-24v8.9h-2L564.9,495 M397.4,556.4h-14.2v-4.1h7.2
+					v-38.8h-26.2v7.1h-3v-7.1h-4.6v-3h42.2v3h-6.3v38.8h5L397.4,556.4 M590.9,543.3v13.1h-13.3v4.1H595v-17.1H590.9 M564.9,527.2
+					h-10.8v2h36.9v2.2h4.1V525h-4.1v2.2h-24v-9h-2L564.9,527.2 M506.1,126.4l0.4-4l9.4,0.9l-0.4,4l-1.9-0.2l-14,47.1l10.3,3.1
+					l-0.9,2.9l-26.2-7.8l0.9-2.9l13,3.9l13.9-46.5L506.1,126.4l4.5,0.4L506.1,126.4 M494.3,125.2l-4.4-0.4L494.3,125.2 M464.7,188
+					l1.2-3.9l6.8,2l-1.1,3.9L464.7,188 M446.5,182.6l1.2-3.9l6.8,2l-1.2,3.9L446.5,182.6 M435.2,179.2l-21.5-6.4l1.1-3.9l21.5,6.4
+					L435.2,179.2 M554.1,290.4H550v-11.3h4.1V290.4 M554.1,267.3H550v-11.3h4.1V267.3 M554.1,244.2H550V233h4.1V244.2 M550,423.9
+					h4.1v-8.5H550V423.9 M550,403.6h4.1v-8.5H550V403.6 M530.9,552.3h-5.4v4.1h5.4v4.1h16.4v-4.1h-13.3v-27.2h10.8v-2h-10.8v-13.7
+					h3.4v-3h-9.8v3h3.4V552.3 M478.2,556.4h12.9v-4.1h-5.4v-19.6h-2v19.6h-5.5L478.2,556.4 M460.9,523.4h-3v-9.8h-4.7v-3h65.1v3
+					h-32.6v9.8h-2v-9.8h-22.9L460.9,523.4 M513.7,556.4v-4.1h-10.7v4.1H513.7 M322.3,513.6h17.2v42.8h-4.1v4.1h29.8v-4.1h6.1v-4.1
+					h-7.2v-3h-3v7.1h-18.6v-42.8h4.6v-3h-24.9V513.6 M419.3,556.4h-10v-4.1h10V556.4 M565.8,560.5v-4.1h-6.7v4.1H565.8 M480.8,487.9
+					h8.9v-4.8h4.1v8.9h-13L480.8,487.9 M489.6,471.3v-11.6h4.1v11.6L489.6,471.3 M408.2,459.7v11.6h-4.1v-11.6H408.2 M408.2,491.9h8
+					v-4.1h-8v-4.8h-4.1v5.8h-40v-11.5h-3V492L408.2,491.9 M512.2,397.8v2h-18.6v3.9h-4.1v-8.5h4.1v2.5L512.2,397.8 M404.2,403.7h4.1
+					v-8.5h-4.1V403.7 M404.2,424h4.1v-8.5h-4.1V424 M489.6,424v-8.5h4.1v8.5H489.6 M388.8,442h15.4v5.8h4.1v-12h-4.1v4.2h-15.4V442
+					 M554.1,439.5h21.7v28.1h-4.1v-25H553v6.6h-3v-13.3h4.1V439.5 M379.5,442v-2h-15.4v-47.2h-3v75.3h3V442H379.5 M319.3,560.5v-4.1
+					h-13.8v4.1H319.3 M396.8,163.5l6.8,2l-1.1,3.9l-6.8-2L396.8,163.5 M342.5,355.5V380H341v16.2h1.5v5.1H341v16.1h1.5v5.1H341v16.1
+					h1.5v5.1H341v16.1h1.5v5.1h-5.1v-1.5h-5.7v1.5h-5.1v-5.1h1.5v-16.1h-1.5v-5.1h1.5v-16.1h-1.5v-1.5h-16.1v1.5h-5.1v-5.1h1.5
+					v-16.1h-1.5v-5.1h1.5v-16.1h-1.5V375h1.5v-10.9c11.1-0.9,22-3.4,32.4-7.4C340.5,356.4,341.5,356,342.5,355.5 M384.2,164l1.2-3.9
+					L384.2,164z" />
+				</g>
+			</g>
+
+			<g id="33-01-02-000" data-name="rooms">
+				<g id="33-01-02-001" data-name="room" data-label="Unisex Restroom 3" data-category="restroom"
+					data-keywords="toilet,restroom,wc,unisex,bathroom" data-access="true" data-node-id="31-01-02-001">
+					<polygon class="cls-2"
+						points="226.24 126.5 234.51 153.72 252.08 148.39 249.49 139.87 251.43 139.28 254.02 147.8 267.46 143.71 262.28 126.66 246.14 121.85 248.73 130.37 246.78 130.96 243.81 121.16 226.24 126.5 226.24 126.5" />
+				</g>
+
+				<g id="33-01-02-002" data-name="room" data-label="Men's Restroom 3" data-category="restroom"
+					data-keywords="toilet,restroom,wc,men,male,bathroom" data-access="true" data-node-id="31-01-02-002">
+					<polygon class="cls-2"
+						points="186.77 309.91 186.77 326.53 158.18 326.53 158.18 309.91 164.25 309.91 164.25 306.87 158.18 306.87 158.18 270.02 187.79 270.02 187.79 292.74 179.63 292.74 179.63 306.87 173.56 306.87 173.56 309.91 186.77 309.91 186.77 309.91" />
+				</g>
+
+				<g id="33-01-02-003" data-name="room" data-label="Men's Restroom 2" data-category="restroom"
+					data-keywords="toilet,restroom,wc,men,male,bathroom" data-access="true" data-node-id="31-01-02-003">
+					<polygon class="cls-2"
+						points="553.04 442.55 553.04 491.95 571.65 491.95 571.65 442.55 553.04 442.55 553.04 442.55" />
+				</g>
+
+				<g id="33-01-02-004" data-name="room" data-label="Men's Restroom 1" data-category="restroom"
+					data-keywords="toilet,restroom,wc,men,male,bathroom" data-access="true" data-node-id="31-01-02-004">
+					<polygon class="cls-2"
+						points="23.35 442.55 23.35 491.95 41.96 491.95 41.96 442.55 23.35 442.55 23.35 442.55" />
+				</g>
+
+				<g id="33-01-02-005" data-name="room" data-label="Laboratory 246" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,246" data-access="true" data-node-id="31-01-02-005">
+					<polygon class="cls-2"
+						points="124.9 38.38 140.3 46.42 157.49 13.52 142.08 5.48 124.9 38.38 124.9 38.38" />
+				</g>
+
+				<g id="33-01-02-006" data-name="room" data-label="Laboratory 245" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,245" data-access="true" data-node-id="31-01-02-006">
+					<polygon class="cls-2"
+						points="143 47.84 160.19 14.93 174.24 22.27 157.05 55.17 143 47.84 143 47.84" />
+				</g>
+
+				<g id="33-01-02-007" data-name="room" data-label="Laboratory 244" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,244" data-access="true" data-node-id="31-01-02-007">
+					<polygon class="cls-2"
+						points="125.25 81.81 157.79 98.81 175.04 93.4 177.79 88.13 133.94 65.18 125.25 81.81 125.25 81.81" />
+				</g>
+
+				<g id="33-01-02-008" data-name="room" data-label="Laboratory 241" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,241" data-access="true" data-node-id="31-01-02-008">
+					<path class="cls-2"
+						d="M205.05,120.77l-19.83,6-6.74-22.18a18.18,18.18,0,0,1,1.28-13.68L181,88.62,197,97.06a2.63,2.63,0,0,1,1.28,1.53Z" />
+				</g>
+
+				<g id="33-01-02-009" data-name="room" data-label="Laboratory 240" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,240" data-access="true" data-node-id="31-01-02-009">
+					<polygon class="cls-2"
+						points="225.17 57.1 211.36 83.54 213.54 84.68 214.99 89.46 236.57 95.88 246.25 63.37 225.17 57.1 225.17 57.1" />
+				</g>
+
+				<g id="33-01-02-010" data-name="room" data-label="Laboratory 239" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,239" data-access="true" data-node-id="31-01-02-010">
+					<polygon class="cls-2"
+						points="239.49 96.75 273 106.73 282.68 74.22 249.17 64.24 239.49 96.75 239.49 96.75" />
+				</g>
+
+				<g id="33-01-02-011" data-name="room" data-label="Laboratory 238A" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,238a,238" data-access="true"
+					data-node-id="31-01-02-011">
+					<polygon class="cls-2"
+						points="204.44 124.14 215.21 159.59 231.6 154.61 220.83 119.16 204.44 124.14 204.44 124.14" />
+				</g>
+
+				<g id="33-01-02-012" data-name="room" data-label="Laboratory 238" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,238" data-access="true" data-node-id="31-01-02-012">
+					<polygon class="cls-2"
+						points="361.59 133.1 371.26 100.59 323.43 86.35 313.75 118.86 361.59 133.1 361.59 133.1" />
+				</g>
+
+				<g id="33-01-02-013" data-name="room" data-label="Laboratory 234" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,234" data-access="true" data-node-id="31-01-02-013">
+					<polygon class="cls-2"
+						points="440.97 156.73 458.87 162.06 468.55 129.55 450.65 124.22 449.49 128.12 447.55 127.53 448.7 123.64 431.78 118.6 422.1 151.11 439.03 156.15 444.89 136.45 446.84 137.03 440.97 156.73 440.97 156.73" />
+				</g>
+
+				<g id="33-01-02-014" data-name="room" data-label="Laboratory 233" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,233" data-access="true" data-node-id="31-01-02-014">
+					<polygon class="cls-2"
+						points="461.79 162.93 473.62 123.2 510.5 126.81 496.65 173.31 461.79 162.93 461.79 162.93" />
+				</g>
+
+				<g id="33-01-02-015" data-name="room" data-label="Laboratory 232" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,232" data-access="true" data-node-id="31-01-02-015">
+					<polygon class="cls-2"
+						points="572.67 132.88 572.67 163.4 539.06 160.11 540.51 155.25 537.59 154.38 529.08 182.96 499.57 174.18 513.59 127.11 544.8 130.16 540.25 145.46 543.16 146.33 547.89 130.46 572.67 132.88 572.67 132.88" />
+				</g>
+
+				<g id="33-01-02-016" data-name="room" data-label="Laboratory 231" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,231" data-access="true" data-node-id="31-01-02-016">
+					<polygon class="cls-2"
+						points="493.66 196.6 493.66 279.33 530.88 279.33 530.88 207.68 493.66 196.6 493.66 196.6" />
+				</g>
+
+				<g id="33-01-02-017" data-name="room" data-label="Laboratory 230" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,230" data-access="true" data-node-id="31-01-02-017">
+					<polygon class="cls-2"
+						points="493.66 281.36 493.66 307.92 530.88 307.92 530.88 281.36 493.66 281.36 493.66 281.36" />
+				</g>
+
+				<g id="33-01-02-018" data-name="room" data-label="Laboratory 227" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,227" data-access="true" data-node-id="31-01-02-018">
+					<polygon class="cls-2"
+						points="530.88 330.08 530.88 356.5 493.66 356.5 493.66 330.08 530.88 330.08 530.88 330.08" />
+				</g>
+
+				<g id="33-01-02-019" data-name="room" data-label="Laboratory 226" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,226" data-access="true" data-node-id="31-01-02-019">
+					<polygon class="cls-2"
+						points="493.66 397.72 493.66 358.53 530.88 358.53 530.88 397.72 493.66 397.72 493.66 397.72" />
+				</g>
+
+				<g id="33-01-02-020" data-name="room" data-label="Laboratory 225A" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,225a,225" data-access="true"
+					data-node-id="31-01-02-020">
+					<polygon class="cls-2"
+						points="493.66 439.5 530.88 439.5 530.88 399.75 493.66 399.75 493.66 439.5 493.66 439.5" />
+				</g>
+
+				<g id="33-01-02-021" data-name="room" data-label="Laboratory 225" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,225" data-access="true" data-node-id="31-01-02-021">
+					<polygon class="cls-2"
+						points="533.93 513.61 533.93 527.14 544.75 527.22 544.75 529.25 533.93 529.25 533.93 556.41 590.94 556.41 590.94 529.25 554.06 529.25 554.06 527.22 564.89 527.22 564.89 518.3 566.92 518.3 566.92 527.22 590.94 527.22 590.94 500.07 566.92 500.07 566.92 509 564.89 509 564.89 495 553.04 495 553.04 513.61 533.93 513.61 533.93 513.61" />
+				</g>
+
+				<g id="33-01-02-022" data-name="room" data-label="Laboratory 224" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,224" data-access="true" data-node-id="31-01-02-022">
+					<polygon class="cls-2"
+						points="439.19 513.61 457.8 513.61 457.8 523.42 460.84 523.42 460.84 513.61 483.68 513.61 483.68 523.42 485.71 523.42 485.71 513.61 530.88 513.61 530.88 552.35 485.71 552.35 485.71 532.72 483.68 532.72 483.68 552.35 460.84 552.35 460.84 532.72 457.8 532.72 457.8 552.35 439.19 552.35 439.19 513.61 439.19 513.61" />
+				</g>
+
+				<g id="33-01-02-023" data-name="room" data-label="Laboratory 223" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,223" data-access="true" data-node-id="31-01-02-023">
+					<polygon class="cls-2"
+						points="390.33 552.35 390.33 513.61 364.16 513.61 364.16 520.71 361.11 520.71 361.11 513.61 342.5 513.61 342.5 556.41 361.11 556.41 361.11 549.3 364.16 549.3 364.16 552.35 390.33 552.35 390.33 552.35" />
+				</g>
+
+				<g id="33-01-02-024" data-name="room" data-label="Laboratory 222" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,222" data-access="true" data-node-id="31-01-02-024">
+					<polygon class="cls-2"
+						points="364.16 442.04 364.16 488.9 404.17 488.9 404.17 442.04 364.16 442.04 364.16 442.04" />
+				</g>
+
+				<g id="33-01-02-025" data-name="room" data-label="Laboratory 221" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,221" data-access="true" data-node-id="31-01-02-025">
+					<polygon class="cls-2"
+						points="364.16 379.11 404.17 379.11 404.17 440.01 364.16 440.01 364.16 379.11 364.16 379.11" />
+				</g>
+
+				<g id="33-01-02-026" data-name="room" data-label="Laboratory 220A" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,220a,220" data-access="true"
+					data-node-id="31-01-02-026">
+					<polygon class="cls-2"
+						points="436.86 310.96 436.86 326.53 407.21 326.53 407.21 310.96 436.86 310.96 436.86 310.96" />
+				</g>
+
+				<g id="33-01-02-027" data-name="room" data-label="Laboratory 220" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,220" data-access="true" data-node-id="31-01-02-027">
+					<polygon class="cls-2"
+						points="407.21 270.02 407.21 307.92 490.62 307.92 490.62 270.02 407.21 270.02 407.21 270.02" />
+				</g>
+
+				<g id="33-01-02-028" data-name="room" data-label="Laboratory 219" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,219" data-access="true" data-node-id="31-01-02-028">
+					<polygon class="cls-2"
+						points="367.2 252.9 404.17 252.9 404.17 292.74 367.2 292.74 367.2 252.9 367.2 252.9" />
+				</g>
+
+				<g id="33-01-02-029" data-name="room" data-label="Laboratory 218" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,218" data-access="true" data-node-id="31-01-02-029">
+					<path class="cls-2"
+						d="M252.5,331.58V308.39H230.84V252.9H255v-24H340v24h24.2v55.49H342.5v23.19A95.07,95.07,0,0,1,252.5,331.58Z" />
+				</g>
+
+				<g id="33-01-02-030" data-name="room" data-label="Laboratory 217" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,217" data-access="true" data-node-id="31-01-02-030">
+					<polygon class="cls-2"
+						points="190.83 252.9 190.83 292.74 227.8 292.74 227.8 252.9 190.83 252.9 190.83 252.9" />
+				</g>
+
+				<g id="33-01-02-031" data-name="room" data-label="Laboratory 216" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,216" data-access="true" data-node-id="31-01-02-031">
+					<polygon class="cls-2"
+						points="190.83 379.11 230.84 379.11 230.84 488.9 190.83 488.9 190.83 379.11 190.83 379.11" />
+				</g>
+
+				<g id="33-01-02-032" data-name="room" data-label="Laboratory 214" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,214" data-access="true" data-node-id="31-01-02-032">
+					<polygon class="cls-2"
+						points="255.54 513.61 255.54 556.41 339.46 556.41 339.46 513.61 255.54 513.61 255.54 513.61" />
+				</g>
+
+				<g id="33-01-02-033" data-name="room" data-label="Laboratory 212" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,212" data-access="true" data-node-id="31-01-02-033">
+					<polygon class="cls-2"
+						points="158.86 513.61 202.64 513.61 202.64 552.35 158.86 552.35 158.86 513.61 158.86 513.61" />
+				</g>
+
+				<g id="33-01-02-034" data-name="room" data-label="Laboratory 211" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,211" data-access="true" data-node-id="31-01-02-034">
+					<polygon class="cls-2"
+						points="137.2 513.61 137.2 552.35 155.81 552.35 155.81 513.61 137.2 513.61 137.2 513.61" />
+				</g>
+
+				<g id="33-01-02-035" data-name="room" data-label="Laboratory 210" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,210" data-access="true" data-node-id="31-01-02-035">
+					<polygon class="cls-2"
+						points="64.12 513.61 64.12 552.35 109.29 552.35 109.29 532.72 111.32 532.72 111.32 552.35 134.16 552.35 134.16 513.61 111.32 513.61 111.32 523.42 109.29 523.42 109.29 513.61 64.12 513.61 64.12 513.61" />
+				</g>
+
+				<g id="33-01-02-036" data-name="room" data-label="Laboratory 209" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,209" data-access="true" data-node-id="31-01-02-036">
+					<polygon class="cls-2"
+						points="61.07 513.61 61.07 527.14 50.25 527.22 50.25 529.25 61.07 529.25 61.07 556.41 4.06 556.41 4.06 529.25 40.94 529.25 40.94 527.22 30.11 527.22 30.11 518.3 28.08 518.3 28.08 527.22 4.06 527.22 4.06 500.07 28.08 500.07 28.08 509 30.11 509 30.11 495 41.96 495 41.96 513.61 61.07 513.61 61.07 513.61" />
+				</g>
+
+				<g id="33-01-02-037" data-name="room" data-label="Laboratory 207" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,207" data-access="true" data-node-id="31-01-02-037">
+					<polygon class="cls-2"
+						points="101.34 439.5 101.34 421.23 64.12 421.23 64.12 439.5 101.34 439.5 101.34 439.5" />
+				</g>
+
+				<g id="33-01-02-038" data-name="room" data-label="Laboratory 206" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,206" data-access="true" data-node-id="31-01-02-038">
+					<polygon class="cls-2"
+						points="64.12 418.19 64.12 399.75 101.34 399.75 101.34 418.19 64.12 418.19 64.12 418.19" />
+				</g>
+
+				<g id="33-01-02-039" data-name="room" data-label="Laboratory 205" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,205" data-access="true" data-node-id="31-01-02-039">
+					<polygon class="cls-2"
+						points="64.12 397.72 64.12 359.04 101.34 359.04 101.34 397.72 64.12 397.72 64.12 397.72" />
+				</g>
+
+				<g id="33-01-02-040" data-name="room" data-label="Laboratory 204" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,204" data-access="true" data-node-id="31-01-02-040">
+					<polygon class="cls-2"
+						points="101.34 355.99 101.34 333.63 64.12 333.63 64.12 355.99 101.34 355.99 101.34 355.99" />
+				</g>
+
+				<g id="33-01-02-041" data-name="room" data-label="Laboratory 203" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,203" data-access="true" data-node-id="31-01-02-041">
+					<polygon class="cls-2"
+						points="101.34 330.59 101.34 314.51 64.12 314.51 64.12 330.59 101.34 330.59 101.34 330.59" />
+				</g>
+
+				<g id="33-01-02-042" data-name="room" data-label="Laboratory 202" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,202" data-access="true" data-node-id="31-01-02-042">
+					<polygon class="cls-2"
+						points="64.12 311.47 64.12 275.69 101.34 275.69 101.34 311.47 64.12 311.47 64.12 311.47" />
+				</g>
+
+				<g id="33-01-02-043" data-name="room" data-label="Laboratory 201" data-category="laboratory"
+					data-keywords="lab,laboratory,research,science,201" data-access="true" data-node-id="31-01-02-043">
+					<polygon class="cls-2"
+						points="64.12 208.72 101.34 208.72 101.34 273.66 64.12 273.66 64.12 208.72 64.12 208.72" />
+				</g>
+			</g>
+
+			<g id="32-01-02-000" data-name="edges">
+				<g id="32-01-02-001" data-name="edge" data-weight="3.38" data-nodes-id="31-01-02-031,31-01-02-052">
+					<polygon class="cls-3"
+						points="232.54 386.47 232.54 389.85 241.5 389.85 241.5 386.47 232.54 386.47 232.54 386.47" />
+				</g>
+
+				<g id="32-01-02-002" data-name="edge" data-weight="8.97" data-nodes-id="31-01-02-023,31-01-02-047">
+					<polygon class="cls-3"
+						points="353.5 511.91 350.11 511.91 350.11 502.95 353.5 502.95 353.5 511.91 353.5 511.91" />
+				</g>
+
+				<g id="32-01-02-003" data-name="edge" data-weight="3.38" data-nodes-id="31-01-02-024,31-01-02-045">
+					<polygon class="cls-3"
+						points="362.46 474.44 362.46 471.06 353.5 471.06 353.5 474.44 362.46 474.44 362.46 474.44" />
+				</g>
+
+				<g id="32-01-02-004" data-name="edge" data-weight="3.38" data-nodes-id="31-01-02-025,31-01-02-044">
+					<polygon class="cls-3"
+						points="362.46 389.85 362.46 386.47 353.5 386.47 353.5 389.85 362.46 389.85 362.46 389.85" />
+				</g>
+
+				<g id="32-01-02-005" data-name="edge" data-weight="81.19" data-nodes-id="31-01-02-044,31-01-02-045">
+					<polygon class="cls-3"
+						points="353.5 471.06 350.11 471.06 350.11 389.85 353.5 389.85 353.5 449.91 353.5 471.06" />
+				</g>
+
+				<g id="32-01-02-006" data-name="edge" data-weight="81.19" data-nodes-id="31-01-02-052,31-01-02-051">
+					<polygon class="cls-3"
+						points="241.5 471.06 244.89 471.06 244.89 389.85 241.5 389.85 241.5 471.06 241.5 471.06" />
+				</g>
+
+				<g id="32-01-02-007" data-name="edge" data-weight="3.38" data-nodes-id="31-01-02-050,31-01-02-046">
+					<polygon class="cls-3"
+						points="244.89 502.95 244.89 499.56 315.94 499.56 315.94 502.95 244.89 502.95 244.89 502.95" />
+				</g>
+
+				<g id="32-01-02-008" data-name="edge" data-weight="3.38" data-nodes-id="31-01-02-046,31-01-02-047">
+					<polygon class="cls-3"
+						points="319.32 502.95 319.32 499.56 350.11 499.56 350.11 502.95 319.32 502.95 319.32 502.95" />
+				</g>
+
+				<g id="32-01-02-009" data-name="edge" data-weight="25.38" data-nodes-id="31-01-02-051,31-01-02-050">
+					<polygon class="cls-3"
+						points="241.5 474.44 244.89 474.44 244.89 499.56 241.5 499.56 241.5 474.44 241.5 474.44" />
+				</g>
+
+				<g id="32-01-02-010" data-name="edge" data-weight="25.38" data-nodes-id="31-01-02-045,31-01-02-047">
+					<polygon class="cls-3"
+						points="350.11 474.44 353.5 474.44 353.5 499.56 350.11 499.56 350.11 474.44 350.11 474.44" />
+				</g>
+
+				<g id="32-01-02-011" data-name="edge" data-weight="93.3" data-nodes-id="31-01-02-047,31-01-02-075">
+					<rect class="cls-3" x="353.5" y="499.56" width="93.3" height="3.38" />
+				</g>
+
+				<g id="32-01-02-012" data-name="edge" data-weight="48.11" data-nodes-id="31-01-02-074,31-01-02-050">
+					<rect class="cls-3" x="193.39" y="499.56" width="48.11" height="3.38" />
+				</g>
+
+				<g id="32-01-02-013" data-name="edge" data-weight="8.97" data-nodes-id="31-01-02-033,31-01-02-053">
+					<rect class="cls-3" x="190" y="502.95" width="3.38" height="8.97" />
+				</g>
+
+				<g id="32-01-02-014" data-name="edge" data-weight="8.97" data-nodes-id="31-01-02-021,31-01-02-049">
+					<rect class="cls-3" x="540.27" y="502.95" width="3.38" height="8.97" />
+				</g>
+
+				<g id="32-01-02-015" data-name="edge" data-weight="15.73" data-nodes-id="31-01-02-049,31-01-02-048">
+					<rect class="cls-3" x="524.54" y="499.56" width="15.73" height="3.38" />
+				</g>
+
+				<g id="32-01-02-016" data-name="edge" data-weight="44.11" data-nodes-id="31-01-02-061,31-01-02-049">
+					<rect class="cls-3" x="540.27" y="455.45" width="3.38" height="44.11" />
+				</g>
+
+				<g id="32-01-02-017" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-003,31-01-02-061">
+					<rect class="cls-3" x="543.65" y="452.07" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-018" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-020,31-01-02-062">
+					<rect class="cls-3" x="532.57" y="428.17" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-019" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-019,31-01-02-063">
+					<rect class="cls-3" x="532.57" y="366.94" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-020" data-name="edge" data-weight="20.51" data-nodes-id="31-01-02-062,31-01-02-061">
+					<rect class="cls-3" x="540.27" y="431.55" width="3.38" height="20.51" />
+				</g>
+
+				<g id="32-01-02-021" data-name="edge" data-weight="57.85" data-nodes-id="31-01-02-063,31-01-02-062">
+					<rect class="cls-3" x="540.27" y="370.32" width="3.38" height="57.85" />
+				</g>
+
+				<g id="32-01-02-022" data-name="edge" data-weight="41.8" data-nodes-id="31-01-02-074,31-01-02-053">
+					<rect class="cls-3" x="148.2" y="499.56" width="41.8" height="3.38" />
+				</g>
+
+				<g id="32-01-02-023" data-name="edge" data-weight="8.97" data-nodes-id="31-01-02-035,31-01-02-054">
+					<rect class="cls-3" x="70.46" y="502.95" width="3.38" height="8.97" />
+				</g>
+
+				<g id="32-01-02-024" data-name="edge" data-weight="8.97" data-nodes-id="31-01-02-036,31-01-02-055">
+					<rect class="cls-3" x="51.35" y="502.95" width="3.38" height="8.97" />
+				</g>
+
+				<g id="32-01-02-025" data-name="edge" data-weight="15.73" data-nodes-id="31-01-02-055,31-01-02-054">
+					<rect class="cls-3" x="54.73" y="499.56" width="15.73" height="3.38" />
+				</g>
+
+				<g id="32-01-02-026" data-name="edge" data-weight="44.11" data-nodes-id="31-01-02-056,31-01-02-055">
+					<rect class="cls-3" x="51.35" y="455.45" width="3.38" height="44.11" />
+				</g>
+
+				<g id="32-01-02-027" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-004,31-01-02-056">
+					<rect class="cls-3" x="43.65" y="452.07" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-028" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-038,31-01-02-057">
+					<rect class="cls-3" x="54.73" y="407.28" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-029" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-039,31-01-02-058">
+					<rect class="cls-3" x="54.73" y="366.94" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-030" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-042,31-01-02-059">
+					<rect class="cls-3" x="54.73" y="298.11" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-031" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-043,31-01-02-060">
+					<rect class="cls-3" x="54.73" y="238.9" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-032" data-name="edge" data-weight="20.01" data-nodes-id="31-01-02-077,31-01-02-056">
+					<rect class="cls-3" x="51.35" y="432.06" width="3.38" height="20.01" />
+				</g>
+
+				<g id="32-01-02-033" data-name="edge" data-weight="36.95" data-nodes-id="31-01-02-058,31-01-02-057">
+					<rect class="cls-3" x="51.35" y="370.32" width="3.38" height="36.95" />
+				</g>
+
+				<g id="32-01-02-034" data-name="edge" data-weight="19.36" data-nodes-id="31-01-02-059,31-01-02-073">
+					<rect class="cls-3" x="51.35" y="301.5" width="3.38" height="19.36" />
+				</g>
+
+				<g id="32-01-02-035" data-name="edge" data-weight="55.83" data-nodes-id="31-01-02-060,31-01-02-059">
+					<rect class="cls-3" x="51.35" y="242.28" width="3.38" height="55.83" />
+				</g>
+
+				<g id="32-01-02-036" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-016,31-01-02-072">
+					<rect class="cls-3" x="532.57" y="248.45" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-037" data-name="edge" data-weight="42.84" data-nodes-id="31-01-02-064,31-01-02-072">
+					<rect class="cls-3" x="540.27" y="205.62" width="3.38" height="42.84" />
+				</g>
+
+				<g id="32-01-02-038" data-name="edge" data-weight="4.68" data-nodes-id="31-01-02-071,31-01-02-064">
+					<polygon class="cls-3"
+						points="540.27 199.55 512.32 191.23 513.29 187.99 543.65 197.03 543.65 202.23 540.27 202.23 540.27 199.55" />
+				</g>
+
+				<g id="32-01-02-039" data-name="edge" data-weight="7.63" data-nodes-id="31-01-02-015,31-01-02-071">
+					<rect class="cls-3" x="508.94" y="182.16" width="7.63" height="3.38"
+						transform="translate(190.25 622.83) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-040" data-name="edge" data-weight="33.24" data-nodes-id="31-01-02-071,31-01-02-070">
+					<rect class="cls-3" x="491.94" y="167.28" width="3.38" height="33.24"
+						transform="translate(176.53 604.54) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-041" data-name="edge" data-weight="21.73" data-nodes-id="31-01-00-095,31-01-02-064">
+					<polygon class="cls-3"
+						points="565.34 205.62 565.34 191.19 561.96 191.19 561.96 202.23 543.65 202.23 543.65 205.62 565.34 205.62" />
+				</g>
+
+				<g id="32-01-02-042" data-name="edge" data-weight="7.63" data-nodes-id="31-01-02-014,31-01-02-070">
+					<rect class="cls-3" x="473.84" y="171.71" width="7.63" height="3.38"
+						transform="translate(175.17 581.72) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-043" data-name="edge" data-weight="7.63" data-nodes-id="31-01-02-013,31-01-02-069">
+					<rect class="cls-3" x="444.05" y="162.84" width="7.63" height="3.38"
+						transform="translate(162.39 546.83) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-044" data-name="edge" data-weight="27.69" data-nodes-id="31-01-02-070,31-01-02-069">
+					<rect class="cls-3" x="459.5" y="160.39" width="3.38" height="27.69"
+						transform="translate(162.6 566.54) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-045" data-name="edge" data-weight="36" data-nodes-id="31-01-02-069,31-01-02-068">
+					<rect class="cls-3" x="425.73" y="146.19" width="3.38" height="36"
+						transform="translate(148.1 526.99) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-046" data-name="edge" data-weight="89.28" data-nodes-id="31-01-02-088,31-01-02-068">
+					<rect class="cls-3" x="362.44" y="100.74" width="3.38" height="89.28"
+						transform="translate(121.14 453.08) rotate(-73.47)" />
+				</g>
+
+				<g id="32-01-02-047" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-001,31-01-02-066">
+					<rect class="cls-3" x="251.94" y="117.25" width="7.7" height="3.38"
+						transform="translate(68.8 330.16) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-048" data-name="edge" data-weight="18.66" data-nodes-id="31-01-02-066,31-01-02-067">
+					<rect class="cls-3" x="266.24" y="107.45" width="3.38" height="18.66"
+						transform="translate(79.56 340.26) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-049" data-name="edge" data-weight="9.97" data-nodes-id="31-01-02-009,31-01-02-065">
+					<polygon class="cls-3"
+						points="224.12 104.81 228.14 103.17 230.33 95.79 227.09 94.82 224.12 104.81" />
+				</g>
+
+				<g id="32-01-02-050" data-name="edge" data-weight="27.1" data-nodes-id="31-01-02-065,31-01-02-066">
+					<polygon class="cls-3"
+						points="228.14 103.17 228.85 106.91 255.27 114.77 256.23 111.53 228.14 103.17" />
+				</g>
+
+				<g id="32-01-02-051" data-name="edge" data-weight="9.97" data-nodes-id="31-01-02-089,31-01-02-065">
+					<polygon class="cls-3"
+						points="228.85 106.91 224.12 104.81 212.26 108.41 213.25 111.65 228.85 106.91 228.85 106.91" />
+				</g>
+
+				<g id="32-01-02-052" data-name="edge" data-weight="70.97" data-nodes-id="31-01-02-054,31-01-02-074">
+					<rect class="cls-3" x="73.85" y="499.56" width="70.97" height="3.38" />
+				</g>
+
+				<g id="32-01-02-053" data-name="edge" data-weight="70.97" data-nodes-id="31-01-02-075,31-01-02-048">
+					<rect class="cls-3" x="450.18" y="499.56" width="70.97" height="3.38" />
+				</g>
+
+				<g id="32-01-02-054" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-041,31-01-02-073">
+					<rect class="cls-3" x="54.73" y="320.86" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-055" data-name="edge" data-weight="18.85" data-nodes-id="31-01-02-076,31-01-02-058">
+					<rect class="cls-3" x="51.35" y="348.09" width="3.38" height="18.85" />
+				</g>
+
+				<g id="32-01-02-056" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-040,31-01-02-076">
+					<rect class="cls-3" x="54.73" y="344.71" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-057" data-name="edge" data-weight="20.47" data-nodes-id="31-01-02-073,31-01-02-076">
+					<rect class="cls-3" x="51.35" y="324.24" width="3.38" height="20.47" />
+				</g>
+
+				<g id="32-01-02-058" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-037,31-01-02-077">
+					<rect class="cls-3" x="54.73" y="428.68" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-059" data-name="edge" data-weight="18.02" data-nodes-id="31-01-02-057,31-01-02-077">
+					<rect class="cls-3" x="51.35" y="410.66" width="3.38" height="18.02" />
+				</g>
+
+				<g id="32-01-02-060" data-name="edge" data-weight="11" data-nodes-id="31-01-00-097,31-01-02-054">
+					<rect class="cls-3" x="70.46" y="488.57" width="3.38" height="11" />
+				</g>
+
+				<g id="32-01-02-061" data-name="edge" data-weight="8.97" data-nodes-id="31-01-02-034,31-01-02-074">
+					<rect class="cls-3" x="144.82" y="502.95" width="3.38" height="8.97" />
+				</g>
+
+				<g id="32-01-02-062" data-name="edge" data-weight="8.97" data-nodes-id="31-01-02-032,31-01-02-046">
+					<polygon class="cls-3"
+						points="319.32 511.91 315.94 511.91 315.94 502.95 319.32 502.95 319.32 511.91 319.32 511.91" />
+				</g>
+
+				<g id="32-01-02-063" data-name="edge" data-weight="29.78" data-nodes-id="31-01-02-080,31-01-02-045">
+					<rect class="cls-3" x="320.34" y="471.06" width="29.78" height="3.38" />
+				</g>
+
+				<g id="32-01-02-064" data-name="edge" data-weight="29.78" data-nodes-id="31-01-02-051,31-01-02-079">
+					<rect class="cls-3" x="244.89" y="471.06" width="29.78" height="3.38" />
+				</g>
+
+				<g id="32-01-02-065" data-name="edge" data-weight="17.76" data-nodes-id="31-01-00-098,31-01-02-080">
+					<rect class="cls-3" x="299.19" y="428.76" width="17.76" height="3.38" />
+				</g>
+
+				<g id="32-01-02-066" data-name="edge" data-weight="17.76" data-nodes-id="31-01-00-098,31-01-02-078">
+					<rect class="cls-3" x="278.04" y="428.76" width="17.76" height="3.38" />
+				</g>
+
+				<g id="32-01-02-067" data-name="edge" data-weight="8.95" data-nodes-id="31-01-02-029,31-01-02-094">
+					<path class="cls-3"
+						d="M299.19,353.55V344.6h-3.38v8.95C296.94,353.57,298.06,353.57,299.19,353.55Z" />
+				</g>
+
+				<g id="32-01-02-068" data-name="edge" data-weight="38.91" data-nodes-id="31-01-02-080,31-01-02-081">
+					<rect class="cls-3" x="316.96" y="432.15" width="3.38" height="38.91" />
+				</g>
+
+				<g id="32-01-02-069" data-name="edge" data-weight="38.91" data-nodes-id="31-01-02-078,31-01-02-079">
+					<rect class="cls-3" x="274.66" y="432.15" width="3.38" height="38.91" />
+				</g>
+
+				<g id="32-01-02-070" data-name="edge" data-weight="8.97" data-nodes-id="31-01-02-022,31-01-02-075">
+					<rect class="cls-3" x="446.8" y="502.95" width="3.38" height="8.97" />
+				</g>
+
+				<g id="32-01-02-071" data-name="edge" data-weight="11" data-nodes-id="31-01-00-096,31-01-02-048">
+					<rect class="cls-3" x="521.15" y="488.57" width="3.38" height="11" />
+				</g>
+
+				<g id="32-01-02-072" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-018,31-01-02-082">
+					<rect class="cls-3" x="532.57" y="344.71" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-073" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-017,31-01-02-083">
+					<rect class="cls-3" x="532.57" y="294.67" width="7.7" height="3.38" />
+				</g>
+
+				<g id="32-01-02-074" data-name="edge" data-weight="89.66" data-nodes-id="31-01-02-085,31-01-02-084">
+					<rect class="cls-3" x="450.61" y="317.05" width="89.66" height="3.38" />
+				</g>
+
+				<g id="32-01-02-075" data-name="edge" data-weight="19" data-nodes-id="31-01-02-083,31-01-02-084">
+					<rect class="cls-3" x="540.27" y="298.05" width="3.38" height="19" />
+				</g>
+
+				<g id="32-01-02-076" data-name="edge" data-weight="7.44" data-nodes-id="31-01-02-027,31-01-02-085">
+					<rect class="cls-3" x="447.22" y="309.61" width="3.38" height="7.44" />
+				</g>
+
+				<g id="32-01-02-077" data-name="edge" data-weight="24.27" data-nodes-id="31-01-02-084,31-01-02-082">
+					<rect class="cls-3" x="540.27" y="320.44" width="3.38" height="24.27" />
+				</g>
+
+				<g id="32-01-02-078" data-name="edge" data-weight="18.85" data-nodes-id="31-01-02-082,31-01-02-063">
+					<rect class="cls-3" x="540.27" y="348.09" width="3.38" height="18.85" />
+				</g>
+
+				<g id="32-01-02-079" data-name="edge" data-weight="42.84" data-nodes-id="31-01-02-072,31-01-02-083">
+					<rect class="cls-3" x="540.27" y="251.83" width="3.38" height="42.84" />
+				</g>
+
+				<g id="32-01-02-080" data-name="edge" data-weight="43.05" data-nodes-id="31-01-02-093,31-01-02-052">
+					<path class="cls-3" d="M244.89,343.42v43.05H241.5v-45C242.62,342.15,243.75,342.8,244.89,343.42Z" />
+				</g>
+
+				<g id="32-01-02-081" data-name="edge" data-weight="45" data-nodes-id="31-01-02-095,31-01-02-044">
+					<path class="cls-3" d="M353.5,341.48v45h-3.39V343.42C351.25,342.8,352.38,342.15,353.5,341.48Z" />
+				</g>
+
+				<g id="32-01-02-082" data-name="edge" data-weight="22.61" data-nodes-id="31-01-02-026,31-01-02-086">
+					<polygon class="cls-3"
+						points="405.52 320.44 405.52 317.05 387.38 317.05 387.38 320.44 405.52 320.44 405.52 320.44" />
+				</g>
+
+				<g id="32-01-02-083" data-name="edge" data-weight="22.1" data-nodes-id="31-01-02-002,31-01-02-087">
+					<polygon class="cls-3"
+						points="207.62 319.91 207.62 316.53 188.47 316.53 188.47 319.91 207.62 319.91 207.62 319.91" />
+				</g>
+
+				<g id="32-01-02-084" data-name="edge" data-weight="22.1" data-nodes-id="31-01-02-030,31-01-02-087">
+					<rect class="cls-3" x="207.62" y="294.43" width="3.38" height="22.1" />
+				</g>
+
+				<g id="32-01-02-085" data-name="edge" data-weight="22.62" data-nodes-id="31-01-02-028,31-01-02-086">
+					<polygon class="cls-3"
+						points="383.99 294.43 387.38 294.43 387.38 317.05 383.99 317.05 383.99 315.05 383.99 294.43" />
+				</g>
+
+				<g id="32-01-02-086" data-name="edge" data-weight="21" data-nodes-id="31-01-02-087,31-01-02-093">
+					<path class="cls-3"
+						d="M241.5,341.48v-4a105.67,105.67,0,0,1-24.37-21H211v3.38h4.57A109.13,109.13,0,0,0,241.5,341.48Z" />
+				</g>
+
+				<g id="32-01-02-087" data-name="edge" data-weight="71.83" data-nodes-id="31-01-02-094,31-01-00-098">
+					<path class="cls-3" d="M295.81,356.93v71.83h3.38V356.93C298.06,357,296.94,357,295.81,356.93Z" />
+				</g>
+
+				<g id="32-01-02-088" data-name="edge" data-weight="21" data-nodes-id="31-01-02-095,31-01-02-086">
+					<path class="cls-3"
+						d="M377.42,317.05a105.74,105.74,0,0,1-23.92,20.47v4a109.06,109.06,0,0,0,25.45-21h5v-3.39Z" />
+				</g>
+
+				<g id="32-01-02-089" data-name="edge" data-weight="14" data-nodes-id="31-01-02-093,31-01-02-094">
+					<path class="cls-3"
+						d="M295.81,356.93a109,109,0,0,1-50.92-13.51v-3.88a105.75,105.75,0,0,0,50.92,14Z" />
+				</g>
+
+				<g id="32-01-02-090" data-name="edge" data-weight="14" data-nodes-id="31-01-02-094,31-01-02-095">
+					<path class="cls-3"
+						d="M299.19,356.93a109,109,0,0,0,50.92-13.51v-3.88a105.75,105.75,0,0,1-50.92,14Z" />
+				</g>
+
+				<g id="32-01-02-091" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-010,31-01-02-066">
+					<rect class="cls-3" x="255.1" y="106.63" width="7.7" height="3.38"
+						transform="translate(81.24 325.6) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-092" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-012,31-01-02-088">
+					<rect class="cls-3" x="317.44" y="125.19" width="7.7" height="3.38"
+						transform="translate(108.01 398.62) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-093" data-name="edge" data-weight="39.62" data-nodes-id="31-01-02-066,31-01-02-088">
+					<rect class="cls-3" x="297.41" y="106.25" width="3.38" height="39.62"
+						transform="translate(92.94 376.76) rotate(-73.42)" />
+				</g>
+
+				<g id="32-01-02-094" data-name="edge" data-weight="7.7" data-nodes-id="31-01-02-011,31-01-02-089">
+					<rect class="cls-3" x="211.05" y="111.98" width="3.38" height="7.7"
+						transform="translate(-24.48 66.85) rotate(-16.9)" />
+				</g>
+
+				<g id="32-01-02-095" data-name="edge" data-weight="5.41" data-nodes-id="31-01-02-008,31-01-02-089">
+					<rect class="cls-3" x="204.22" y="110.11" width="5.41" height="3.38"
+						transform="translate(-23.57 64.98) rotate(-16.9)" />
+				</g>
+
+				<g id="32-01-02-096" data-name="edge" data-weight="6.38" data-nodes-id="31-01-02-007,31-01-02-090">
+					<rect class="cls-3" x="157.65" y="72.04" width="6.38" height="3.38"
+						transform="translate(21.02 182.17) rotate(-62.42)" />
+				</g>
+
+				<g id="32-01-02-097" data-name="edge" data-weight="30.8" data-nodes-id="31-01-02-090,31-01-02-089">
+					<path class="cls-3"
+						d="M165.39,68.69,201.9,87.76a13,13,0,0,1,6.45,7.79l3.91,12.86-3.24,1-3.91-12.87a9.66,9.66,0,0,0-4.78-5.77L163.82,71.69Z" />
+				</g>
+
+				<g id="32-01-02-098" data-name="edge" data-weight="7.77" data-nodes-id="31-01-02-091,31-01-02-090">
+					<polygon class="cls-3" points="147.56 59.33 146 62.33 160.82 70.12 162.39 67.12 147.56 59.33" />
+				</g>
+
+				<g id="32-01-02-099" data-name="edge" data-weight="6.38" data-nodes-id="31-01-02-006,31-01-02-091">
+					<rect class="cls-3" x="144.35" y="54.02" width="6.38" height="3.38"
+						transform="translate(29.85 160.7) rotate(-62.42)" />
+				</g>
+
+				<g id="32-01-02-100" data-name="edge" data-weight="6.38" data-nodes-id="31-01-02-005,31-01-02-092">
+					<rect class="cls-3" x="127.15" y="45.04" width="6.38" height="3.38"
+						transform="translate(28.58 140.63) rotate(-62.42)" />
+				</g>
+
+				<g id="32-01-02-101" data-name="edge" data-weight="16.02" data-nodes-id="31-01-02-092,31-01-02-091">
+					<rect class="cls-3" x="134.99" y="47.54" width="3.38" height="16.02"
+						transform="translate(24.16 150.98) rotate(-62.42)" />
+				</g>
+			</g>
+
+			<g id="31-01-02-000" data-name="nodes">
+				<g id="31-01-02-001" data-name="node" data-type="nav" data-room-id="33-01-02-001">
+					<rect class="cls-4" x="252.52" y="122.56" width="3.38" height="3.38"
+						transform="translate(62.58 332.44) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-002" data-name="node" data-type="nav" data-room-id="33-01-02-002">
+					<rect class="cls-4" x="185.08" y="316.53" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-003" data-name="node" data-type="nav" data-room-id="33-01-02-003">
+					<rect class="cls-4" x="551.35" y="452.07" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-004" data-name="node" data-type="nav" data-room-id="33-01-02-004">
+					<rect class="cls-4" x="40.26" y="452.07" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-005" data-name="node" data-type="nav" data-room-id="33-01-02-005">
+					<rect class="cls-4" x="130.91" y="40.71" width="3.38" height="3.38"
+						transform="translate(33.63 140.31) rotate(-62.42)" />
+				</g>
+
+				<g id="31-01-02-006" data-name="node" data-type="nav" data-room-id="33-01-02-006">
+					<rect class="cls-4" x="148.11" y="49.7" width="3.38" height="3.38"
+						transform="translate(34.9 160.38) rotate(-62.42)" />
+				</g>
+
+				<g id="31-01-02-007" data-name="node" data-type="nav" data-room-id="33-01-02-007">
+					<rect class="cls-4" x="156.89" y="76.37" width="3.38" height="3.38"
+						transform="translate(15.97 182.49) rotate(-62.42)" />
+				</g>
+
+				<g id="31-01-02-008" data-name="node" data-type="nav" data-room-id="33-01-02-008">
+					<rect class="cls-4" x="201.03" y="111.39" width="3.38" height="3.38"
+						transform="translate(-24.12 63.81) rotate(-16.9)" />
+				</g>
+
+				<g id="31-01-02-009" data-name="node" data-type="nav" data-room-id="33-01-02-009">
+					<rect class="cls-4" x="227.5" y="91.99" width="3.38" height="3.38"
+						transform="translate(74.01 286.62) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-010" data-name="node" data-type="nav" data-room-id="33-01-02-010">
+					<rect class="cls-4" x="258.84" y="101.32" width="3.38" height="3.38"
+						transform="translate(87.46 323.32) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-011" data-name="node" data-type="nav" data-room-id="33-01-02-011">
+					<rect class="cls-4" x="212.66" y="119.44" width="3.38" height="3.38"
+						transform="translate(-25.95 67.55) rotate(-16.9)" />
+				</g>
+
+				<g id="31-01-02-012" data-name="node" data-type="nav" data-room-id="33-01-02-012">
+					<rect class="cls-4" x="321.18" y="119.88" width="3.38" height="3.38"
+						transform="translate(114.23 396.34) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-013" data-name="node" data-type="nav" data-room-id="33-01-02-013">
+					<rect class="cls-4" x="447.74" y="157.56" width="3.38" height="3.38"
+						transform="translate(168.57 544.57) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-014" data-name="node" data-type="nav" data-room-id="33-01-02-014">
+					<rect class="cls-4" x="477.53" y="166.43" width="3.38" height="3.38"
+						transform="translate(181.35 579.45) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-015" data-name="node" data-type="nav" data-room-id="33-01-02-015">
+					<rect class="cls-4" x="512.63" y="176.88" width="3.38" height="3.38"
+						transform="translate(196.42 620.56) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-016" data-name="node" data-type="nav" data-room-id="33-01-02-016">
+					<rect class="cls-4" x="529.19" y="248.45" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-017" data-name="node" data-type="nav" data-room-id="33-01-02-017">
+					<rect class="cls-4" x="529.19" y="294.67" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-018" data-name="node" data-type="nav" data-room-id="33-01-02-018">
+					<rect class="cls-4" x="529.19" y="344.71" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-019" data-name="node" data-type="nav" data-room-id="33-01-02-019">
+					<rect class="cls-4" x="529.19" y="366.94" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-020" data-name="node" data-type="nav" data-room-id="33-01-02-020">
+					<rect class="cls-4" x="529.19" y="428.17" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-021" data-name="node" data-type="nav" data-room-id="33-01-02-021">
+					<rect class="cls-4" x="540.27" y="511.91" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-022" data-name="node" data-type="nav" data-room-id="33-01-02-022">
+					<rect class="cls-4" x="446.8" y="511.91" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-023" data-name="node" data-type="nav" data-room-id="33-01-02-023">
+					<rect class="cls-4" x="350.11" y="511.91" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-024" data-name="node" data-type="nav" data-room-id="33-01-02-024">
+					<rect class="cls-4" x="362.46" y="471.06" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-025" data-name="node" data-type="nav" data-room-id="33-01-02-025">
+					<rect class="cls-4" x="362.46" y="386.47" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-026" data-name="node" data-type="nav" data-room-id="33-01-02-026">
+					<rect class="cls-4" x="405.52" y="317.05" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-027" data-name="node" data-type="nav" data-room-id="33-01-02-027">
+					<rect class="cls-4" x="447.22" y="306.23" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-028" data-name="node" data-type="nav" data-room-id="33-01-02-028">
+					<rect class="cls-4" x="383.99" y="291.05" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-029" data-name="node" data-type="nav" data-room-id="33-01-02-029">
+					<rect class="cls-4" x="295.81" y="341.21" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-030" data-name="node" data-type="nav" data-room-id="33-01-02-030">
+					<rect class="cls-4" x="207.62" y="291.05" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-031" data-name="node" data-type="nav" data-room-id="33-01-02-031">
+					<rect class="cls-4" x="229.15" y="386.47" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-032" data-name="node" data-type="nav" data-room-id="33-01-02-032">
+					<rect class="cls-4" x="315.94" y="511.91" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-033" data-name="node" data-type="nav" data-room-id="33-01-02-033">
+					<rect class="cls-4" x="190" y="511.91" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-034" data-name="node" data-type="nav" data-room-id="33-01-02-034">
+					<rect class="cls-4" x="144.82" y="511.91" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-035" data-name="node" data-type="nav" data-room-id="33-01-02-035">
+					<rect class="cls-4" x="70.46" y="511.91" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-036" data-name="node" data-type="nav" data-room-id="33-01-02-036">
+					<rect class="cls-4" x="51.35" y="511.91" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-037" data-name="node" data-type="nav" data-room-id="33-01-02-037">
+					<rect class="cls-4" x="62.43" y="428.68" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-038" data-name="node" data-type="nav" data-room-id="33-01-02-038">
+					<rect class="cls-4" x="62.43" y="407.28" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-039" data-name="node" data-type="nav" data-room-id="33-01-02-039">
+					<rect class="cls-4" x="62.43" y="366.94" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-040" data-name="node" data-type="nav" data-room-id="33-01-02-040">
+					<rect class="cls-4" x="62.43" y="344.71" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-041" data-name="node" data-type="nav" data-room-id="33-01-02-041">
+					<rect class="cls-4" x="62.43" y="320.86" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-042" data-name="node" data-type="nav" data-room-id="33-01-02-042">
+					<rect class="cls-4" x="62.43" y="298.11" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-043" data-name="node" data-type="nav" data-room-id="33-01-02-043">
+					<rect class="cls-4" x="62.43" y="238.9" width="3.38" height="3.38" />
+				</g>
+
+				<!-- Support nodes -->
+				<g id="31-01-02-044" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="350.11" y="386.47" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-045" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="350.11" y="471.06" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-046" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="315.94" y="499.56" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-047" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="350.11" y="499.56" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-048" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="521.15" y="499.56" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-049" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="540.27" y="499.56" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-050" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="241.5" y="499.56" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-051" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="241.5" y="471.06" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-052" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="241.5" y="386.47" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-053" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="190" y="499.56" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-054" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="70.46" y="499.56" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-055" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="51.35" y="499.56" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-056" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="51.35" y="452.07" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-057" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="51.35" y="407.28" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-058" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="51.35" y="366.94" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-059" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="51.35" y="298.11" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-060" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="51.35" y="238.9" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-061" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="540.27" y="452.07" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-062" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="540.27" y="428.17" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-063" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="540.27" y="366.94" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-064" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="540.27" y="202.23" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-065" data-name="node" data-type="sup" data-room-id="none">
+					<polygon class="cls-4" points="228.14 103.17 224.12 104.81 228.85 106.91 228.14 103.17" />
+				</g>
+
+				<g id="31-01-02-066" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="255.68" y="111.94" width="3.38" height="3.38"
+						transform="translate(75.02 327.88) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-067" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="276.81" y="118.23" width="3.38" height="3.38"
+						transform="translate(84.09 352.63) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-068" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="406.86" y="156.88" width="3.38" height="3.38"
+						transform="translate(140 504.89) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-069" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="444.6" y="168.11" width="3.38" height="3.38"
+						transform="translate(156.21 549.1) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-070" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="474.39" y="176.98" width="3.38" height="3.38"
+						transform="translate(168.99 583.98) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-071" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="509.49" y="187.43" width="3.38" height="3.38"
+						transform="translate(184.07 625.1) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-072" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="540.27" y="248.45" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-073" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="51.35" y="320.86" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-074" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="144.82" y="499.56" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-075" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="446.8" y="499.56" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-076" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="51.35" y="344.71" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-077" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="51.35" y="428.68" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-078" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="274.66" y="428.76" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-079" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="274.66" y="471.06" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-080" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="316.96" y="428.76" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-081" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="316.96" y="471.06" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-082" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="540.27" y="344.71" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-083" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="540.27" y="294.67" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-084" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="540.27" y="317.05" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-085" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="447.22" y="317.05" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-086" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="383.99" y="317.05" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-087" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="207.62" y="316.53" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-02-088" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="318.02" y="130.5" width="3.38" height="3.38"
+						transform="translate(101.79 400.9) rotate(-73.42)" />
+				</g>
+
+				<g id="31-01-02-089" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="209.44" y="108.83" width="3.38" height="3.38"
+						transform="translate(-23.01 66.15) rotate(-16.9)" />
+				</g>
+
+				<g id="31-01-02-090" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="161.41" y="67.71" width="3.38" height="3.38"
+						transform="translate(26.07 181.84) rotate(-62.42)" />
+				</g>
+
+				<g id="31-01-02-091" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="143.59" y="58.35" width="3.38" height="3.38"
+						transform="translate(24.8 161.02) rotate(-62.42)" />
+				</g>
+
+				<g id="31-01-02-092" data-name="node" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="126.39" y="49.37" width="3.38" height="3.38"
+						transform="translate(23.53 140.95) rotate(-62.42)" />
+				</g>
+
+				<g id="31-01-02-093" data-name="node" data-type="sup" data-room-id="none">
+					<path class="cls-4"
+						d="M244.89,343.42v-3.88c-1.14-.65-2.27-1.33-3.39-2v4C242.62,342.15,243.75,342.8,244.89,343.42Z" />
+				</g>
+
+				<g id="31-01-02-094" data-name="node" data-type="sup" data-room-id="none">
+					<path class="cls-4"
+						d="M295.81,353.55v3.38c1.13,0,2.25,0,3.38,0v-3.38C298.06,353.57,296.94,353.57,295.81,353.55Z" />
+				</g>
+
+				<g id="31-01-02-095" data-name="node" data-type="sup" data-room-id="none">
+					<path class="cls-4"
+						d="M350.11,339.54v3.88c1.14-.62,2.27-1.27,3.39-1.94v-4C352.38,338.21,351.25,338.89,350.11,339.54Z" />
+				</g>
+
+				<g id="31-01-00-098" data-name="31-01-00-098" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="295.81" y="428.76" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-00-097" data-name="31-01-00-097" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="70.46" y="485.18" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-00-096" data-name="31-01-00-096" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="521.15" y="485.18" width="3.38" height="3.38" />
+				</g>
+
+				<g id="31-01-00-095" data-name="31-01-00-095" data-type="sup" data-room-id="none">
+					<rect class="cls-4" x="561.96" y="187.8" width="3.38" height="3.38" />
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>
